@@ -1,0 +1,1276 @@
+{
+  "registered_nicks": {
+    "prince": {
+      "nick": "PrinCe",
+      "password_hash": "$2a$10$l3HUXc7fLktLQOBMbIQTS.iXqIkxEcLtXYHlyKgamvu8oWn10SCom",
+      "is_admin": 0,
+      "created_at": "2026-07-30T07:25:11.546Z"
+    },
+    "sunny": {
+      "nick": "Sunny",
+      "password_hash": "$2a$10$azzrB0/1HNSBGqWp0NKSdO1To/To2AIArh4.NdxDMTYz/UTA/pygK",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-07-30T10:29:53.041Z"
+    },
+    "mishail": {
+      "nick": "Mishail",
+      "password_hash": "$2a$10$EfpT1DIMhnrzyuPtukiF4uGFLG/G2Ar2dOXQOYfSms72F/LKvfKHm",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-07-30T16:49:07.803Z"
+    }
+  },
+  "registered_channels": {
+    "#funnypaki": {
+      "name": "#Funnypaki",
+      "founder_nick": "PrinCe",
+      "password_hash": "$2a$10$DQ9YTQiwNNQQQi1fMHR.ouZ0R7.1MD7a9yyNT.ejQk2Wd.4dKKONa",
+      "description": "Official Channel",
+      "modes": {
+        "r": false,
+        "i": false,
+        "m": false,
+        "k": ""
+      },
+      "created_at": "2026-07-30T10:10:13.413Z"
+    }
+  },
+  "channel_access": {
+    "#funnypaki": [
+      {
+        "nick_lower": "prince",
+        "original_nick": "PrinCe",
+        "role": "owner",
+        "added_by": "PrinCe",
+        "created_at": "2026-07-30T10:10:13.413Z"
+      },
+      {
+        "nick_lower": "sunny",
+        "original_nick": "Sunny",
+        "role": "op",
+        "added_by": "PrinCe",
+        "created_at": "2026-07-30T10:30:06.685Z"
+      }
+    ]
+  },
+  "ip_bans": [],
+  "nick_bans": [],
+  "shuns": [
+    {
+      "id": 1785430800186,
+      "target": "Mishail",
+      "target_lower": "mishail",
+      "reason": "30 chup",
+      "shunned_by": "PrinCe",
+      "created_at": "2026-07-30T17:00:00.186Z"
+    }
+  ],
+  "dcc_deny": [],
+  "pappu_brain": {
+    "learned_qa": []
+  },
+  "motd": [
+    "==========================================================",
+    "  Welcome to #FunnyPaki UnrealIRCd Server                 ",
+    "  Respect all users & Obey Server Operators!              ",
+    "=========================================================="
+  ],
+  "opermotd": [
+    "==========================================================",
+    "  OPERATOR MOTD: Confidential Server Oper Area           ",
+    "  Do not abuse Oper privileges! All actions logged.       ",
+    "=========================================================="
+  ],
+  "ip_history": [
+    {
+      "id": 1785395706329.3745,
+      "nick": "Guest_5369",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T07:15:06.329Z"
+    },
+    {
+      "id": 1785395722789.08,
+      "nick": "Guest_8821",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T07:15:22.789Z"
+    },
+    {
+      "id": 1785395793017.18,
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-31T04:42:01.123Z"
+    },
+    {
+      "id": 1785397950718.6746,
+      "nick": "Guest_9929",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T07:52:30.718Z"
+    },
+    {
+      "id": 1785397988666.2466,
+      "nick": "Guest_9694",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T07:53:08.666Z"
+    },
+    {
+      "id": 1785398938425.6821,
+      "nick": "Guest_9280",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T08:08:58.425Z"
+    },
+    {
+      "id": 1785398938491.7102,
+      "nick": "Guest_4252",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T08:08:58.491Z"
+    },
+    {
+      "id": 1785399450639.7314,
+      "nick": "Guest_8196",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T08:17:30.639Z"
+    },
+    {
+      "id": 1785399451657.5173,
+      "nick": "Guest_6867",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T08:17:31.657Z"
+    },
+    {
+      "id": 1785399473489.9329,
+      "nick": "Guest_2934",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T08:17:53.489Z"
+    },
+    {
+      "id": 1785404029399.1406,
+      "nick": "Guest_6661",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T09:33:49.399Z"
+    },
+    {
+      "id": 1785405037552.4712,
+      "nick": "Guest_4530",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T09:50:37.552Z"
+    },
+    {
+      "id": 1785405071293.2905,
+      "nick": "Guest_4460",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T09:51:11.293Z"
+    },
+    {
+      "id": 1785405107340.446,
+      "nick": "Guest_5409",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T09:51:47.340Z"
+    },
+    {
+      "id": 1785405480750.766,
+      "nick": "Guest_8266",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T09:58:00.750Z"
+    },
+    {
+      "id": 1785405860593.42,
+      "nick": "Guest_9085",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:04:20.593Z"
+    },
+    {
+      "id": 1785406142282.572,
+      "nick": "Guest_7684",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:09:02.282Z"
+    },
+    {
+      "id": 1785406344387.9275,
+      "nick": "Guest_1312",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:12:24.387Z"
+    },
+    {
+      "id": 1785406679602.3997,
+      "nick": "Guest_7171",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:17:59.602Z"
+    },
+    {
+      "id": 1785406681590.9785,
+      "nick": "Guest_9540",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:18:01.590Z"
+    },
+    {
+      "id": 1785406739740.297,
+      "nick": "Guest_3473",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:18:59.740Z"
+    },
+    {
+      "id": 1785406740761.3591,
+      "nick": "Guest_3110",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:19:00.761Z"
+    },
+    {
+      "id": 1785406882277.5469,
+      "nick": "Guest_4031",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:21:22.276Z"
+    },
+    {
+      "id": 1785406882637.6797,
+      "nick": "Guest_8176",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:21:22.637Z"
+    },
+    {
+      "id": 1785407207210.9575,
+      "nick": "Guest_1713",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:26:47.210Z"
+    },
+    {
+      "id": 1785407313146.5461,
+      "nick": "identify",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:28:33.146Z"
+    },
+    {
+      "id": 1785407380810.7615,
+      "nick": "Sunny",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:29:40.810Z"
+    },
+    {
+      "id": 1785407593242.1433,
+      "nick": "Guest_8854",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:33:13.242Z"
+    },
+    {
+      "id": 1785407594254.0803,
+      "nick": "Guest_9744",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:33:14.254Z"
+    },
+    {
+      "id": 1785407594307.459,
+      "nick": "Guest_2119",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:33:14.307Z"
+    },
+    {
+      "id": 1785407632549.3464,
+      "nick": "Guest_7317",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:33:52.549Z"
+    },
+    {
+      "id": 1785407937618.7344,
+      "nick": "Guest_7079",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:38:57.618Z"
+    },
+    {
+      "id": 1785407938588.7227,
+      "nick": "Guest_3289",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:38:58.587Z"
+    },
+    {
+      "id": 1785407939312.8257,
+      "nick": "Guest_7635",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:38:59.312Z"
+    },
+    {
+      "id": 1785407940592.646,
+      "nick": "Guest_2247",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:39:00.592Z"
+    },
+    {
+      "id": 1785408123924.181,
+      "nick": "Guest_1413",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:42:03.924Z"
+    },
+    {
+      "id": 1785408127890.674,
+      "nick": "Guest_6416",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:42:07.890Z"
+    },
+    {
+      "id": 1785408231206.4512,
+      "nick": "Guest_8986",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:43:51.206Z"
+    },
+    {
+      "id": 1785408455527.0999,
+      "nick": "Guest_4251",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:47:35.526Z"
+    },
+    {
+      "id": 1785408513364.9758,
+      "nick": "Guest_6513",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T10:48:33.364Z"
+    },
+    {
+      "id": 1785410629315.9478,
+      "nick": "Guest_3308",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:23:49.315Z"
+    },
+    {
+      "id": 1785410629412.045,
+      "nick": "Guest_6483",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:23:49.412Z"
+    },
+    {
+      "id": 1785410629545.542,
+      "nick": "Guest_1426",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:23:49.545Z"
+    },
+    {
+      "id": 1785410629747.5618,
+      "nick": "Guest_8387",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:23:49.747Z"
+    },
+    {
+      "id": 1785410629793.295,
+      "nick": "Guest_4976",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:23:49.793Z"
+    },
+    {
+      "id": 1785410629819.8533,
+      "nick": "Guest_6057",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:23:49.819Z"
+    },
+    {
+      "id": 1785410677799.9314,
+      "nick": "Guest_9108",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:24:37.799Z"
+    },
+    {
+      "id": 1785411715815.7576,
+      "nick": "Guest_6873",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:41:55.815Z"
+    },
+    {
+      "id": 1785411756762.3003,
+      "nick": "Guest_9357",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:42:36.762Z"
+    },
+    {
+      "id": 1785411767124.9312,
+      "nick": "Guest_7965",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:42:47.124Z"
+    },
+    {
+      "id": 1785412178902.8706,
+      "nick": "Guest_7442",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:49:38.902Z"
+    },
+    {
+      "id": 1785412179262.896,
+      "nick": "Guest_7567",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:49:39.262Z"
+    },
+    {
+      "id": 1785412203388.6982,
+      "nick": "Guest_5825",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T11:50:03.388Z"
+    },
+    {
+      "id": 1785413159603.2292,
+      "nick": "Guest_8244",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:05:59.603Z"
+    },
+    {
+      "id": 1785413159613.8193,
+      "nick": "Guest_1140",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:05:59.612Z"
+    },
+    {
+      "id": 1785413159620.2756,
+      "nick": "Guest_4119",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:05:59.620Z"
+    },
+    {
+      "id": 1785413482838.511,
+      "nick": "Guest_7740",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:11:22.838Z"
+    },
+    {
+      "id": 1785413552807.395,
+      "nick": "Guest_1887",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:12:32.807Z"
+    },
+    {
+      "id": 1785414601651.8787,
+      "nick": "Guest_7536",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:30:01.651Z"
+    },
+    {
+      "id": 1785414628299.3967,
+      "nick": "Guest_9690",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:30:28.299Z"
+    },
+    {
+      "id": 1785414628480.7761,
+      "nick": "Guest_4702",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:30:28.480Z"
+    },
+    {
+      "id": 1785414628636.5696,
+      "nick": "Guest_3725",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:30:28.636Z"
+    },
+    {
+      "id": 1785414855472.5083,
+      "nick": "Guest_7811",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:34:15.472Z"
+    },
+    {
+      "id": 1785414855735.355,
+      "nick": "Guest_8145",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:34:15.735Z"
+    },
+    {
+      "id": 1785414856763.5823,
+      "nick": "Guest_8184",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T12:34:16.763Z"
+    },
+    {
+      "id": 1785428515707.169,
+      "nick": "Guest_7113",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:21:55.707Z"
+    },
+    {
+      "id": 1785428516724.4204,
+      "nick": "Guest_6543",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:21:56.724Z"
+    },
+    {
+      "id": 1785428516737.609,
+      "nick": "Guest_1955",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:21:56.737Z"
+    },
+    {
+      "id": 1785428535074.227,
+      "nick": "Guest_9576",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:22:15.074Z"
+    },
+    {
+      "id": 1785428538185.6853,
+      "nick": "Guest_2500",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:22:18.185Z"
+    },
+    {
+      "id": 1785429495260.2666,
+      "nick": "Guest_7469",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:38:15.260Z"
+    },
+    {
+      "id": 1785429501391.0168,
+      "nick": "Mishail",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:25:02.071Z"
+    },
+    {
+      "id": 1785429833666.3262,
+      "nick": "Guest_8417",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:43:53.666Z"
+    },
+    {
+      "id": 1785429834717.383,
+      "nick": "Guest_7886",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:43:54.717Z"
+    },
+    {
+      "id": 1785429834722.2224,
+      "nick": "Guest_7346",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:43:54.722Z"
+    },
+    {
+      "id": 1785429853928.9858,
+      "nick": "Guest_2672",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:44:13.928Z"
+    },
+    {
+      "id": 1785429869391.4578,
+      "nick": "Guest_7780",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:44:29.391Z"
+    },
+    {
+      "id": 1785429884836.7302,
+      "nick": "Guest_7864",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:44:44.836Z"
+    },
+    {
+      "id": 1785429989652.168,
+      "nick": "Guest_7298",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:46:29.652Z"
+    },
+    {
+      "id": 1785429989682.564,
+      "nick": "Guest_9661",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:46:29.682Z"
+    },
+    {
+      "id": 1785429989688.8718,
+      "nick": "Guest_9693",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:59:19.875Z"
+    },
+    {
+      "id": 1785430015808.8457,
+      "nick": "Guest_2814",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:46:55.808Z"
+    },
+    {
+      "id": 1785430389198.0657,
+      "nick": "Guest_6032",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:53:09.198Z"
+    },
+    {
+      "id": 1785430620693.4724,
+      "nick": "Guest_3144",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:57:00.693Z"
+    },
+    {
+      "id": 1785430620706.7244,
+      "nick": "Guest_6787",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:57:00.706Z"
+    },
+    {
+      "id": 1785430620711.8125,
+      "nick": "Guest_3966",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:57:00.711Z"
+    },
+    {
+      "id": 1785430620848.7173,
+      "nick": "Guest_9764",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:57:00.848Z"
+    },
+    {
+      "id": 1785430654890.1138,
+      "nick": "Guest_9819",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T16:57:34.890Z"
+    },
+    {
+      "id": 1785431144609.4338,
+      "nick": "Guest_1478",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:05:44.609Z"
+    },
+    {
+      "id": 1785431145608.07,
+      "nick": "Guest_5990",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:05:45.608Z"
+    },
+    {
+      "id": 1785431147628.4802,
+      "nick": "Guest_9161",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:05:47.628Z"
+    },
+    {
+      "id": 1785431173781.8704,
+      "nick": "Guest_3066",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:06:13.781Z"
+    },
+    {
+      "id": 1785431227504.2104,
+      "nick": "Tota",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:07:07.504Z"
+    },
+    {
+      "id": 1785431550626.9685,
+      "nick": "Guest_6162",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:12:30.625Z"
+    },
+    {
+      "id": 1785431551668.4937,
+      "nick": "Guest_2715",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:12:31.668Z"
+    },
+    {
+      "id": 1785431552595.4153,
+      "nick": "Guest_4988",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:12:32.595Z"
+    },
+    {
+      "id": 1785432064710.8806,
+      "nick": "Guest_8102",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:21:04.710Z"
+    },
+    {
+      "id": 1785432064723.7517,
+      "nick": "Guest_8575",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:21:04.723Z"
+    },
+    {
+      "id": 1785432064842.7625,
+      "nick": "Guest_8672",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:21:04.842Z"
+    },
+    {
+      "id": 1785432095989.3738,
+      "nick": "Guest_2520",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:21:35.989Z"
+    },
+    {
+      "id": 1785432234688.4487,
+      "nick": "Guest_5259",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:23:54.688Z"
+    },
+    {
+      "id": 1785432236608.8726,
+      "nick": "Guest_2418",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:23:56.608Z"
+    },
+    {
+      "id": 1785432237254.9775,
+      "nick": "Guest_4192",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:23:57.254Z"
+    },
+    {
+      "id": 1785432288382.5798,
+      "nick": "Guest_6996",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:24:48.382Z"
+    },
+    {
+      "id": 1785432350211.1392,
+      "nick": "Guest_1968",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:25:50.211Z"
+    },
+    {
+      "id": 1785432495630.1938,
+      "nick": "Guest_8662",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:28:15.630Z"
+    },
+    {
+      "id": 1785432496679.5754,
+      "nick": "Guest_8644",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:28:16.679Z"
+    },
+    {
+      "id": 1785432587140.6248,
+      "nick": "Guest_7499",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:29:47.140Z"
+    },
+    {
+      "id": 1785432601003.1003,
+      "nick": "Guest_1074",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:30:01.003Z"
+    },
+    {
+      "id": 1785432749063.4368,
+      "nick": "Guest_5086",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:32:29.063Z"
+    },
+    {
+      "id": 1785433243624.4365,
+      "nick": "Guest_4442",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:40:43.624Z"
+    },
+    {
+      "id": 1785433349099.326,
+      "nick": "Guest_5075",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:42:29.099Z"
+    },
+    {
+      "id": 1785433495632.5752,
+      "nick": "Guest_4278",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:44:55.632Z"
+    },
+    {
+      "id": 1785433627242.1758,
+      "nick": "Guest_3710",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-30T17:47:07.242Z"
+    },
+    {
+      "id": 1785472013204.1829,
+      "nick": "Guest_9214",
+      "ip": "127.0.0.1",
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+      "last_seen": "2026-07-31T04:26:53.203Z"
+    }
+  ],
+  "chat_logs": [
+    {
+      "id": 1785395712859.4302,
+      "channel": "#General",
+      "nick": "Guest_5369",
+      "ip": "127.0.0.1",
+      "message": "hello",
+      "timestamp": "2026-07-30T07:15:12.859Z"
+    },
+    {
+      "id": 1785395728205.6677,
+      "channel": "#General",
+      "nick": "Guest_8821",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T07:15:28.205Z"
+    },
+    {
+      "id": 1785396108043.6145,
+      "channel": "#General",
+      "nick": "Guest_8821",
+      "ip": "127.0.0.1",
+      "message": ":P",
+      "timestamp": "2026-07-30T07:21:48.044Z"
+    },
+    {
+      "id": 1785396325450.0164,
+      "channel": "#General",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": ".deop",
+      "timestamp": "2026-07-30T07:25:25.450Z"
+    },
+    {
+      "id": 1785397973802.7156,
+      "channel": "#General",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": ":D",
+      "timestamp": "2026-07-30T07:52:53.802Z"
+    },
+    {
+      "id": 1785397979560.9604,
+      "channel": "#General",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "😀",
+      "timestamp": "2026-07-30T07:52:59.560Z"
+    },
+    {
+      "id": 1785404616444.2275,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6661",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T09:43:36.445Z"
+    },
+    {
+      "id": 1785404623155.4521,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6661",
+      "ip": "127.0.0.1",
+      "message": "nick PrinCe",
+      "timestamp": "2026-07-30T09:43:43.155Z"
+    },
+    {
+      "id": 1785405115204.2937,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_5409",
+      "ip": "127.0.0.1",
+      "message": "hello",
+      "timestamp": "2026-07-30T09:51:55.204Z"
+    },
+    {
+      "id": 1785406150654.1914,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_7684",
+      "ip": "127.0.0.1",
+      "message": ":D",
+      "timestamp": "2026-07-30T10:09:10.654Z"
+    },
+    {
+      "id": 1785406155923.4504,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_7684",
+      "ip": "127.0.0.1",
+      "message": "😀",
+      "timestamp": "2026-07-30T10:09:15.923Z"
+    },
+    {
+      "id": 1785407692884.4788,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  kais eho ?",
+      "timestamp": "2026-07-30T10:34:52.884Z"
+    },
+    {
+      "id": 1785407702899.9487,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  han sab ok hai tum batao",
+      "timestamp": "2026-07-30T10:35:02.900Z"
+    },
+    {
+      "id": 1785407717553.4888,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  kuch khas nahi samjh nahi ara kya karun :(",
+      "timestamp": "2026-07-30T10:35:17.553Z"
+    },
+    {
+      "id": 1785407730054.8354,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  tum kya karte ho ?",
+      "timestamp": "2026-07-30T10:35:30.054Z"
+    },
+    {
+      "id": 1785408135118.833,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6416",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  kya hal",
+      "timestamp": "2026-07-30T10:42:15.118Z"
+    },
+    {
+      "id": 1785408146589.315,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6416",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  koi aya tha yahan ?",
+      "timestamp": "2026-07-30T10:42:26.589Z"
+    },
+    {
+      "id": 1785408156870.3945,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6416",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  samjho tum",
+      "timestamp": "2026-07-30T10:42:36.870Z"
+    },
+    {
+      "id": 1785408167307.8232,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6416",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  kuch nahi tum batao",
+      "timestamp": "2026-07-30T10:42:47.307Z"
+    },
+    {
+      "id": 1785413493728.7275,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_7740",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T12:11:33.728Z"
+    },
+    {
+      "id": 1785428593743.8555,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_2500",
+      "ip": "127.0.0.1",
+      "message": "hello",
+      "timestamp": "2026-07-30T16:23:13.743Z"
+    },
+    {
+      "id": 1785428606739.731,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_2500",
+      "ip": "127.0.0.1",
+      "message": "Asmakhi:  kya hal ?",
+      "timestamp": "2026-07-30T16:23:26.739Z"
+    },
+    {
+      "id": 1785428654599.2234,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "han",
+      "timestamp": "2026-07-30T16:24:14.599Z"
+    },
+    {
+      "id": 1785429418108.1743,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  kya hal hain",
+      "timestamp": "2026-07-30T16:36:58.108Z"
+    },
+    {
+      "id": 1785429430998.5244,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "Pappu:  tum kahan the ?",
+      "timestamp": "2026-07-30T16:37:10.998Z"
+    },
+    {
+      "id": 1785429681665.8213,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_1955",
+      "ip": "127.0.0.1",
+      "message": "❤️",
+      "timestamp": "2026-07-30T16:41:21.665Z"
+    },
+    {
+      "id": 1785430019280.142,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_2814",
+      "ip": "127.0.0.1",
+      "message": ":D",
+      "timestamp": "2026-07-30T16:46:59.280Z"
+    },
+    {
+      "id": 1785430023268.655,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_2814",
+      "ip": "127.0.0.1",
+      "message": "hello",
+      "timestamp": "2026-07-30T16:47:03.268Z"
+    },
+    {
+      "id": 1785430025019.1245,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_2814",
+      "ip": "127.0.0.1",
+      "message": ":P",
+      "timestamp": "2026-07-30T16:47:05.019Z"
+    },
+    {
+      "id": 1785430728152.9038,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6787",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T16:58:48.152Z"
+    },
+    {
+      "id": 1785430739502.792,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_3966",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T16:58:59.502Z"
+    },
+    {
+      "id": 1785430745730.5461,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_3144",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T16:59:05.730Z"
+    },
+    {
+      "id": 1785430751489.2944,
+      "channel": "#FunnyPaki",
+      "nick": "Mishail",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T16:59:11.489Z"
+    },
+    {
+      "id": 1785431179614.6775,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_3066",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T17:06:19.614Z"
+    },
+    {
+      "id": 1785431186646.9849,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_3066",
+      "ip": "127.0.0.1",
+      "message": "nick PrinCe",
+      "timestamp": "2026-07-30T17:06:26.646Z"
+    },
+    {
+      "id": 1785431222029.1865,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_5990",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T17:07:02.029Z"
+    },
+    {
+      "id": 1785431264140.209,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "hmm",
+      "timestamp": "2026-07-30T17:07:44.140Z"
+    },
+    {
+      "id": 1785431633363.5422,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_6162",
+      "ip": "127.0.0.1",
+      "message": "hello",
+      "timestamp": "2026-07-30T17:13:53.363Z"
+    },
+    {
+      "id": 1785432395459.9717,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "h",
+      "timestamp": "2026-07-30T17:26:35.459Z"
+    },
+    {
+      "id": 1785432397377.8955,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "s",
+      "timestamp": "2026-07-30T17:26:37.377Z"
+    },
+    {
+      "id": 1785432413034.7727,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_1968",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T17:26:53.034Z"
+    },
+    {
+      "id": 1785432579966.6072,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_8662",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T17:29:39.966Z"
+    },
+    {
+      "id": 1785432719783.4966,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "s",
+      "timestamp": "2026-07-30T17:31:59.783Z"
+    },
+    {
+      "id": 1785432798254.2969,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "stats",
+      "timestamp": "2026-07-30T17:33:18.254Z"
+    },
+    {
+      "id": 1785433386910.0435,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T17:43:06.910Z"
+    },
+    {
+      "id": 1785434059348.7336,
+      "channel": "#FunnyPaki",
+      "nick": "PrinCe",
+      "ip": "127.0.0.1",
+      "message": "hi",
+      "timestamp": "2026-07-30T17:54:19.348Z"
+    },
+    {
+      "id": 1785472907549.312,
+      "channel": "#FunnyPaki",
+      "nick": "Guest_9214",
+      "ip": "127.0.0.1",
+      "message": "hello",
+      "timestamp": "2026-07-31T04:41:47.549Z"
+    }
+  ]
+}

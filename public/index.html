@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>#FunnyPaki WebIRC Chat Room</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <!-- FRONT LOGIN SCREEN OVERLAY -->
+  <div id="login-overlay" class="login-overlay">
+    <div class="login-card">
+      <h1 class="login-title">Funnypaki Chatroom</h1>
+      <div class="login-title-bar"></div>
+
+      <form id="login-form" class="login-form">
+        <div class="login-field">
+          <label for="login-nick-input">Nickname</label>
+          <input type="text" id="login-nick-input" placeholder="Enter your nickname" required autocomplete="off" />
+        </div>
+
+        <div class="login-field">
+          <label for="login-pass-input">Password (optional)</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="login-pass-input" placeholder="Password for NickServ" autocomplete="off" />
+            <button type="button" id="btn-toggle-eye" class="toggle-eye-btn" title="Toggle Password Visibility">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="login-btn-connect" class="login-connect-btn">Connect</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="pakichat-app-container">
+    <!-- Top Green Header Bar -->
+    <header class="pakichat-header">
+      <div class="header-tabs">
+        <ul id="tab-list" class="pakichat-tabs">
+          <li data-target="#FunnyPaki" class="pakichat-tab active">
+            <span class="tab-label">#FunnyPaki</span>
+            <span class="tab-close">&times;</span>
+          </li>
+          <li data-target="Status" class="pakichat-tab">
+            <span class="tab-label">Status</span>
+          </li>
+        </ul>
+        <button id="btn-add-channel" class="btn-add-tab" title="Join Channel">+</button>
+      </div>
+
+      <div class="header-right-tools">
+        <span id="user-status-badge" class="badge badge-guest">Guest</span>
+        <span id="current-nick-display" class="nick-display">Guest_0000</span>
+        <button id="btn-register-modal" class="btn btn-xs btn-outline-white" title="Account">🔐 Account</button>
+        <button id="btn-admin-modal" class="btn btn-xs btn-danger hidden" title="Admin Console">🛡️ Admin</button>
+        <button id="btn-help-modal" class="btn btn-xs btn-outline-white" title="Help">❓</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Split -->
+    <main class="pakichat-workspace">
+      <!-- Center Chat Area -->
+      <section class="pakichat-chat-panel">
+        <!-- Room Topic Header Bar -->
+        <div class="chat-topic-bar">
+          <div class="topic-info">
+            <h2>
+              <span id="window-title-text">#FunnyPaki</span>
+              <span id="window-modes-text" class="mode-badge"></span>
+            </h2>
+            <span id="window-topic-text" class="topic-text">Welcome to #FunnyPaki Chat Room!</span>
+          </div>
+          <div class="window-actions">
+            <button id="btn-change-topic" class="btn btn-xs btn-outline" title="Change Channel Topic">Edit Topic</button>
+            <button id="btn-clear-chat" class="btn btn-xs btn-outline" title="Clear Screen">Clear</button>
+          </div>
+        </div>
+
+        <!-- Clean White Chat Logs Viewport -->
+        <div id="chat-logs-container" class="chat-logs-viewport">
+          <div id="window-FunnyPaki" class="chat-window active">
+            <div class="sys-msg welcome">*** Welcome to #FunnyPaki Chat Room! Type /help for list of IRC, ChanServ & UnrealIRCd commands.</div>
+          </div>
+          <div id="window-Status" class="chat-window">
+            <div class="sys-msg info">*** System Console Status Window initialized.</div>
+          </div>
+        </div>
+
+        <!-- Emoji Picker Container -->
+        <div id="emoji-picker" class="emoji-picker hidden">
+          <div class="emoji-header">
+            <span>Select Emoji</span>
+            <button id="btn-close-emoji" class="emoji-close">&times;</button>
+          </div>
+          <div class="emoji-grid">
+            <span>😀</span><span>😂</span><span>😍</span><span>😎</span><span>🤔</span><span>🔥</span>
+            <span>👍</span><span>❤️</span><span>🎉</span><span>👏</span><span>🙌</span><span>💯</span>
+            <span>💩</span><span>💀</span><span>🚀</span><span>🌟</span><span>👑</span><span>🛡️</span>
+            <span>⭐</span><span>⚡</span><span>🔊</span><span>💬</span><span>⚠️</span><span>🚫</span>
+          </div>
+        </div>
+
+        <!-- Formatting Toolbar & Input Box -->
+        <div class="pakichat-input-container">
+          <!-- Formatting Toolbar -->
+          <div class="formatting-toolbar">
+            <button id="btn-toggle-emoji" class="btn-fmt" title="Emoji">😉</button>
+            <button id="btn-toggle-color" class="btn-fmt" title="Text Color">🎨</button>
+            <button id="btn-fmt-bold" class="btn-fmt btn-fmt-text" title="Bold"><strong>B</strong></button>
+            <button id="btn-fmt-italic" class="btn-fmt btn-fmt-text" title="Italic"><em>I</em></button>
+            <button id="btn-fmt-underline" class="btn-fmt btn-fmt-text" title="Underline"><u>U</u></button>
+          </div>
+
+          <!-- Bottom Input Line -->
+          <div class="input-line">
+            <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" />
+            <button id="btn-send-message" class="btn-send-green">Send</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right User List Panel -->
+      <aside class="pakichat-userlist-panel">
+        <div class="userlist-header">
+          <span>USERS (<span id="user-count">0</span>)</span>
+        </div>
+        <div id="user-list-container" class="user-list-wrapper">
+          <!-- Dynamic user list -->
+        </div>
+      </aside>
+    </main>
+
+    <!-- Context Menu -->
+    <div id="user-context-menu" class="context-menu hidden">
+      <div class="context-header" id="ctx-user-title">User Actions</div>
+      <ul>
+        <li id="ctx-action-pm">💬 Send Private Message</li>
+        <li class="separator"></li>
+        <li id="ctx-action-owner" class="rank-action">👑 Set Owner Status (~)</li>
+        <li id="ctx-action-admin" class="rank-action">🛡️ Set Admin Status (&)</li>
+        <li id="ctx-action-op" class="rank-action">⭐ Set Operator Status (@)</li>
+        <li id="ctx-action-halfop" class="rank-action">⚡ Set Half-Op Status (%)</li>
+        <li id="ctx-action-voice" class="rank-action">🔊 Give Voice Status (+)</li>
+        <li class="separator"></li>
+        <li id="ctx-action-add-access" class="rank-action">📌 Add to Permanent Access List</li>
+        <li id="ctx-action-demote" class="rank-action warning">📉 Demote User</li>
+        <li id="ctx-action-kick" class="danger">👢 Kick User</li>
+        <li id="ctx-action-ban-ip" class="danger">🚫 Ban IP Address</li>
+        <li id="ctx-action-ban-nick" class="danger">🚫 Ban Nickname</li>
+      </ul>
+    </div>
+
+    <!-- Account Modal -->
+    <div id="modal-account" class="modal-backdrop hidden">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3>🔐 Account & Nick Protection</h3>
+          <button class="modal-close" data-close="modal-account">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-group">
+            <button id="tab-btn-identify" class="tab-btn active">Identify / Login</button>
+            <button id="tab-btn-register" class="tab-btn">Register Nick</button>
+          </div>
+
+          <form id="form-identify" class="auth-form">
+            <div class="form-group">
+              <label>Nickname:</label>
+              <input type="text" id="identify-nick" class="form-control" placeholder="Enter nick" required />
+            </div>
+            <div class="form-group">
+              <label>Password:</label>
+              <input type="password" id="identify-pass" class="form-control" placeholder="Enter password" required />
+            </div>
+            <button type="submit" class="btn btn-primary full-width">Identify Nick</button>
+          </form>
+
+          <form id="form-register" class="auth-form hidden">
+            <div class="form-group">
+              <label>Choose Nickname:</label>
+              <input type="text" id="register-nick" class="form-control" placeholder="e.g. Shahzad" required />
+            </div>
+            <div class="form-group">
+              <label>Password:</label>
+              <input type="password" id="register-pass" class="form-control" placeholder="Create password" required />
+            </div>
+            <button type="submit" class="btn btn-success full-width">Register & Protect Nick</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Modal -->
+    <div id="modal-admin" class="modal-backdrop hidden">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <h3>🛡️ Administrator & IP Tracker Console</h3>
+          <button class="modal-close" data-close="modal-admin">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="admin-tabs">
+            <button class="adm-tab active" data-target="admin-sec-online">🟢 Active Users & IPs</button>
+            <button class="adm-tab" data-target="admin-sec-history">📜 IP Connection Logs</button>
+            <button class="adm-tab" data-target="admin-sec-bans">🚫 Ban Management</button>
+            <button class="adm-tab" data-target="admin-sec-registered">👤 Registered Accounts</button>
+          </div>
+
+          <div class="admin-content">
+            <div id="admin-sec-online" class="admin-panel-sec active">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nick</th>
+                    <th>IP Address</th>
+                    <th>Global Rank</th>
+                    <th>Channels</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="table-online-users"></tbody>
+              </table>
+            </div>
+
+            <div id="admin-sec-history" class="admin-panel-sec">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nick</th>
+                    <th>IP Address</th>
+                    <th>Last Seen</th>
+                    <th>User Agent</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="table-ip-history"></tbody>
+              </table>
+            </div>
+
+            <div id="admin-sec-bans" class="admin-panel-sec">
+              <div class="flex-between margin-bottom">
+                <h4>Active Server Bans</h4>
+                <div class="ban-manual-inputs">
+                  <input type="text" id="manual-ban-target" class="form-control form-control-sm" placeholder="IP or Nick to Ban" />
+                  <button id="btn-manual-ban-ip" class="btn btn-sm btn-danger">Ban IP</button>
+                  <button id="btn-manual-ban-nick" class="btn btn-sm btn-warning">Ban Nick</button>
+                </div>
+              </div>
+
+              <h5>IP Address Bans</h5>
+              <table class="data-table margin-bottom">
+                <thead>
+                  <tr>
+                    <th>IP Address</th>
+                    <th>Reason</th>
+                    <th>Banned By</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="table-ip-bans"></tbody>
+              </table>
+
+              <h5>Nickname Bans</h5>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nick</th>
+                    <th>Reason</th>
+                    <th>Banned By</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="table-nick-bans"></tbody>
+              </table>
+            </div>
+
+            <div id="admin-sec-registered" class="admin-panel-sec">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Nick</th>
+                    <th>Role</th>
+                    <th>Registered Date</th>
+                  </tr>
+                </thead>
+                <tbody id="table-registered-nicks"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="modal-help" class="modal-backdrop hidden">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-header">
+          <h3>❓ #FunnyPaki UnrealIRCd Commands Suite</h3>
+          <button class="modal-close" data-close="modal-help">&times;</button>
+        </div>
+        <div class="modal-body help-body">
+          <h4>Geekshed ChanServ Commands:</h4>
+          <ul>
+            <li><code>/cs register #channel &lt;password&gt; [description]</code> - Register channel & become Founder.</li>
+            <li><code>/cs info #channel</code> - View channel registration & Founder info.</li>
+            <li><code>/cs aop | sop | hop | vop #channel add|del|list &lt;nick&gt;</code> - Manage Access Lists.</li>
+            <li><code>/mode #channel +r / +i / +m / +k</code> - Set channel modes.</li>
+          </ul>
+
+          <h4 style="margin-top:14px;">UnrealIRCd Oper & Admin Commands:</h4>
+          <ul>
+            <li><code>/OPER &lt;userid&gt; &lt;password&gt;</code> - Authenticate as IRC Operator / Admin.</li>
+            <li><code>/SAJOIN &lt;nick&gt; &lt;#channel&gt;</code> - Force user to join channel.</li>
+            <li><code>/SAPART &lt;nick&gt; &lt;#channel&gt;</code> - Force user to part channel.</li>
+            <li><code>/SAMODE &lt;#channel&gt; &lt;mode&gt;</code> - Force change channel modes.</li>
+            <li><code>/KILL &lt;nick&gt; [reason]</code> - Disconnect user from network.</li>
+            <li><code>/SHUN [+|-]&lt;nick|ip&gt; [time] [reason]</code> - Shun / mute target user globally.</li>
+            <li><code>/KLINE | /ZLINE | /GLINE | /GZLINE [+|-]&lt;nick|ip&gt; [reason]</code> - Network bans.</li>
+            <li><code>/WALLOPS | /GLOBOPS | /CHATOPS | /ADCHAT &lt;msg&gt;</code> - Oper broadcast channels.</li>
+            <li><code>/SETHOST &lt;vhost&gt;</code> | <code>/CHGHOST &lt;nick&gt; &lt;vhost&gt;</code> - Identity vhost cloaking.</li>
+            <li><code>/REHASH</code> | <code>/HTM [ON|OFF]</code> | <code>/CLOSE</code> - Server administration.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
