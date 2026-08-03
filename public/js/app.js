@@ -101,6 +101,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function generateDeviceFingerprint() {
+    try {
+      let saved = localStorage.getItem('pakichat_device_id');
+      if (saved && saved.startsWith('DEV-')) return saved;
+
+      const screenSig = `${screen.width}x${screen.height}x${screen.colorDepth}`;
+      const tzSig = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+      const cores = navigator.hardwareConcurrency || 4;
+      const mem = navigator.deviceMemory || 4;
+      const ua = navigator.userAgent || '';
+
+      let canvasHash = 'cvs000';
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#f60';
+        ctx.fillRect(125, 1, 62, 20);
+        ctx.fillStyle = '#069';
+        ctx.fillText('FunnyPaki#2026', 2, 15);
+        const dataUrl = canvas.toDataURL();
+        let hash = 0;
+        for (let i = 0; i < dataUrl.length; i++) {
+          hash = ((hash << 5) - hash) + dataUrl.charCodeAt(i);
+          hash |= 0;
+        }
+        canvasHash = Math.abs(hash).toString(16).toUpperCase();
+      } catch (e) {}
+
+      const rawSig = `${screenSig}|${tzSig}|${cores}|${mem}|${canvasHash}|${ua.substring(0, 40)}`;
+      let strHash = 0;
+      for (let i = 0; i < rawSig.length; i++) {
+        strHash = ((strHash << 5) - strHash) + rawSig.charCodeAt(i);
+        strHash |= 0;
+      }
+      const hexPart1 = Math.abs(strHash).toString(16).toUpperCase().padStart(4, '0').substring(0, 4);
+      const hexPart2 = Math.abs((strHash * 31) | 0).toString(16).toUpperCase().padStart(4, '0').substring(0, 4);
+
+      const deviceId = `DEV-${hexPart1}-${hexPart2}`;
+      localStorage.setItem('pakichat_device_id', deviceId);
+      document.cookie = `pakichat_dev_id=${deviceId}; path=/; max-age=315360000`;
+      return deviceId;
+    } catch (err) {
+      return 'DEV-GENERIC-0000';
+    }
+  }
+
+  const clientDeviceId = generateDeviceFingerprint();
+
+  socket.on('connect', () => {
+    socket.emit('set_device_id', { deviceId: clientDeviceId });
+  });
+
   // Handle Login Connect Submit (With 5-Second Buffer Delay)
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
@@ -137,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // 5 Seconds Buffer Delay
       setTimeout(() => {
         if (chosenNick) {
-          socket.emit('change_nick', { newNick: chosenNick });
+          socket.emit('change_nick', { newNick: chosenNick, deviceId: clientDeviceId });
         }
 
         if (chosenPass) {
@@ -215,21 +269,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  socket.on('chat_message', ({ channel, nick, prefix, roleName, message, timestamp }) => {
+  socket.on('chat_message', ({ channel, nick, prefix, roleName, message, textColor, bgColor, timestamp }) => {
     const isSelf = nick.toLowerCase() === currentNick.toLowerCase();
-    appendChatMessage(channel, nick, prefix, roleName, message, timestamp, false, isSelf);
+    appendChatMessage(channel, nick, prefix, roleName, message, timestamp, false, isSelf, textColor, bgColor);
   });
 
   socket.on('chat_action', ({ channel, nick, action, timestamp }) => {
     appendActionMessage(channel, nick, action, timestamp);
   });
 
-  socket.on('private_message', ({ from, to, message, timestamp }) => {
+  socket.on('private_message', ({ from, to, message, textColor, bgColor, timestamp }) => {
     const otherParty = (from.toLowerCase() === currentNick.toLowerCase()) ? to : from;
     ensurePMTabExists(otherParty);
 
     const isSelf = from.toLowerCase() === currentNick.toLowerCase();
-    appendChatMessage(otherParty, from, '', 'User', message, timestamp, true, isSelf);
+    appendChatMessage(otherParty, from, '', 'User', message, timestamp, true, isSelf, textColor, bgColor);
 
     if (activeWindow.toLowerCase() !== otherParty.toLowerCase()) {
       incrementUnread(otherParty);
@@ -244,13 +298,55 @@ document.addEventListener('DOMContentLoaded', () => {
     appendSystemMessage(channel, 'part', `*** ${nick} has left ${channel} (${reason})`);
   });
 
+  const loginAlertBanner = document.getElementById('login-alert-banner');
+
+  function showLoginRedirect(type, title, message) {
+    if (loginOverlay) {
+      loginOverlay.style.opacity = '1';
+      loginOverlay.style.pointerEvents = 'auto';
+      loginOverlay.classList.remove('hidden');
+    }
+
+    const btnConnect = document.getElementById('login-btn-connect');
+    if (btnConnect) {
+      btnConnect.disabled = false;
+      btnConnect.classList.remove('connecting');
+      btnConnect.textContent = 'Connect';
+    }
+
+    if (loginAlertBanner) {
+      loginAlertBanner.className = `login-alert-banner ${type}`;
+      loginAlertBanner.innerHTML = `<strong>${title}</strong><br/>${message}`;
+      loginAlertBanner.classList.remove('hidden');
+    }
+  }
+
   socket.on('user_kicked', ({ channel, targetNick, kickedBy, reason }) => {
     appendSystemMessage(channel, 'kick', `*** ${targetNick} was kicked from ${channel} by ${kickedBy} (${reason})`);
   });
 
   socket.on('you_were_kicked', ({ channel, kickedBy, reason }) => {
-    alert(`You were kicked from ${channel} by ${kickedBy}: ${reason}`);
-    switchWindow('Status');
+    showLoginRedirect(
+      'kick',
+      '⚠️ You Were Kicked',
+      `You were kicked from <strong>${channel}</strong> by <strong>${escapeHTML(kickedBy)}</strong><br/>Reason: <em>${escapeHTML(reason)}</em>`
+    );
+  });
+
+  socket.on('you_were_banned', ({ channel, bannedBy, reason }) => {
+    showLoginRedirect(
+      'ban',
+      '🛑 You Have Been Banned',
+      `You were banned from <strong>${channel}</strong> by <strong>${escapeHTML(bannedBy)}</strong><br/>Reason: <em>${escapeHTML(reason)}</em>`
+    );
+  });
+
+  socket.on('you_were_killed', ({ killedBy, reason }) => {
+    showLoginRedirect(
+      'kill',
+      '💥 Connection Terminated (KILL)',
+      `You were killed by Oper <strong>${escapeHTML(killedBy)}</strong><br/>Reason: <em>${escapeHTML(reason)}</em>`
+    );
   });
 
   socket.on('nick_changed', ({ channel, oldNick, newNick }) => {
@@ -454,6 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderUserListGrouped(users, channel) {
     userListContainer.innerHTML = '';
     userCount.textContent = users.length;
+    const mobileUserCount = document.getElementById('mobile-user-count');
+    if (mobileUserCount) mobileUserCount.textContent = users.length;
 
     const groups = {
       owner: { title: '👑 Owners (~)', list: [] },
@@ -514,7 +612,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function appendChatMessage(winName, nick, prefix, roleName, message, timestamp, isPM = false, isSelf = false) {
+  function appendChatMessage(winName, nick, prefix, roleName, message, timestamp, isPM = false, isSelf = false, textColor = null, bgColor = null) {
     const winEl = getOrCreateWindowElement(winName);
     const line = document.createElement('div');
     line.className = `chat-line ${isPM ? 'pm' : ''}`;
@@ -523,7 +621,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialLetter = (nick[0] || 'U').toUpperCase();
 
     // AUTO-CONVERT TEXT SMILIES & ENHANCE EMOJI SIZING
-    const formattedMsg = parseEmojiShortcuts(escapeHTML(message));
+    let formattedMsg = parseEmojiShortcuts(escapeHTML(message));
+
+    if (textColor || (bgColor && bgColor !== 'transparent')) {
+      const styles = [];
+      if (textColor) styles.push(`color: ${textColor}`);
+      if (bgColor && bgColor !== 'transparent') styles.push(`background-color: ${bgColor}`);
+      formattedMsg = `<span class="msg-text-colored" style="${styles.join('; ')}">${formattedMsg}</span>`;
+    }
 
     line.innerHTML = `
       <div class="avatar-badge" style="background-color: ${nickColor}">${initialLetter}</div>
@@ -575,9 +680,28 @@ document.addEventListener('DOMContentLoaded', () => {
   function openContextMenu(x, y) {
     if (!selectedTargetUser) return;
     ctxUserTitle.textContent = `${selectedTargetUser.nick} [${selectedTargetUser.roleName}]`;
-    contextMenu.style.left = `${x}px`;
-    contextMenu.style.top = `${y}px`;
+
+    contextMenu.style.display = 'block';
     contextMenu.classList.remove('hidden');
+
+    const menuWidth = contextMenu.offsetWidth || 195;
+    const menuHeight = contextMenu.offsetHeight || 320;
+
+    let posX = x;
+    let posY = y;
+
+    // Always position to the left if opened near right user list panel
+    if (posX + menuWidth > window.innerWidth - 10) {
+      posX = Math.max(10, posX - menuWidth);
+    }
+
+    // Adjust top position to prevent bottom screen clipping
+    if (posY + menuHeight > window.innerHeight - 10) {
+      posY = Math.max(10, window.innerHeight - menuHeight - 10);
+    }
+
+    contextMenu.style.left = `${posX}px`;
+    contextMenu.style.top = `${posY}px`;
   }
 
   function closeContextMenu() {
@@ -705,36 +829,209 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // TAB Autocomplete
+  // Tab Completion & Command History State
+  let tabMatches = [];
+  let tabMatchIndex = 0;
+  let tabStartPos = 0;
+
+  const inputHistory = [];
+  let historyIndex = -1;
+  let tempCurrentInput = '';
+
   chatInput.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
       e.preventDefault();
-      const val = chatInput.value;
-      const cursorPos = chatInput.selectionStart;
 
-      const words = val.substring(0, cursorPos).split(' ');
-      const currentWord = words[words.length - 1];
+      if (tabMatches.length > 0) {
+        // Cycle to next match
+        tabMatchIndex = (tabMatchIndex + 1) % tabMatches.length;
+        const nextMatch = tabMatches[tabMatchIndex];
+        const val = chatInput.value;
+        const newVal = val.substring(0, tabStartPos) + nextMatch + (tabStartPos === 0 ? ': ' : ' ');
+        chatInput.value = newVal;
+        return;
+      }
+
+      // Initial Tab Press: Extract word before cursor
+      const cursorPos = chatInput.selectionStart;
+      const textBefore = chatInput.value.substring(0, cursorPos);
+      const lastSpace = textBefore.lastIndexOf(' ');
+      const currentWord = lastSpace === -1 ? textBefore : textBefore.substring(lastSpace + 1);
 
       if (!currentWord) return;
 
       const currentWordLower = currentWord.toLowerCase();
-      const matches = currentChannelUsers.filter(u => u.nick.toLowerCase().startsWith(currentWordLower));
+      tabStartPos = lastSpace === -1 ? 0 : lastSpace + 1;
 
-      if (matches.length > 0) {
-        const completedNick = matches[0].nick;
-        words[words.length - 1] = (words.length === 1) ? `${completedNick}: ` : `${completedNick} `;
-        chatInput.value = words.join(' ') + val.substring(cursorPos);
-        chatInput.selectionStart = chatInput.selectionEnd = chatInput.value.length;
+      // Find matching users in current channel
+      const activeUsers = currentChannelUsers.map(u => u.nick);
+      tabMatches = activeUsers.filter(n => n.toLowerCase().startsWith(currentWordLower));
+
+      if (tabMatches.length > 0) {
+        tabMatchIndex = 0;
+        const firstMatch = tabMatches[0];
+        const val = chatInput.value;
+        const newVal = val.substring(0, tabStartPos) + firstMatch + (tabStartPos === 0 ? ': ' : ' ');
+        chatInput.value = newVal;
       }
+    } else if (e.key === 'ArrowUp') {
+      if (inputHistory.length === 0) return;
+      e.preventDefault();
+      if (historyIndex === -1 || historyIndex === inputHistory.length) {
+        tempCurrentInput = chatInput.value;
+        historyIndex = inputHistory.length - 1;
+      } else if (historyIndex > 0) {
+        historyIndex--;
+      }
+      chatInput.value = inputHistory[historyIndex] || '';
+      setTimeout(() => chatInput.setSelectionRange(chatInput.value.length, chatInput.value.length), 0);
+    } else if (e.key === 'ArrowDown') {
+      if (inputHistory.length === 0 || historyIndex === -1) return;
+      e.preventDefault();
+      if (historyIndex < inputHistory.length - 1) {
+        historyIndex++;
+        chatInput.value = inputHistory[historyIndex];
+      } else {
+        historyIndex = inputHistory.length;
+        chatInput.value = tempCurrentInput;
+      }
+      setTimeout(() => chatInput.setSelectionRange(chatInput.value.length, chatInput.value.length), 0);
     } else if (e.key === 'Enter') {
       handleInputSubmit();
+    } else {
+      tabMatches = [];
+      tabMatchIndex = 0;
     }
   });
+
+  // --- TEXT & BACKGROUND COLOR PICKER ENGINE ---
+  let activeTextColor = null;
+  let activeBgColor = null;
+
+  let tempFgColor = '#000000';
+  let tempBgColor = 'transparent';
+
+  const btnToggleColor = document.getElementById('btn-toggle-color');
+  const colorPickerModal = document.getElementById('color-picker-modal');
+  const btnCloseColorPicker = document.getElementById('btn-close-color-picker');
+  const colorPreviewBox = document.getElementById('color-preview-box');
+  const btnApplyColor = document.getElementById('btn-apply-color');
+  const btnClearColor = document.getElementById('btn-clear-color');
+
+  if (btnToggleColor && colorPickerModal) {
+    btnToggleColor.addEventListener('click', () => {
+      colorPickerModal.classList.toggle('hidden');
+      if (emojiPicker) emojiPicker.classList.add('hidden');
+    });
+  }
+
+  if (btnCloseColorPicker && colorPickerModal) {
+    btnCloseColorPicker.addEventListener('click', () => {
+      colorPickerModal.classList.add('hidden');
+    });
+  }
+
+  function updateColorPreview() {
+    if (!colorPreviewBox) return true;
+
+    const fg = tempFgColor.toLowerCase();
+    const bg = tempBgColor.toLowerCase();
+
+    if (bg !== 'transparent' && fg === bg) {
+      colorPreviewBox.textContent = "❌ Invalid: Text & Background colors cannot be identical!";
+      colorPreviewBox.style.color = '#ef4444';
+      colorPreviewBox.style.backgroundColor = '#fee2e2';
+      return false;
+    }
+
+    if (bg === '#ffffff' && fg === '#ffffff') {
+      colorPreviewBox.textContent = "❌ Invalid: White text on White background!";
+      colorPreviewBox.style.color = '#ef4444';
+      colorPreviewBox.style.backgroundColor = '#fee2e2';
+      return false;
+    }
+
+    if (bg === '#000000' && fg === '#000000') {
+      colorPreviewBox.textContent = "❌ Invalid: Black text on Black background!";
+      colorPreviewBox.style.color = '#ef4444';
+      colorPreviewBox.style.backgroundColor = '#fee2e2';
+      return false;
+    }
+
+    colorPreviewBox.textContent = "Sample Text #FunnyPaki 😊";
+    colorPreviewBox.style.color = tempFgColor;
+    colorPreviewBox.style.backgroundColor = tempBgColor === 'transparent' ? '#ffffff' : tempBgColor;
+    return true;
+  }
+
+  // Foreground Swatches
+  document.querySelectorAll('#fg-color-grid .color-swatch').forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      document.querySelectorAll('#fg-color-grid .color-swatch').forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      tempFgColor = swatch.getAttribute('data-color') || '#000000';
+      updateColorPreview();
+    });
+  });
+
+  // Background Swatches
+  document.querySelectorAll('#bg-color-grid .color-swatch').forEach(swatch => {
+    swatch.addEventListener('click', () => {
+      document.querySelectorAll('#bg-color-grid .color-swatch').forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+      tempBgColor = swatch.getAttribute('data-color') || 'transparent';
+      updateColorPreview();
+    });
+  });
+
+  // Apply Button
+  if (btnApplyColor) {
+    btnApplyColor.addEventListener('click', () => {
+      const isValid = updateColorPreview();
+      if (!isValid) {
+        alert("Please select a readable combination of Text and Background colors!");
+        return;
+      }
+      activeTextColor = tempFgColor;
+      activeBgColor = tempBgColor;
+      if (btnToggleColor) btnToggleColor.classList.add('active');
+      if (colorPickerModal) colorPickerModal.classList.add('hidden');
+      chatInput.focus();
+    });
+  }
+
+  // Clear Button
+  if (btnClearColor) {
+    btnClearColor.addEventListener('click', () => {
+      activeTextColor = null;
+      activeBgColor = null;
+      tempFgColor = '#000000';
+      tempBgColor = 'transparent';
+
+      document.querySelectorAll('#fg-color-grid .color-swatch').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('#bg-color-grid .color-swatch').forEach(s => s.classList.remove('active'));
+      const defaultFg = document.querySelector('#fg-color-grid .color-swatch[data-color="#000000"]');
+      if (defaultFg) defaultFg.classList.add('active');
+      const defaultBg = document.querySelector('#bg-color-grid .color-swatch[data-color="transparent"]');
+      if (defaultBg) defaultBg.classList.add('active');
+
+      updateColorPreview();
+      if (btnToggleColor) btnToggleColor.classList.remove('active');
+      if (colorPickerModal) colorPickerModal.classList.add('hidden');
+      chatInput.focus();
+    });
+  }
 
   // --- Complete Command Parser ---
 
   function handleInputSubmit() {
     let text = chatInput.value.trim();
     if (!text) return;
+
+    inputHistory.push(text);
+    if (inputHistory.length > 100) inputHistory.shift();
+    historyIndex = inputHistory.length;
+
     chatInput.value = '';
 
     if (text.startsWith('/')) {
@@ -744,7 +1041,12 @@ document.addEventListener('DOMContentLoaded', () => {
         appendSystemMessage('Status', 'error', '*** Please join a #channel or PM a user to send messages.');
         return;
       }
-      socket.emit('send_message', { target: activeWindow, message: text });
+      socket.emit('send_message', {
+        target: activeWindow,
+        message: text,
+        textColor: activeTextColor,
+        bgColor: activeBgColor
+      });
     }
   }
 
@@ -758,7 +1060,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'sajoin', 'sapart', 'samode', 'kill', 'shun', 'unshun', 'kline', 'zline', 'gline', 'gzline',
       'sethost', 'setident', 'chghost', 'chgident', 'chgname', 'rehash',
       'opermotd', 'addmotd', 'addomotd', 'mkpasswd', 'htm', 'close', 'dccdeny', 'undccdeny',
-      'banlist', 'stats'
+      'banlist', 'stats', 'seen', 'whowas', 'whois', 'devban', 'devunban'
     ];
 
     if (unrealCmds.includes(cmd)) {
@@ -1200,6 +1502,34 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => socket.emit('get_admin_data'), 300);
       });
     });
+  }
+
+  // --- MOBILE USER LIST SLIDE-OVER DRAWER ENGINE ---
+  const btnMobileUsersToggle = document.getElementById('btn-mobile-users-toggle');
+  const btnCloseMobileUserlist = document.getElementById('btn-close-mobile-userlist');
+  const pakichatUserlistPanel = document.getElementById('pakichat-userlist-panel');
+  const userListBackdrop = document.getElementById('user-list-backdrop');
+
+  function openMobileUserList() {
+    if (pakichatUserlistPanel) pakichatUserlistPanel.classList.add('mobile-drawer-open');
+    if (userListBackdrop) userListBackdrop.classList.remove('hidden');
+  }
+
+  function closeMobileUserList() {
+    if (pakichatUserlistPanel) pakichatUserlistPanel.classList.remove('mobile-drawer-open');
+    if (userListBackdrop) userListBackdrop.classList.add('hidden');
+  }
+
+  if (btnMobileUsersToggle) {
+    btnMobileUsersToggle.addEventListener('click', openMobileUserList);
+  }
+
+  if (btnCloseMobileUserlist) {
+    btnCloseMobileUserlist.addEventListener('click', closeMobileUserList);
+  }
+
+  if (userListBackdrop) {
+    userListBackdrop.addEventListener('click', closeMobileUserList);
   }
 
 });

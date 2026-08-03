@@ -32,6 +32,8 @@
         </div>
 
         <button type="submit" id="login-btn-connect" class="login-connect-btn">Connect</button>
+        <!-- Alert Banner (Displays Kick / Ban / Kill Reasons) -->
+        <div id="login-alert-banner" class="login-alert-banner hidden"></div>
       </form>
     </div>
   </div>
@@ -55,6 +57,7 @@
       <div class="header-right-tools">
         <span id="user-status-badge" class="badge badge-guest">Guest</span>
         <span id="current-nick-display" class="nick-display">Guest_0000</span>
+        <button id="btn-mobile-users-toggle" class="btn btn-xs btn-primary mobile-only" title="View Users List">👥 Users (<span id="mobile-user-count">0</span>)</button>
         <button id="btn-register-modal" class="btn btn-xs btn-outline-white" title="Account">🔐 Account</button>
         <button id="btn-admin-modal" class="btn btn-xs btn-danger hidden" title="Admin Console">🛡️ Admin</button>
         <button id="btn-help-modal" class="btn btn-xs btn-outline-white" title="Help">❓</button>
@@ -104,6 +107,65 @@
           </div>
         </div>
 
+        <!-- Text & Background Color Picker Modal -->
+        <div id="color-picker-modal" class="color-picker-modal hidden">
+          <div class="color-picker-header">
+            <span>🎨 Text & Background Color Picker</span>
+            <button id="btn-close-color-picker" class="color-picker-close">&times;</button>
+          </div>
+
+          <div class="color-picker-body">
+            <!-- Text Color Section -->
+            <div class="color-section">
+              <label class="color-label">Text Color (Foreground):</label>
+              <div id="fg-color-grid" class="color-grid">
+                <span class="color-swatch active" data-color="#000000" style="background-color: #000000;" title="Black"></span>
+                <span class="color-swatch" data-color="#ef4444" style="background-color: #ef4444;" title="Red"></span>
+                <span class="color-swatch" data-color="#2563eb" style="background-color: #2563eb;" title="Blue"></span>
+                <span class="color-swatch" data-color="#16a34a" style="background-color: #16a34a;" title="Green"></span>
+                <span class="color-swatch" data-color="#9333ea" style="background-color: #9333ea;" title="Purple"></span>
+                <span class="color-swatch" data-color="#d97706" style="background-color: #d97706;" title="Orange/Gold"></span>
+                <span class="color-swatch" data-color="#db2777" style="background-color: #db2777;" title="Pink/Magenta"></span>
+                <span class="color-swatch" data-color="#0891b2" style="background-color: #0891b2;" title="Teal/Cyan"></span>
+                <span class="color-swatch" data-color="#ffffff" style="background-color: #ffffff; border: 1px solid #ccc;" title="White"></span>
+                <span class="color-swatch" data-color="#1e293b" style="background-color: #1e293b;" title="Navy Dark"></span>
+                <span class="color-swatch" data-color="#991b1b" style="background-color: #991b1b;" title="Crimson"></span>
+                <span class="color-swatch" data-color="#14532d" style="background-color: #14532d;" title="Dark Green"></span>
+              </div>
+            </div>
+
+            <!-- Background Color Section -->
+            <div class="color-section">
+              <label class="color-label">Highlight Color (Background):</label>
+              <div id="bg-color-grid" class="color-grid">
+                <span class="color-swatch active" data-color="transparent" style="background-color: transparent; border: 1px dashed #aaa;" title="None / Transparent">🚫</span>
+                <span class="color-swatch" data-color="#fef08a" style="background-color: #fef08a;" title="Soft Yellow"></span>
+                <span class="color-swatch" data-color="#bbf7d0" style="background-color: #bbf7d0;" title="Soft Green"></span>
+                <span class="color-swatch" data-color="#bfdbfe" style="background-color: #bfdbfe;" title="Soft Blue"></span>
+                <span class="color-swatch" data-color="#fbcfe8" style="background-color: #fbcfe8;" title="Soft Pink"></span>
+                <span class="color-swatch" data-color="#e2e8f0" style="background-color: #e2e8f0;" title="Light Gray"></span>
+                <span class="color-swatch" data-color="#000000" style="background-color: #000000;" title="Black"></span>
+                <span class="color-swatch" data-color="#1e293b" style="background-color: #1e293b;" title="Dark Navy"></span>
+                <span class="color-swatch" data-color="#475569" style="background-color: #475569;" title="Slate Gray"></span>
+              </div>
+            </div>
+
+            <!-- Live Sample Preview Box -->
+            <div class="color-preview-container">
+              <label class="color-label">Live Sample Preview:</label>
+              <div id="color-preview-box" class="color-preview-box">
+                Sample Text #FunnyPaki 😊
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="color-picker-actions">
+              <button type="button" id="btn-apply-color" class="btn-color-apply">Apply Color</button>
+              <button type="button" id="btn-clear-color" class="btn-color-clear">Clear Color</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Formatting Toolbar & Input Box -->
         <div class="pakichat-input-container">
           <!-- Formatting Toolbar -->
@@ -123,10 +185,14 @@
         </div>
       </section>
 
+      <!-- Mobile User List Backdrop -->
+      <div id="user-list-backdrop" class="user-list-backdrop hidden"></div>
+
       <!-- Right User List Panel -->
-      <aside class="pakichat-userlist-panel">
+      <aside id="pakichat-userlist-panel" class="pakichat-userlist-panel">
         <div class="userlist-header">
           <span>USERS (<span id="user-count">0</span>)</span>
+          <button id="btn-close-mobile-userlist" class="mobile-only btn-close-drawer">&times;</button>
         </div>
         <div id="user-list-container" class="user-list-wrapper">
           <!-- Dynamic user list -->

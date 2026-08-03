@@ -1,0 +1,14 @@
+{
+  "motd": [
+    "==========================================================",
+    "  Welcome to #FunnyPaki UnrealIRCd Server                 ",
+    "  Respect all users & Obey Server Operators!              ",
+    "=========================================================="
+  ],
+  "opermotd": [
+    "==========================================================",
+    "  OPERATOR MOTD: Confidential Server Oper Area           ",
+    "  Do not abuse Oper privileges! All actions logged.       ",
+    "=========================================================="
+  ]
+}

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin & Anti-Spam Control Console - #FunnyPaki</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    html, body {
+      background-color: #f1f5f9;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #1e293b;
+      overflow-y: auto !important;
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      background-color: #0e6231;
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header-title {
+      font-size: 20px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .admin-container {
+      max-width: 1150px;
+      margin: 30px auto 60px auto;
+      padding: 0 20px;
+    }
+
+    .main-nav-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #cbd5e1;
+      padding-bottom: 10px;
+    }
+
+    .nav-tab-btn {
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      background: #ffffff;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .nav-tab-btn.active {
+      background: #0e6231;
+      color: #ffffff;
+      border-color: #0e6231;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .stat-card-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-card-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: #0e6231;
+    }
+
+    .admin-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+      padding: 24px;
+      margin-bottom: 30px;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .search-input, .text-input {
+      padding: 12px 16px;
+      font-size: 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-input:focus, .text-input:focus {
+      border-color: #0e6231;
+      box-shadow: 0 0 0 3px rgba(14, 98, 49, 0.15);
+    }
+
+    .select-dropdown {
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      background: #ffffff;
+      outline: none;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .filter-btn.active {
+      background: #0e6231;
+      color: #ffffff;
+      border-color: #0e6231;
+    }
+
+    .admin-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .admin-table th {
+      background-color: #f8fafc;
+      color: #475569;
+      font-weight: 700;
+      padding: 14px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .admin-table td {
+      padding: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .admin-table tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .badge-type {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .badge-ip { background-color: #fee2e2; color: #991b1b; }
+    .badge-nick { background-color: #fef3c7; color: #92400e; }
+    .badge-device { background-color: #f3e8ff; color: #6b21a8; }
+    .badge-shun { background-color: #e0e7ff; color: #3730a3; }
+
+    .badge-act-block { background-color: #fee2e2; color: #991b1b; }
+    .badge-act-kick { background-color: #fef3c7; color: #92400e; }
+    .badge-act-ban { background-color: #7f1d1d; color: #ffffff; }
+    .badge-act-shun { background-color: #e0e7ff; color: #3730a3; }
+
+    .btn-unban-action, .btn-primary-action {
+      background-color: #16a34a;
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.15s, transform 0.1s;
+    }
+
+    .btn-danger-action {
+      background-color: #ef4444;
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-danger-action:hover { background-color: #dc2626; }
+    .btn-primary-action:hover { background-color: #15803d; }
+
+    .add-filter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      margin-bottom: 20px;
+    }
+
+    /* Admin Login Overlay */
+    .admin-login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #eaf0f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999999;
+    }
+
+    .admin-login-card {
+      background: #ffffff;
+      width: 90%;
+      max-width: 420px;
+      padding: 36px 32px;
+      border-radius: 16px;
+      border: 1.5px solid #13793c;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .btn-logout {
+      background: #ef4444;
+      color: #ffffff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-logout:hover { background: #dc2626; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- ADMIN AUTHENTICATION LOGIN OVERLAY -->
+  <div id="admin-login-overlay" class="admin-login-overlay">
+    <div class="admin-login-card">
+      <h1 class="login-title">Admin Access</h1>
+      <div class="login-title-bar"></div>
+
+      <form id="admin-login-form" class="login-form">
+        <div class="login-field">
+          <label for="admin-user-input">Admin Username</label>
+          <input type="text" id="admin-user-input" placeholder="Enter admin username" required autocomplete="off" value="shahzad">
+        </div>
+
+        <div class="login-field">
+          <label for="admin-pass-input">Admin Password</label>
+          <div class="password-input-wrapper">
+            <input type="password" id="admin-pass-input" placeholder="Enter admin password" required autocomplete="current-password">
+            <button type="button" id="btn-admin-toggle-eye" class="toggle-eye-btn" title="Toggle Password Visibility">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="admin-btn-login" class="login-connect-btn">Unlock Console</button>
+        <div id="admin-login-error" class="login-alert-banner ban hidden"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PROTECTED MAIN ADMIN CONSOLE -->
+  <div id="admin-main-console" class="hidden">
+    <header class="admin-header">
+      <div class="admin-header-title">
+        🛡️ #FunnyPaki Admin & Anti-Spam Control Console
+      </div>
+      <div class="admin-header-right">
+        <span id="logged-admin-name" style="font-weight: 600;">Admin: shahzad</span>
+        <a href="/" class="btn btn-xs btn-outline-white" style="text-decoration: none; padding: 6px 12px; color: white; border: 1px solid white; border-radius: 6px;">💬 Back to Chat</a>
+        <button id="btn-admin-logout" class="btn-logout">🚪 Logout</button>
+      </div>
+    </header>
+
+    <main class="admin-container">
+      <!-- Main Nav Tabs -->
+      <div class="main-nav-tabs">
+        <button id="tab-btn-bans" class="nav-tab-btn active" data-tab="bans-section">🛡️ Ban Management</button>
+        <button id="tab-btn-spam" class="nav-tab-btn" data-tab="spam-section">🚫 Anti-Spam & Bad Words Filter</button>
+      </div>
+
+      <!-- SECTION 1: BAN MANAGEMENT -->
+      <div id="bans-section">
+        <!-- Stat Summary Cards -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-card-label">Total IP Bans</span>
+            <span id="stat-ip-count" class="stat-card-value">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-label">Total Nick Bans</span>
+            <span id="stat-nick-count" class="stat-card-value">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-label">Device Bans</span>
+            <span id="stat-device-count" class="stat-card-value">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-label">Active Stealth Shuns</span>
+            <span id="stat-shun-count" class="stat-card-value">0</span>
+          </div>
+        </div>
+
+        <!-- Main Bans Table Card -->
+        <div class="admin-card">
+          <div class="controls-row">
+            <input type="text" id="bans-search-input" class="search-input" placeholder="🔍 Search Nickname, IP, Device ID, Operator or Reason..." autocomplete="off">
+            <div class="filter-tabs">
+              <button class="filter-btn active" data-filter="all">All Bans</button>
+              <button class="filter-btn" data-filter="ip">IP Bans</button>
+              <button class="filter-btn" data-filter="nick">Nick Bans</button>
+              <button class="filter-btn" data-filter="device">Device Bans</button>
+              <button class="filter-btn" data-filter="shun">Stealth Shuns</button>
+            </div>
+          </div>
+
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Type</th>
+                  <th>Target (IP / Nick)</th>
+                  <th>Banned By</th>
+                  <th>Reason</th>
+                  <th>Date & Time</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="bans-table-body">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 20px; color: #64748b;">Loading bans data...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: ANTI-SPAM & BAD WORDS FILTER -->
+      <div id="spam-section" class="hidden">
+        <div class="admin-card">
+          <h2 style="font-size: 18px; font-weight: 800; margin-top: 0; color: #0e6231;">🚫 Add New Forbidden Word / Spam Filter</h2>
+          
+          <form id="add-spam-filter-form" class="add-filter-form">
+            <input type="text" id="spam-word-input" class="text-input" placeholder="Enter forbidden word or phrase (e.g. badword)" required style="flex: 1; min-width: 240px;">
+            
+            <label style="font-weight: 600; font-size: 13px;">Automated Action:</label>
+            <select id="spam-action-select" class="select-dropdown">
+              <option value="block">🚫 Block Message (Suppress silently)</option>
+              <option value="kick">👢 Kick User (Auto-Kick)</option>
+              <option value="ban">🛑 Ban User (Auto IP & Nick Ban)</option>
+              <option value="shun">🤫 Stealth Shun (10m Mute)</option>
+            </select>
+
+            <button type="submit" class="btn-primary-action">➕ Add Filter Rule</button>
+          </form>
+
+          <h3 style="font-size: 16px; font-weight: 700; color: #334155; margin-top: 24px;">Active Word & Spam Filters List</h3>
+          
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Forbidden Word / Phrase</th>
+                  <th>Automated Action</th>
+                  <th>Added By</th>
+                  <th>Date Added</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="spam-table-body">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">Loading spam filters...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

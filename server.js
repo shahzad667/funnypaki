@@ -98,7 +98,7 @@ const mainChanObj = {
   ops: new Set([BOT_SOCKET_ID]),
   halfops: new Set(),
   voices: new Set(),
-  modes: { r: false, i: false, m: false, k: '' },
+  modes: { r: false, i: false, m: false, k: '', f: { enabled: true, lines: 10, seconds: 5 } },
   invites: new Set()
 };
 channels.set(DEFAULT_MAIN_CHANNEL.toLowerCase(), mainChanObj);
@@ -199,6 +199,7 @@ function getModeString(modes) {
   if (modes.i) str += 'i';
   if (modes.m) str += 'm';
   if (modes.k) str += 'k';
+  if (modes.f && modes.f.enabled) str += `f [${modes.f.lines}:${modes.f.seconds}]`;
   return str === '+' ? '' : str;
 }
 
@@ -557,6 +558,8 @@ io.on('connection', (socket) => {
     realname: 'PakiChat Guest User',
     channels: new Set(),
     user_agent: userAgent,
+    connectedAt: Date.now(),
+    lastActive: Date.now(),
     identify_timer: null
   });
 
@@ -578,7 +581,30 @@ io.on('connection', (socket) => {
 
   joinChannel(socket, DEFAULT_MAIN_CHANNEL);
 
-  socket.on('change_nick', async ({ newNick }) => {
+  socket.on('set_device_id', ({ deviceId }) => {
+    if (!deviceId) return;
+    socket.deviceId = deviceId;
+    const u = users.get(socket.id);
+    if (u) {
+      u.deviceId = deviceId;
+      db.logUserIP(u.nick, u.ip, socket.handshake.headers['user-agent'] || '', deviceId);
+    }
+    if (db.isDeviceBanned(deviceId)) {
+      socket.emit('you_were_banned', {
+        channel: DEFAULT_MAIN_CHANNEL,
+        bannedBy: 'Operator',
+        reason: `Your Physical Device [${deviceId}] is BANNED from #FunnyPaki!`
+      });
+      socket.disconnect(true);
+    }
+  });
+
+  socket.on('change_nick', async ({ newNick, deviceId }) => {
+    if (deviceId) {
+      socket.deviceId = deviceId;
+      const u = users.get(socket.id);
+      if (u) u.deviceId = deviceId;
+    }
     handleNickChange(socket, newNick);
   });
 
@@ -649,6 +675,8 @@ io.on('connection', (socket) => {
   socket.on('register_channel', async ({ channel, password, description }) => {
     const u = users.get(socket.id);
     if (!u) return;
+
+    u.lastActive = Date.now();
     const res = await db.registerChannel(channel, u.nick, password, description);
     if (res.success) {
       socket.emit('system_notice', { type: 'success', message: `*** [ChanServ] ${res.message}` });
@@ -674,7 +702,7 @@ io.on('connection', (socket) => {
     handleInviteUser(socket, targetNick, channel);
   });
 
-  socket.on('send_message', ({ target, message }) => {
+  socket.on('send_message', ({ target, message, textColor, bgColor }) => {
     const u = users.get(socket.id);
     if (!u || !message || !message.trim()) return;
     message = message.trim();
@@ -682,6 +710,129 @@ io.on('connection', (socket) => {
     if (db.isNickBanned(u.nick) || db.isIPBanned(u.ip)) {
       socket.emit('system_notice', { type: 'error', message: '*** You are banned from sending messages.' });
       return;
+    }
+
+    // Real-Time Anti-Spam / Forbidden Word Filter Engine
+    const spamMatch = db.checkSpamMatch(message);
+    if (spamMatch && !u.is_oper && !u.is_admin && u.global_role !== 'owner') {
+      const act = spamMatch.action;
+      const word = spamMatch.word;
+
+      if (act === 'block') {
+        socket.emit('system_notice', {
+          type: 'error',
+          message: `*** Message blocked: Contains forbidden word/phrase '${word}'.`
+        });
+        return;
+      }
+
+      if (act === 'kick') {
+        socket.emit('you_were_kicked', {
+          channel: target.startsWith('#') ? target : DEFAULT_MAIN_CHANNEL,
+          kickedBy: 'Auto-Filter',
+          reason: `Forbidden word detected: '${word}'`
+        });
+        if (target.startsWith('#')) {
+          const chanObj = channels.get(normChan(target));
+          if (chanObj) {
+            io.to(chanObj.name).emit('system_notice', {
+              type: 'warning',
+              message: `*** ${u.nick} was kicked by Auto-Filter (Forbidden word: '${word}')`
+            });
+            partChannel(socket, chanObj.name);
+          }
+        }
+        return;
+      }
+
+      if (act === 'ban') {
+        db.banIP(u.ip, `Auto-Filter: Forbidden word '${word}'`, 'Auto-Filter');
+        db.banNick(u.nick, `Auto-Filter: Forbidden word '${word}'`, 'Auto-Filter');
+
+        socket.emit('you_were_banned', {
+          channel: target.startsWith('#') ? target : DEFAULT_MAIN_CHANNEL,
+          bannedBy: 'Auto-Filter',
+          reason: `Forbidden word detected: '${word}'`
+        });
+
+        if (target.startsWith('#')) {
+          const chanObj = channels.get(normChan(target));
+          if (chanObj) {
+            io.to(chanObj.name).emit('system_notice', {
+              type: 'error',
+              message: `*** [BAN] ${u.nick} was BANNED by Auto-Filter (Forbidden word: '${word}')`
+            });
+            setTimeout(() => {
+              partChannel(socket, chanObj.name);
+            }, 3000);
+          }
+        }
+        return;
+      }
+
+      if (act === 'shun') {
+        db.shunUser(u.nick, `Auto-Filter: '${word}'`, 'Auto-Filter', 600000); // 10m
+        socket.emit('system_notice', {
+          type: 'warning',
+          message: `*** [SHUN] You have been stealth shunned for 10 minutes (Forbidden word: '${word}').`
+        });
+        socket.emit('chat_message', {
+          channel: target,
+          nick: u.nick,
+          prefix: '',
+          roleName: 'User',
+          message: message,
+          timestamp: new Date().toLocaleTimeString()
+        });
+        return;
+      }
+    }
+
+    // Track word count stats for top chatters (excluding bots)
+    const wordsCount = message.trim().split(/\s+/).filter(Boolean).length;
+    if (wordsCount > 0) {
+      db.trackWords(u.nick, wordsCount);
+    }
+
+    // Dynamic Channel Anti-Flood Engine (+f mode)
+    if (target.startsWith('#')) {
+      const norm = normChan(target);
+      const chanObj = channels.get(norm);
+      if (chanObj && chanObj.modes.f && chanObj.modes.f.enabled) {
+        const isStaff = getUserRankInChannel(socket.id, chanObj).rank >= 2 || u.is_oper || u.is_admin || u.global_role === 'owner';
+
+        if (!isStaff) {
+          const fLimit = chanObj.modes.f;
+          const limitMs = fLimit.seconds * 1000;
+          const now = Date.now();
+
+          if (!u.msgTimestamps) u.msgTimestamps = [];
+          u.msgTimestamps = u.msgTimestamps.filter(t => (now - t) <= limitMs);
+          u.msgTimestamps.push(now);
+
+          if (u.msgTimestamps.length >= fLimit.lines) {
+            const floodReason = `Channel flood triggered: ${fLimit.lines} lines in ${fLimit.seconds}s`;
+            socket.emit('you_were_kicked', {
+              channel: chanObj.name,
+              kickedBy: 'Flood-Guard',
+              reason: floodReason
+            });
+
+            io.to(chanObj.name).emit('system_notice', {
+              type: 'warning',
+              message: `*** ${u.nick} was kicked by Flood-Guard (${floodReason})`
+            });
+
+            partChannel(socket, chanObj.name);
+            return;
+          }
+        }
+      }
+    }
+
+    if (message.startsWith('.') || message.startsWith('!') || message.startsWith('!seen') || message.startsWith('!SEEN')) {
+      const handled = handleDotCommand(socket, target.startsWith('#') ? target : DEFAULT_MAIN_CHANNEL, message);
+      if (handled) return;
     }
 
     const isUserShunned = db.isShunned(u.nick, u.ip);
@@ -703,6 +854,8 @@ io.on('connection', (socket) => {
           prefix: rankInfo.prefix,
           roleName: rankInfo.roleName,
           message: message,
+          textColor: textColor || null,
+          bgColor: bgColor || null,
           timestamp: new Date().toLocaleTimeString()
         });
         return;
@@ -724,6 +877,8 @@ io.on('connection', (socket) => {
         prefix: rankInfo.prefix,
         roleName: rankInfo.roleName,
         message: message,
+        textColor: textColor || null,
+        bgColor: bgColor || null,
         timestamp: new Date().toLocaleTimeString()
       });
 
@@ -737,6 +892,8 @@ io.on('connection', (socket) => {
           from: u.nick,
           to: target || 'User',
           message: message,
+          textColor: textColor || null,
+          bgColor: bgColor || null,
           timestamp: new Date().toLocaleTimeString()
         });
         return;
@@ -751,6 +908,8 @@ io.on('connection', (socket) => {
         from: u.nick,
         to: targetUser.nick,
         message: message,
+        textColor: textColor || null,
+        bgColor: bgColor || null,
         timestamp: new Date().toLocaleTimeString()
       };
 
@@ -1506,6 +1665,43 @@ async function handleUnrealCommand(socket, cmd, args) {
       socket.emit('system_notice', { type: 'success', message: `*** [UNDCCDENY] ${undccRes.message}` });
       break;
 
+    case 'seen':
+      handleSeenInquiry(socket, args[0]);
+      break;
+
+    case 'whowas':
+      handleWhowas(socket, args[0]);
+      break;
+
+    case 'devban':
+      if (!isOperOrAdmin) {
+        socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: /DEVBAN requires IRCop privileges.' });
+        return;
+      }
+      if (!args[0]) {
+        socket.emit('system_notice', { type: 'error', message: 'Usage: /DEVBAN <nick|deviceId> [reason]' });
+        return;
+      }
+      handleDeviceBanCommand(socket, args[0], args.slice(1).join(' '));
+      break;
+
+    case 'devunban':
+      if (!isOperOrAdmin) {
+        socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: /DEVUNBAN requires IRCop privileges.' });
+        return;
+      }
+      if (!args[0]) {
+        socket.emit('system_notice', { type: 'error', message: 'Usage: /DEVUNBAN <deviceId>' });
+        return;
+      }
+      const undevRes = db.unbanDevice(args[0]);
+      socket.emit('system_notice', { type: 'success', message: `*** [DEVUNBAN] ${undevRes.message}` });
+      break;
+
+    case 'whois':
+      handleWhoisInquiry(socket, args[0]);
+      break;
+
     default:
       socket.emit('system_notice', { type: 'error', message: `*** Unknown UnrealIRCd command /${cmd}.` });
   }
@@ -1682,6 +1878,23 @@ function handleSetChannelMode(socket, channelName, modeStr, keyArg = '') {
     else if (char === 'i') chanObj.modes.i = adding;
     else if (char === 'm') chanObj.modes.m = adding;
     else if (char === 'k') chanObj.modes.k = adding ? keyArg : '';
+    else if (char === 'f') {
+      if (adding) {
+        let lines = 10;
+        let seconds = 5;
+        if (keyArg && keyArg.includes(':')) {
+          const parts = keyArg.split(':').map(Number);
+          if (parts[0] > 0) lines = parts[0];
+          if (parts[1] > 0) seconds = parts[1];
+        } else if (keyArg && !isNaN(Number(keyArg))) {
+          lines = Number(keyArg);
+        }
+        chanObj.modes.f = { enabled: true, lines, seconds };
+      } else {
+        if (!chanObj.modes.f) chanObj.modes.f = { enabled: false, lines: 10, seconds: 5 };
+        chanObj.modes.f.enabled = false;
+      }
+    }
   }
 
   db.saveChannelModes(chanObj.name, chanObj.modes);
@@ -1939,13 +2152,574 @@ function handleUnban(socket, target, banType = 'ip') {
   }
 }
 
+// --- !SEEN LAST ONLINE INQUIRY ENGINE ---
+function formatRelativeTime(dateIsoStr) {
+  if (!dateIsoStr) return 'some time ago';
+  const past = new Date(dateIsoStr).getTime();
+  const now = Date.now();
+  const diffMs = Math.max(0, now - past);
+  const diffSec = Math.floor(diffMs / 1000);
+
+  if (diffSec < 60) return `${diffSec} seconds ago`;
+
+  const diffMin = Math.floor(diffSec / 60);
+  const hours = Math.floor(diffMin / 60);
+  const remainingMins = diffMin % 60;
+
+  if (hours === 0) {
+    return `${diffMin} ${diffMin === 1 ? 'minute' : 'minutes'} ago`;
+  } else if (remainingMins === 0) {
+    return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+  } else {
+    return `${hours} ${hours === 1 ? 'hour' : 'hours'} and ${remainingMins} ${remainingMins === 1 ? 'minute' : 'minutes'} ago`;
+  }
+}
+
+function handleSeenInquiry(socket, targetNick) {
+  if (!targetNick || !targetNick.trim()) {
+    socket.emit('system_notice', { type: 'error', message: 'Usage: !seen <nick>' });
+    return;
+  }
+  targetNick = targetNick.trim();
+  const targetLower = targetNick.toLowerCase();
+
+  // 1. Check if user is currently online
+  const onlineUser = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === targetLower);
+  if (onlineUser) {
+    socket.emit('system_notice', {
+      type: 'info',
+      message: `*** [SEEN] '${onlineUser.nick}' is currently ONLINE right now in ${DEFAULT_MAIN_CHANNEL}!`
+    });
+    return;
+  }
+
+  // 2. Check IP History DB
+  const adminData = db.getAdminData();
+  const historyList = (adminData.ip_history || []).filter(h => h.nick.toLowerCase() === targetLower);
+
+  if (historyList.length > 0) {
+    historyList.sort((a, b) => new Date(b.last_seen) - new Date(a.last_seen));
+    const lastRec = historyList[0];
+    const relTime = formatRelativeTime(lastRec.last_seen);
+    socket.emit('system_notice', {
+      type: 'info',
+      message: `*** [SEEN] '${lastRec.nick}' was last seen online ${relTime}.`
+    });
+  } else {
+    socket.emit('system_notice', {
+      type: 'info',
+      message: `*** [SEEN] No login history found for nickname '${targetNick}'.`
+    });
+  }
+}
+
+// --- /WHOIS QUERY ENGINE WITH RANK-BASED IP PRIVACY ---
+function handleWhoisInquiry(socket, targetNick) {
+  if (!targetNick || !targetNick.trim()) {
+    socket.emit('system_notice', { type: 'error', message: 'Usage: /whois <nick>' });
+    return;
+  }
+  targetNick = targetNick.trim();
+  const targetLower = targetNick.toLowerCase();
+  const requester = users.get(socket.id);
+  if (!requester) return;
+
+  const targetUser = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === targetLower);
+  if (!targetUser) {
+    socket.emit('system_notice', { type: 'error', message: `*** [WHOIS] ${targetNick}: No such nick/channel` });
+    return;
+  }
+
+  // Check if requester is Staff/Operator (HalfOp % or higher, Oper, Admin, Owner)
+  const requesterMaxRank = Math.max(0, ...Array.from(channels.values()).map(c => getUserRankInChannel(socket.id, c).rank));
+  const isStaff = requesterMaxRank >= 2 || requester.is_oper || requester.is_admin || requester.global_role === 'owner';
+
+  // IP Privacy Rule: Staff sees real IP/VHost; Normal users see masked host
+  const identStr = targetUser.ident || 'user';
+  const realNameStr = targetUser.realname || 'PakiChat Member';
+  const displayHost = isStaff ? (targetUser.vhost || targetUser.ip) : `${targetUser.nick.toLowerCase()}.funnypaki.user.cloak`;
+
+  socket.emit('system_notice', {
+    type: 'info',
+    message: `*** ${targetUser.nick} is ~${identStr}@${displayHost} * ${realNameStr}`
+  });
+
+  // Collect channels target belongs to
+  const memberChans = [];
+  channels.forEach(chanObj => {
+    const r = getUserRankInChannel(targetUser.socketId, chanObj);
+    if (r.rank > 0) {
+      memberChans.push(`${r.prefix}${chanObj.name}`);
+    }
+  });
+
+  if (memberChans.length > 0) {
+    socket.emit('system_notice', {
+      type: 'info',
+      message: `*** ${targetUser.nick} on ${memberChans.join(' ')}`
+    });
+  }
+
+  socket.emit('system_notice', {
+    type: 'info',
+    message: `*** ${targetUser.nick} using irc.funnypaki.net (#FunnyPaki IRC Server Network)`
+  });
+
+  // Calculate idle minutes and sign-on time
+  const lastActiveMs = targetUser.lastActive || targetUser.connectedAt || Date.now();
+  const idleSec = Math.floor(Math.max(0, Date.now() - lastActiveMs) / 1000);
+  const idleMins = Math.floor(idleSec / 60);
+
+  const signOnDateStr = new Date(targetUser.connectedAt || Date.now()).toString().split(' GMT')[0];
+
+  socket.emit('system_notice', {
+    type: 'info',
+    message: `*** ${targetUser.nick} has been idle ${idleMins} mins, signed on ${signOnDateStr}`
+  });
+
+  socket.emit('system_notice', {
+    type: 'info',
+    message: `*** ${targetUser.nick} End of /WHOIS list.`
+  });
+}
+
+// --- /WHOWAS HISTORICAL IP LOOKUP ENGINE ---
+function handleWhowas(socket, targetNick) {
+  if (!targetNick || !targetNick.trim()) {
+    socket.emit('system_notice', { type: 'error', message: 'Usage: /whowas <nick>' });
+    return;
+  }
+  targetNick = targetNick.trim();
+  const records = db.getWhowas(targetNick);
+
+  if (records.length === 0) {
+    socket.emit('system_notice', {
+      type: 'info',
+      message: `*** [WHOWAS] No historical IP records found for nick '${targetNick}'.`
+    });
+    return;
+  }
+
+  socket.emit('system_notice', {
+    type: 'info',
+    message: `*** [WHOWAS] Historical IP records for '${targetNick}' (${records.length} total entries):`
+  });
+
+  records.slice(0, 10).forEach((rec, idx) => {
+    const relTime = formatRelativeTime(rec.last_seen);
+    const exactDate = new Date(rec.last_seen).toLocaleString();
+    socket.emit('system_notice', {
+      type: 'info',
+      message: `*** [${idx + 1}] IP: ${rec.ip} | Last Seen: ${relTime} (${exactDate})`
+    });
+  });
+}
+
+// --- DEVICE FINGERPRINT BAN COMMAND HANDLER ---
+function handleDeviceBanCommand(socket, targetNickOrDevId, reason = 'Banned by operator') {
+  const u = users.get(socket.id);
+  if (!u) return;
+
+  let targetDeviceId = null;
+  let targetNick = targetNickOrDevId;
+
+  if (targetNickOrDevId.startsWith('DEV-')) {
+    targetDeviceId = targetNickOrDevId;
+  } else {
+    const onlineTarget = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === targetNickOrDevId.toLowerCase());
+    if (onlineTarget && onlineTarget.deviceId) {
+      targetDeviceId = onlineTarget.deviceId;
+    } else {
+      const history = db.getWhowas(targetNickOrDevId);
+      if (history.length > 0 && history[0].device_id) {
+        targetDeviceId = history[0].device_id;
+      }
+    }
+  }
+
+  if (!targetDeviceId) {
+    socket.emit('system_notice', {
+      type: 'error',
+      message: `*** Could not resolve Device Signature for '${targetNickOrDevId}'. Target must be online or have logged in recently.`
+    });
+    return;
+  }
+
+  const result = db.banDevice(targetDeviceId, targetNick, reason, u.nick);
+  if (!result.success) {
+    socket.emit('system_notice', { type: 'error', message: `*** ${result.message}` });
+    return;
+  }
+
+  socket.emit('system_notice', {
+    type: 'success',
+    message: `*** [DEVBAN] Target Device [${targetDeviceId}] (${targetNick}) has been physical DEVICE BANNED! (Reason: ${reason})`
+  });
+
+  users.forEach((usr, sId) => {
+    if (usr.deviceId === targetDeviceId) {
+      const s = io.sockets.sockets.get(sId);
+      if (s) {
+        s.emit('you_were_banned', {
+          channel: DEFAULT_MAIN_CHANNEL,
+          bannedBy: u.nick,
+          reason: `Physical Device Banned: ${reason}`
+        });
+        s.disconnect(true);
+      }
+    }
+  });
+}
+
+// --- QUICK DOT COMMANDS ENGINE (.aop, .hop, .vop, .admin, .owner, .kick, .ban, .whowas) ---
+function handleDotCommand(socket, channelName, text) {
+  const u = users.get(socket.id);
+  if (!u) return false;
+
+  const norm = normChan(channelName);
+  const chanObj = channels.get(norm);
+  if (!chanObj) return false;
+
+  const parts = text.trim().split(' ');
+  const cmd = parts[0].toLowerCase();
+  const targetNick = parts[1];
+
+  if (cmd === '!seen' || cmd === '.seen') {
+    handleSeenInquiry(socket, targetNick);
+    return true;
+  }
+
+  if (cmd === '!whowas' || cmd === '.whowas' || cmd === '/whowas') {
+    handleWhowas(socket, targetNick);
+    return true;
+  }
+
+  if (cmd === '!ttop5' || cmd === '!ttop10' || cmd === '!top5' || cmd === '!top10') {
+    const isToday = cmd.startsWith('!ttop');
+    const limit = cmd.endsWith('10') ? 10 : 5;
+    const timeframe = isToday ? 'today' : 'all_time';
+
+    const topList = db.getTopChatters(limit, timeframe);
+
+    if (topList.length === 0) {
+      socket.emit('system_notice', {
+        type: 'info',
+        message: `*** No word count statistics recorded for ${isToday ? "Today" : "All-Time"} yet.`
+      });
+      return false;
+    }
+
+    const formattedList = topList.map((item, idx) => {
+      const count = isToday ? item.today_words : item.all_time_words;
+      return `${idx + 1}.${item.original_nick}(${count})`;
+    }).join(', ');
+
+    const titleStr = isToday ? `Today's Top ${limit} User Word Count` : `All-Time Top ${limit} User Word Count`;
+    socket.emit('system_notice', {
+      type: 'info',
+      message: `*** ${titleStr}: ${formattedList}`
+    });
+    return false; // Return false so command text is echoed publicly to room!
+  }
+
+  const dotRanks = ['.owner', '.admin', '.aop', '.op', '.hop', '.halfop', '.vop', '.voice', '.deop', '.dehop', '.devoice', '.kick', '.ban'];
+  if (!dotRanks.includes(cmd)) return false;
+
+  if (!targetNick) {
+    socket.emit('system_notice', { type: 'error', message: `Usage: ${cmd} <nick> [reason]` });
+    return true;
+  }
+
+  const senderRank = getUserRankInChannel(socket.id, chanObj);
+
+  if (cmd === '.kick') {
+    if (senderRank.rank < 3 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires Operator (@) rank or higher to kick.' });
+      return true;
+    }
+    const targetUser = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === targetNick.toLowerCase());
+    if (!targetUser) {
+      socket.emit('system_notice', { type: 'error', message: `*** User '${targetNick}' is not online in ${chanObj.name}.` });
+      return true;
+    }
+
+    const targetRank = getUserRankInChannel(targetUser.socketId, chanObj);
+    if (targetRank.rank >= senderRank.rank && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: `*** Permission Denied: You cannot kick equal or higher rank '${targetNick}'.` });
+      return true;
+    }
+
+    const reason = parts.slice(2).join(' ') || 'No reason defined';
+    io.to(chanObj.name).emit('system_notice', {
+      type: 'warning',
+      message: `*** ${targetUser.nick} was kicked by ${u.nick} (${reason})`
+    });
+
+    const targetSocket = io.sockets.sockets.get(targetUser.socketId);
+    if (targetSocket) {
+      targetSocket.emit('you_were_kicked', {
+        channel: chanObj.name,
+        kickedBy: u.nick,
+        reason: reason
+      });
+      partChannel(targetSocket, chanObj.name);
+    }
+    return true;
+  }
+
+  if (cmd === '.ban') {
+    if (senderRank.rank < 3 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires Operator (@) rank or higher to ban.' });
+      return true;
+    }
+
+    const reason = parts.slice(2).join(' ') || 'Banned by operator';
+    const isMask = targetNick.includes('*') || targetNick.includes('@') || (targetNick.includes('.') && targetNick.split('.').length === 4);
+
+    if (isMask) {
+      const maskStr = targetNick.trim();
+      const banRes = db.banIP(maskStr, reason, u.nick);
+
+      if (!banRes.success) {
+        socket.emit('system_notice', { type: 'error', message: `*** ${banRes.message}` });
+        return true;
+      }
+
+      io.to(chanObj.name).emit('system_notice', {
+        type: 'error',
+        message: `*** [BAN] Mask '${maskStr}' was BANNED by ${u.nick} (Reason: ${reason})`
+      });
+
+      // Disconnect matching connected sockets after 3s buffer delay
+      setTimeout(() => {
+        users.forEach((usr, sId) => {
+          if (db.isIPBanned(usr.ip)) {
+            const s = io.sockets.sockets.get(sId);
+            if (s) {
+              s.emit('you_were_banned', { channel: chanObj.name, bannedBy: u.nick, reason: reason });
+              partChannel(s, chanObj.name);
+            }
+          }
+        });
+      }, 3000);
+      return true;
+    }
+
+    const targetUser = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === targetNick.toLowerCase());
+
+    if (targetUser) {
+      const targetRank = getUserRankInChannel(targetUser.socketId, chanObj);
+      if (targetRank.rank >= senderRank.rank && !u.is_oper) {
+        socket.emit('system_notice', { type: 'error', message: `*** Permission Denied: You cannot ban equal or higher rank '${targetNick}'.` });
+        return true;
+      }
+
+      // Step 1: Immediate Nick & IP ban
+      db.banIP(targetUser.ip, reason, u.nick);
+      db.banNick(targetUser.nick, reason, u.nick);
+
+      io.to(chanObj.name).emit('system_notice', {
+        type: 'error',
+        message: `*** [BAN] '${targetUser.nick}' [IP: ${targetUser.ip}] was BANNED by ${u.nick} (Reason: ${reason})`
+      });
+
+      const targetSocket = io.sockets.sockets.get(targetUser.socketId);
+      if (targetSocket) {
+        targetSocket.emit('you_were_banned', {
+          channel: chanObj.name,
+          bannedBy: u.nick,
+          reason: reason
+        });
+      }
+
+      // Step 2: 3-Second Buffer Delay before kick
+      setTimeout(() => {
+        const checkTargetSocket = io.sockets.sockets.get(targetUser.socketId);
+        if (checkTargetSocket) {
+          io.to(chanObj.name).emit('system_notice', {
+            type: 'warning',
+            message: `*** ${targetUser.nick} was kicked by ${u.nick} (Banned: ${reason})`
+          });
+          partChannel(checkTargetSocket, chanObj.name);
+        }
+      }, 3000);
+
+    } else {
+      // Offline nick ban
+      db.banNick(targetNick, reason, u.nick);
+      io.to(chanObj.name).emit('system_notice', {
+        type: 'error',
+        message: `*** [BAN] Offline Nick '${targetNick}' was BANNED by ${u.nick} (Reason: ${reason})`
+      });
+    }
+    return true;
+  }
+
+  if (cmd === '.owner') {
+    if (senderRank.rank < 5 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Only Channel Owner (~) can assign Owner status.' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'owner', true);
+    return true;
+  }
+
+  if (cmd === '.admin') {
+    if (senderRank.rank < 5 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Only Channel Owner (~) can assign Admin status.' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'admin', true);
+    return true;
+  }
+
+  if (cmd === '.aop' || cmd === '.op') {
+    if (senderRank.rank < 4 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Operators (@) cannot grant Op to others. Requires Owner (~) or Admin (&).' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'op', true);
+    return true;
+  }
+
+  if (cmd === '.hop' || cmd === '.halfop') {
+    if (senderRank.rank < 3 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: HalfOps (%) cannot grant HalfOp to others. Requires Operator (@) or higher.' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'halfop', true);
+    return true;
+  }
+
+  if (cmd === '.vop' || cmd === '.voice') {
+    if (senderRank.rank < 2 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires HalfOp (%) rank or higher to grant Voice.' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'voice', true);
+    return true;
+  }
+
+  if (cmd === '.deop') {
+    if (senderRank.rank < 4 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires Admin (&) or Owner (~) to deop.' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'op', false);
+    return true;
+  }
+
+  if (cmd === '.dehop') {
+    if (senderRank.rank < 3 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires Operator (@) or higher to dehop.' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'halfop', false);
+    return true;
+  }
+
+  if (cmd === '.devoice') {
+    if (senderRank.rank < 2 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires HalfOp (%) or higher to devoice.' });
+      return true;
+    }
+    handleSetRole(socket, chanObj.name, targetNick, 'voice', false);
+    return true;
+  }
+
+  return false;
+}
+
+app.use(express.json());
+
+const ADMIN_TOKEN = 'secret-shahzad-admin-token-998877';
+
+app.post('/api/admin/login', (req, res) => {
+  const { username, password } = req.body || {};
+  if (username === 'shahzad' && password === 'Khanjee@123') {
+    return res.json({ success: true, token: ADMIN_TOKEN, username: 'shahzad' });
+  }
+  return res.status(401).json({ success: false, message: 'Invalid Admin Username or Password!' });
+});
+
+app.get('/api/admin/bans', (req, res) => {
+  const token = req.headers['authorization'] || req.query.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized access to Ban Management Console.' });
+  }
+  const bansData = db.getBans();
+  return res.json({ success: true, bans: bansData });
+});
+
+app.post('/api/admin/unban', (req, res) => {
+  const token = req.headers['authorization'] || req.body.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized action.' });
+  }
+  const { type, target } = req.body || {};
+  if (!target) {
+    return res.status(400).json({ success: false, message: 'Target is required.' });
+  }
+
+  let result;
+  if (type === 'ip') {
+    result = db.unbanIP(target);
+  } else if (type === 'nick') {
+    result = db.unbanNick(target);
+  } else if (type === 'shun') {
+    result = db.unshunUser(target);
+  } else if (type === 'device') {
+    result = db.unbanDevice(target);
+  } else {
+    result = target.startsWith('DEV-') ? db.unbanDevice(target) : (target.includes('.') ? db.unbanIP(target) : db.unbanNick(target));
+  }
+
+  return res.json(result);
+});
+
+app.get('/api/admin/spam-filters', (req, res) => {
+  const token = req.headers['authorization'] || req.query.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+  return res.json({ success: true, filters: db.getSpamFilters() });
+});
+
+app.post('/api/admin/spam-filters', (req, res) => {
+  const token = req.headers['authorization'] || req.body.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+  const { word, action } = req.body || {};
+  const result = db.addSpamFilter(word, action || 'block', 'shahzad');
+  return res.json(result);
+});
+
+app.delete('/api/admin/spam-filters/:id', (req, res) => {
+  const token = req.headers['authorization'] || req.query.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+  const result = db.removeSpamFilter(req.params.id);
+  return res.json(result);
+});
+
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin.html'));
+});
+
 app.get('/api/admin/data', (req, res) => {
   res.json(db.getAdminData());
 });
 
 server.listen(PORT, () => {
   console.log(`====================================================`);
-  console.log(`  #FunnyPaki Server v8.3 /UNSHUN & Duration Format  `);
+  console.log(`  #FunnyPaki Server v10.0 Anti-Spam & Admin Console `);
   console.log(`  Access Chat: http://localhost:${PORT}             `);
+  console.log(`  Admin Console: http://localhost:${PORT}/admin.html `);
   console.log(`====================================================`);
 });
