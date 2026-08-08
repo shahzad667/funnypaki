@@ -554,12 +554,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileUserCount) mobileUserCount.textContent = users.length;
 
     const groups = {
-      owner: { title: '👑 Owners (~)', list: [] },
-      admin: { title: '🛡️ Admins (&)', list: [] },
-      op: { title: '⭐ Operators (@)', list: [] },
-      halfop: { title: '⚡ Half-Ops (%)', list: [] },
-      voice: { title: '🔊 Voice / Reg (+)', list: [] },
-      guest: { title: '💬 Users / Guests', list: [] }
+      owner: { title: '👑 Owners (~)', sticker: '🏡', list: [] },
+      admin: { title: '🛡️ Admins (&)', sticker: '🔑', list: [] },
+      op: { title: '⭐ Operators (@)', sticker: '⭐', list: [] },
+      halfop: { title: '⚡ Half-Ops (%)', sticker: '⚡', list: [] },
+      voice: { title: '🔊 Voice / Reg (+)', sticker: '🔊', list: [] },
+      guest: { title: '💬 Users / Guests', sticker: '👤', list: [] }
     };
 
     users.forEach(u => {
@@ -589,6 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
           li.innerHTML = `
             <span class="u-icon">👤</span>
             <span class="u-nick" style="color: ${nickColor}" title="${u.prefix || ''}${u.nick}">${u.prefix || ''}${u.nick}</span>
+            <span class="u-sticker">${group.sticker}</span>
           `;
 
           li.addEventListener('contextmenu', (e) => {
@@ -612,13 +613,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function formatTimeHHMM(ts) {
+    if (!ts) {
+      const d = new Date();
+      return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    }
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return String(ts).substring(0, 5);
+    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  }
+
   function appendChatMessage(winName, nick, prefix, roleName, message, timestamp, isPM = false, isSelf = false, textColor = null, bgColor = null) {
     const winEl = getOrCreateWindowElement(winName);
     const line = document.createElement('div');
     line.className = `chat-line ${isPM ? 'pm' : ''}`;
 
     const nickColor = getNickColor(nick);
-    const initialLetter = (nick[0] || 'U').toUpperCase();
 
     // AUTO-CONVERT TEXT SMILIES & ENHANCE EMOJI SIZING
     let formattedMsg = parseEmojiShortcuts(escapeHTML(message));
@@ -630,11 +640,15 @@ document.addEventListener('DOMContentLoaded', () => {
       formattedMsg = `<span class="msg-text-colored" style="${styles.join('; ')}">${formattedMsg}</span>`;
     }
 
+    const timeStr = formatTimeHHMM(timestamp);
+    const initialLetter = (nick[0] || 'U').toUpperCase();
+
     line.innerHTML = `
       <div class="avatar-badge" style="background-color: ${nickColor}">${initialLetter}</div>
-      <span class="nick-colored" style="color: ${nickColor}">${prefix || ''}${escapeHTML(nick)}</span>
+      <div class="time-col">${timeStr}</div>
+      <div class="nick-col nick-colored" style="color: ${nickColor}">${prefix || ''}${escapeHTML(nick)}</div>
       <span class="arrow-sep">➔</span>
-      <span class="msg-text">${formattedMsg}</span>
+      <div class="msg-col msg-text">${formattedMsg}</div>
     `;
 
     winEl.appendChild(line);
@@ -1531,5 +1545,24 @@ document.addEventListener('DOMContentLoaded', () => {
   if (userListBackdrop) {
     userListBackdrop.addEventListener('click', closeMobileUserList);
   }
+
+  // --- MULTI-THEME SELECTOR DROPDOWN ENGINE ---
+  const themeSelectorDropdown = document.getElementById('theme-selector-dropdown');
+  const savedTheme = localStorage.getItem('pakichat_active_theme') || 'classic';
+
+  function applyActiveTheme(themeName) {
+    document.body.classList.remove('theme-vintage', 'theme-classic', 'theme-dark');
+    document.body.classList.add(`theme-${themeName}`);
+    if (themeSelectorDropdown) themeSelectorDropdown.value = themeName;
+    localStorage.setItem('pakichat_active_theme', themeName);
+  }
+
+  if (themeSelectorDropdown) {
+    themeSelectorDropdown.addEventListener('change', (e) => {
+      applyActiveTheme(e.target.value);
+    });
+  }
+
+  applyActiveTheme(savedTheme);
 
 });

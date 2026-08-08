@@ -6,7 +6,7 @@
   <title>#FunnyPaki WebIRC Chat Room</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <script src="/socket.io/socket.io.js"></script>
 </head>
@@ -80,6 +80,11 @@
           <div class="window-actions">
             <button id="btn-change-topic" class="btn btn-xs btn-outline" title="Change Channel Topic">Edit Topic</button>
             <button id="btn-clear-chat" class="btn btn-xs btn-outline" title="Clear Screen">Clear</button>
+            <select id="theme-selector-dropdown" class="btn btn-xs btn-outline theme-select-dropdown" title="Choose Chat Theme">
+              <option value="classic" selected>🎨 Theme: Classic mIRC</option>
+              <option value="vintage">🎨 Theme: Java Vintage</option>
+              <option value="dark">🎨 Theme: Dark Mode</option>
+            </select>
           </div>
         </div>
 
