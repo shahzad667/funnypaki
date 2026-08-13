@@ -728,9 +728,105 @@ const Database = {
     saveUserData();
   },
 
+  logUserIP(nick, ip, userAgent = '', deviceId = '') {
+    if (!userData.ip_history) userData.ip_history = [];
+    if (!userData.visitor_logs) userData.visitor_logs = [];
+
+    const existingIndex = userData.ip_history.findIndex(item => item.nick.toLowerCase() === nick.toLowerCase() && item.ip === ip);
+    const nowIso = new Date().toISOString();
+
+    if (existingIndex >= 0) {
+      userData.ip_history[existingIndex].last_seen = nowIso;
+      userData.ip_history[existingIndex].user_agent = userAgent;
+      if (deviceId) userData.ip_history[existingIndex].device_id = deviceId;
+    } else {
+      userData.ip_history.push({
+        id: Date.now() + Math.random(),
+        nick,
+        ip,
+        device_id: deviceId || 'DEV-GENERIC',
+        user_agent: userAgent,
+        last_seen: nowIso
+      });
+    }
+
+    // Append to 3-day Visitor Log
+    userData.visitor_logs.push({
+      id: Date.now() + Math.random(),
+      nick: nick,
+      ip: ip,
+      device_id: deviceId || 'DEV-GENERIC',
+      user_agent: userAgent,
+      timestamp: nowIso
+    });
+
+    this.purgeVisitorLogsOlderThan3Days();
+    saveUserData();
+  },
+
+  purgeVisitorLogsOlderThan3Days() {
+    if (!userData.visitor_logs) userData.visitor_logs = [];
+    const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000; // 72 hours
+    const now = Date.now();
+    const initialLen = userData.visitor_logs.length;
+
+    userData.visitor_logs = userData.visitor_logs.filter(log => {
+      const logTime = new Date(log.timestamp).getTime();
+      return (now - logTime) <= THREE_DAYS_MS;
+    });
+
+    if (userData.visitor_logs.length < initialLen) {
+      saveUserData();
+    }
+  },
+
+  getVisitorLogs() {
+    this.purgeVisitorLogsOlderThan3Days();
+    const logs = (userData.visitor_logs || []).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const now = Date.now();
+    const DAY_MS = 24 * 60 * 60 * 1000;
+
+    const day1Logs = []; // Today (0 - 24h)
+    const day2Logs = []; // Yesterday (24h - 48h)
+    const day3Logs = []; // 2 Days Ago (48h - 72h)
+
+    const todayIPs = new Set();
+    const todayNicks = new Set();
+    const todayDevices = new Set();
+
+    logs.forEach(item => {
+      const ageMs = now - new Date(item.timestamp).getTime();
+      if (ageMs <= DAY_MS) {
+        day1Logs.push(item);
+        todayIPs.add(item.ip);
+        todayNicks.add(item.nick);
+        if (item.device_id) todayDevices.add(item.device_id);
+      } else if (ageMs <= 2 * DAY_MS) {
+        day2Logs.push(item);
+      } else if (ageMs <= 3 * DAY_MS) {
+        day3Logs.push(item);
+      }
+    });
+
+    return {
+      all_logs: logs,
+      day1_logs: day1Logs,
+      day2_logs: day2Logs,
+      day3_logs: day3Logs,
+      stats: {
+        today_unique_ips: todayIPs.size,
+        today_unique_nicks: todayNicks.size,
+        today_unique_devices: todayDevices.size,
+        total_3day_logs: logs.length
+      }
+    };
+  },
+
   getAdminData() {
+    this.purgeVisitorLogsOlderThan3Days();
     return {
       ip_history: userData.ip_history.sort((a, b) => new Date(b.last_seen) - new Date(a.last_seen)),
+      visitor_logs_summary: this.getVisitorLogs(),
       ip_bans: userData.ip_bans,
       nick_bans: userData.nick_bans,
       shuns: userData.shuns || [],
@@ -749,3 +845,4 @@ const Database = {
 };
 
 module.exports = Database;
+

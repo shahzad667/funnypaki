@@ -17,7 +17,15 @@ const PORT = process.env.PORT || 3000;
 let isHTM = false;
 let htmNoisy = true;
 
-app.use(express.json());
+app.get('/', (req, res) => {
+  const ua = req.headers['user-agent'] || '';
+  const isMobile = /mobile|iphone|ipad|android|blackberry|mini|windows\sce|palm/i.test(ua);
+  if (isMobile && req.query.desktop !== '1') {
+    return res.sendFile(path.join(__dirname, 'public', 'mobile.html'));
+  }
+  return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Active Sockets map: socket.id -> { nick, ip, identified, global_role, is_oper, vhost, ident, realname, channels: Set, user_agent, identify_timer }
@@ -702,9 +710,14 @@ io.on('connection', (socket) => {
     handleInviteUser(socket, targetNick, channel);
   });
 
-  socket.on('send_message', ({ target, message, textColor, bgColor }) => {
+  socket.on('send_message', (data) => {
     const u = users.get(socket.id);
-    if (!u || !message || !message.trim()) return;
+    if (!u || !data) return;
+    const target = data.target || data.channel || DEFAULT_MAIN_CHANNEL;
+    let message = data.message;
+    const textColor = data.textColor;
+    const bgColor = data.bgColor;
+    if (!message || !message.trim()) return;
     message = message.trim();
 
     if (db.isNickBanned(u.nick) || db.isIPBanned(u.ip)) {
@@ -2703,6 +2716,53 @@ app.delete('/api/admin/spam-filters/:id', (req, res) => {
   const result = db.removeSpamFilter(req.params.id);
   return res.json(result);
 });
+
+app.post('/api/admin/upload-sound', express.json({ limit: '10mb' }), (req, res) => {
+  const token = req.headers['authorization'] || req.body.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+
+  const { soundType, base64Data, extension } = req.body || {};
+  if (!['newjoining', 'tagnick', 'private'].includes(soundType) || !base64Data) {
+    return res.status(400).json({ success: false, message: 'Invalid sound type or payload.' });
+  }
+
+  try {
+    const ext = (extension || 'wav').replace('.', '');
+    const fs = require('fs');
+    const soundsDir = path.join(__dirname, 'public', 'sounds');
+    if (!fs.existsSync(soundsDir)) {
+      fs.mkdirSync(soundsDir, { recursive: true });
+    }
+
+    const buffer = Buffer.from(base64Data.replace(/^data:audio\/\w+;base64,/, ''), 'base64');
+    const targetFile = path.join(soundsDir, `${soundType}.${ext}`);
+    fs.writeFileSync(targetFile, buffer);
+
+    const altExt = ext === 'wav' ? 'mp3' : 'wav';
+    fs.writeFileSync(path.join(soundsDir, `${soundType}.${altExt}`), buffer);
+
+    return res.json({ success: true, message: `Sound '${soundType}' updated successfully.` });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+app.get('/api/admin/visitor-logs', (req, res) => {
+  const token = req.headers['authorization'] || req.query.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized access.' });
+  }
+  return res.json({ success: true, data: db.getVisitorLogs() });
+});
+
+// Periodic log cleanup every 60 minutes
+setInterval(() => {
+  try {
+    db.purgeVisitorLogsOlderThan3Days();
+  } catch (err) {}
+}, 60 * 60 * 1000);
 
 app.get('/admin.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));

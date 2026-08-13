@@ -44,22 +44,79 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Switch Main Nav Tabs
-  if (tabBtnBans && tabBtnSpam) {
-    tabBtnBans.addEventListener('click', () => {
-      tabBtnBans.classList.add('active');
-      tabBtnSpam.classList.remove('active');
-      bansSection.classList.remove('hidden');
-      spamSection.classList.add('hidden');
-    });
+  document.querySelectorAll('.nav-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const targetId = btn.getAttribute('data-tab');
 
-    tabBtnSpam.addEventListener('click', () => {
-      tabBtnSpam.classList.add('active');
-      tabBtnBans.classList.remove('active');
-      spamSection.classList.remove('hidden');
-      bansSection.classList.add('hidden');
-      loadSpamFilters();
+      const sections = ['bans-section', 'spam-section', 'sounds-section', 'visitors-section'];
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          if (id === targetId) el.classList.remove('hidden');
+          else el.classList.add('hidden');
+        }
+      });
+
+      if (targetId === 'spam-section') loadSpamFilters();
+      if (targetId === 'visitors-section') loadVisitorLogs();
     });
-  }
+  });
+
+
+  // Sound File Upload Handlers
+  document.querySelectorAll('.upload-sound-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const soundType = form.getAttribute('data-type');
+      const fileInput = form.querySelector('input[type="file"]');
+      if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+        alert('Please select an audio file to upload.');
+        return;
+      }
+
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+
+      reader.onload = async () => {
+        const base64Data = reader.result;
+        const extension = file.name.split('.').pop().toLowerCase();
+
+        try {
+          const res = await fetch('/api/admin/upload-sound', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${adminToken}`
+            },
+            body: JSON.stringify({
+              soundType,
+              base64Data,
+              extension,
+              token: adminToken
+            })
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            alert(`✅ ${data.message}`);
+            const audioPreview = document.getElementById(`audio-preview-${soundType}`);
+            if (audioPreview) {
+              audioPreview.src = `/sounds/${soundType}.${extension}?t=${Date.now()}`;
+              audioPreview.load();
+            }
+          } else {
+            alert(`🛑 Error: ${data.message}`);
+          }
+        } catch (err) {
+          alert(`🛑 Upload failed: ${err.message}`);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+  });
 
   // Check initial token
   if (adminToken) {
@@ -410,4 +467,115 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#039;');
   }
+
+  // --- 3-DAY UNIQUE VISITOR LOGS ENGINE ---
+  let visitorData = null;
+  let currentVisitorDayFilter = 'day1';
+
+  async function loadVisitorLogs() {
+    try {
+      const res = await fetch('/api/admin/visitor-logs', {
+        headers: { 'Authorization': `Bearer ${adminToken}` }
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        visitorData = data.data;
+        renderVisitorStats();
+        renderVisitorTable();
+      }
+    } catch (err) {
+      console.error('Error loading visitor logs:', err);
+    }
+  }
+
+  function renderVisitorStats() {
+    if (!visitorData || !visitorData.stats) return;
+    const stats = visitorData.stats;
+    const elIps = document.getElementById('stat-visitor-ips');
+    const elNicks = document.getElementById('stat-visitor-nicks');
+    const elDevs = document.getElementById('stat-visitor-devices');
+    const elTotal = document.getElementById('stat-visitor-total');
+
+    if (elIps) elIps.textContent = stats.today_unique_ips || 0;
+    if (elNicks) elNicks.textContent = stats.today_unique_nicks || 0;
+    if (elDevs) elDevs.textContent = stats.today_unique_devices || 0;
+    if (elTotal) elTotal.textContent = stats.total_3day_logs || 0;
+  }
+
+  function renderVisitorTable() {
+    const tableBody = document.getElementById('visitors-table-body');
+    const searchInput = document.getElementById('visitors-search-input');
+    if (!tableBody || !visitorData) return;
+
+    let logs = [];
+    if (currentVisitorDayFilter === 'day1') logs = visitorData.day1_logs || [];
+    else if (currentVisitorDayFilter === 'day2') logs = visitorData.day2_logs || [];
+    else if (currentVisitorDayFilter === 'day3') logs = visitorData.day3_logs || [];
+    else logs = visitorData.all_logs || [];
+
+    const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+
+    if (query) {
+      logs = logs.filter(item =>
+        (item.nick && item.nick.toLowerCase().includes(query)) ||
+        (item.ip && item.ip.includes(query)) ||
+        (item.device_id && item.device_id.toLowerCase().includes(query)) ||
+        (item.timestamp && item.timestamp.toLowerCase().includes(query))
+      );
+    }
+
+    tableBody.innerHTML = '';
+    if (logs.length === 0) {
+      tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">No visitor logs found for this filter.</td></tr>`;
+      return;
+    }
+
+    logs.forEach(item => {
+      const tr = document.createElement('tr');
+      const timeStr = new Date(item.timestamp).toLocaleString();
+      tr.innerHTML = `
+        <td style="font-size: 13px; font-weight: 500;">${timeStr}</td>
+        <td><strong style="color: #0e6231;">${escapeHTML(item.nick)}</strong></td>
+        <td><code>${escapeHTML(item.ip)}</code></td>
+        <td><code style="font-size: 12px; color: #475569;">${escapeHTML(item.device_id || 'DEV-GENERIC')}</code></td>
+        <td>
+          <button class="btn-sm btn-danger" onclick="quickBanIP('${escapeHTML(item.ip)}')">Ban IP</button>
+        </td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  }
+
+  // Day filter listeners
+  document.querySelectorAll('.day-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.day-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentVisitorDayFilter = btn.getAttribute('data-day');
+      renderVisitorTable();
+    });
+  });
+
+  const visitorSearchInput = document.getElementById('visitors-search-input');
+  if (visitorSearchInput) {
+    visitorSearchInput.addEventListener('input', () => {
+      renderVisitorTable();
+    });
+  }
+
+  window.quickBanIP = async (ipToBan) => {
+    if (!ipToBan || !confirm(`Are you sure you want to BAN IP address [${ipToBan}]?`)) return;
+    try {
+      const res = await fetch('/api/admin/unban', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${adminToken}`
+        },
+        body: JSON.stringify({ type: 'ip', target: ipToBan, token: adminToken })
+      });
+      alert(`IP [${ipToBan}] Ban action triggered.`);
+    } catch (e) {}
+  };
 });
+

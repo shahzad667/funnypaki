@@ -420,12 +420,12 @@ body.theme-classic .userlist-header {
 }
 
 body.theme-classic .rank-group-title {
-  background-color: transparent !important;
-  color: #475569 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
   font-weight: 700 !important;
   font-size: 11px !important;
   padding: 8px 6px 4px 6px !important;
-  text-transform: none !important;
+  text-transform: uppercase !important;
   letter-spacing: normal !important;
 }
 

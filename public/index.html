@@ -8,8 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script>
+    if (/mobile|iphone|ipad|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent) && window.location.search.indexOf('desktop=1') === -1) {
+      window.location.href = '/mobile.html';
+    }
+  </script>
   <script src="/socket.io/socket.io.js"></script>
 </head>
+
 <body>
   <!-- FRONT LOGIN SCREEN OVERLAY -->
   <div id="login-overlay" class="login-overlay">
@@ -55,6 +61,7 @@
       </div>
 
       <div class="header-right-tools">
+        <button id="btn-sound-toggle" class="btn btn-xs btn-outline-white" title="Toggle Audio Notifications">🔊 Sound ON</button>
         <span id="user-status-badge" class="badge badge-guest">Guest</span>
         <span id="current-nick-display" class="nick-display">Guest_0000</span>
         <button id="btn-mobile-users-toggle" class="btn btn-xs btn-primary mobile-only" title="View Users List">👥 Users (<span id="mobile-user-count">0</span>)</button>

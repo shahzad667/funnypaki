@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>#FunnyPaki Mobile Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/mobile.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+  <!-- Login Modal Overlay -->
+  <div id="mobile-login-overlay" class="mobile-login-modal">
+    <div class="mobile-login-card">
+      <h2>#FunnyPaki Mobile</h2>
+      <form id="mobile-login-form">
+        <input type="text" id="mobile-nick-input" placeholder="Enter Nickname" required autocomplete="off" />
+        <input type="password" id="mobile-pass-input" placeholder="Password (Optional)" autocomplete="off" />
+        <button type="submit">Join Chatroom</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mobile-app">
+    <!-- Top Header Bar -->
+    <header class="mobile-header">
+      <div class="header-left">
+        <span class="channel-tag">#FunnyPaki</span>
+        <span id="mobile-topic" class="topic-text">Topic : Welcome To Our chatroom Enjoy and Safe</span>
+      </div>
+      <div class="header-right-btns">
+        <button id="btn-sound-toggle-mobile" class="btn-mini" title="Toggle Sound">🔊 ON</button>
+        <button id="btn-mobile-nick" class="btn-mini">Nick</button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="mobile-workspace">
+      <!-- Left Chat Log Window -->
+      <section class="mobile-chat-container">
+        <div id="mobile-chat-logs" class="mobile-chat-viewport">
+          <div class="sys-line info">*** Welcome to #FunnyPaki Mobile Chatroom!</div>
+        </div>
+      </section>
+
+      <!-- Right User List Sidebar -->
+      <aside class="mobile-userlist-container">
+        <!-- OWNER Section -->
+        <div id="banner-owner" class="user-group-banner" style="display:none">OWNER</div>
+        <ul id="list-owner" class="user-group-list"></ul>
+
+        <!-- ADMIN Section -->
+        <div id="banner-admin" class="user-group-banner" style="display:none">ADMIN</div>
+        <ul id="list-admin" class="user-group-list"></ul>
+
+        <!-- OP Section -->
+        <div id="banner-op" class="user-group-banner" style="display:none">OP</div>
+        <ul id="list-op" class="user-group-list"></ul>
+
+        <!-- HALF-OP Section -->
+        <div id="banner-halfop" class="user-group-banner" style="display:none">HALF-OP</div>
+        <ul id="list-halfop" class="user-group-list"></ul>
+
+        <!-- ONLINE Section -->
+        <div id="banner-online" class="user-group-banner" style="display:none">ONLINE</div>
+        <ul id="list-online" class="user-group-list"></ul>
+      </aside>
+    </main>
+
+    <!-- Bottom Input Dock -->
+    <footer class="mobile-input-dock">
+      <!-- Emoji Popover -->
+      <div id="mobile-emoji-popover" class="mobile-emoji-popover hidden">
+        <span class="emoji-opt">😊</span>
+        <span class="emoji-opt">😂</span>
+        <span class="emoji-opt">❤️</span>
+        <span class="emoji-opt">👍</span>
+        <span class="emoji-opt">🔥</span>
+        <span class="emoji-opt">😎</span>
+        <span class="emoji-opt">😮</span>
+        <span class="emoji-opt">🇵🇰</span>
+        <span class="emoji-opt">🙏</span>
+        <span class="emoji-opt">🤣</span>
+        <span class="emoji-opt">💖</span>
+        <span class="emoji-opt">✨</span>
+      </div>
+
+      <!-- Color Popover -->
+      <div id="mobile-color-popover" class="mobile-color-popover hidden">
+        <div class="color-swatch" style="background:#000000" data-color="#000000"></div>
+        <div class="color-swatch" style="background:#dc2626" data-color="#dc2626"></div>
+        <div class="color-swatch" style="background:#16a34a" data-color="#16a34a"></div>
+        <div class="color-swatch" style="background:#2563eb" data-color="#2563eb"></div>
+        <div class="color-swatch" style="background:#9333ea" data-color="#9333ea"></div>
+        <div class="color-swatch" style="background:#ea580c" data-color="#ea580c"></div>
+        <div class="color-swatch" style="background:#db2777" data-color="#db2777"></div>
+        <div class="color-swatch" style="background:#0891b2" data-color="#0891b2"></div>
+        <div class="color-swatch" style="background:#65a30d" data-color="#65a30d"></div>
+        <div class="color-swatch" style="background:#475569" data-color="#475569"></div>
+      </div>
+
+      <!-- Top Toolbar matching user image -->
+      <div class="toolbar-buttons-row">
+        <button type="button" id="btn-mobile-emoji" class="fmt-btn" title="Emoji">😊</button>
+        <button type="button" id="btn-mobile-color" class="fmt-btn" title="Color">🎨</button>
+        <button type="button" id="btn-mobile-bold" class="fmt-btn fmt-btn-b" title="Bold">B</button>
+        <button type="button" id="btn-mobile-italic" class="fmt-btn fmt-btn-i" title="Italic">I</button>
+        <button type="button" id="btn-mobile-underline" class="fmt-btn fmt-btn-u" title="Underline">U</button>
+      </div>
+
+      <form id="mobile-chat-form" class="input-box-wrapper">
+        <input type="text" id="mobile-msg-input" class="mobile-input" placeholder="Type message..." autocomplete="off" />
+        <button type="submit" class="btn-mobile-send">Send</button>
+      </form>
+    </footer>
+  </div>
+
+  <script src="js/mobile.js"></script>
+</body>
+</html>

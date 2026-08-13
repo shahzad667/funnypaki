@@ -1,0 +1,415 @@
+/* Classic Mobile WebIRC CSS matching screenshot theme */
+:root {
+  --topbar-bg: #000000;
+  --topbar-text: #ffffff;
+  --chat-bg: #ffffff;
+  --chat-border: #15803d;
+  --sidebar-bg: #ffffff;
+  --header-banner-bg: #000000;
+  --header-banner-text: #ffffff;
+  --arrow-color: #7e22ce;
+  --text-main: #000000;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #000000;
+  color: #000000;
+  overflow: hidden;
+}
+
+/* App Container */
+.mobile-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #000000;
+}
+
+/* Top Header Bar */
+.mobile-header {
+  background-color: var(--topbar-bg);
+  color: var(--topbar-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  border-bottom: 1px solid #333333;
+  flex-shrink: 0;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.channel-tag {
+  background: #000;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 2px 4px;
+}
+
+.topic-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-right-btns {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-mini {
+  background: #15803d;
+  color: white;
+  border: none;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+/* Main Split Body: Left Chat, Right Users */
+.mobile-workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  background-color: #000000;
+  gap: 4px;
+  padding: 2px;
+}
+
+/* Left Chat Log Section */
+.mobile-chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--chat-bg);
+  border: 2px solid var(--chat-border);
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.mobile-chat-viewport {
+  flex: 1;
+  padding: 8px 10px;
+  overflow-y: auto;
+  font-size: 15px;
+  line-height: 1.45;
+  word-wrap: break-word;
+  word-break: break-word;
+  background-color: #ffffff;
+}
+
+/* Message Line Format matching screenshot */
+.msg-line {
+  margin-bottom: 8px;
+  font-weight: 400;
+  color: var(--text-main);
+  font-size: 16px;
+}
+
+.msg-nick {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.msg-arrow {
+  color: #8b5cf6;
+  margin: 0 4px;
+  font-weight: 700;
+}
+
+.msg-text {
+  color: #111827;
+}
+
+/* Formatting support in messages */
+.msg-text b, .msg-text strong { font-weight: 700; }
+.msg-text i, .msg-text em { font-style: italic; }
+.msg-text u { text-decoration: underline; }
+
+/* Random Nick Colors like mIRC screenshot */
+.nick-c1 { color: #9333ea; }
+.nick-c2 { color: #dc2626; }
+.nick-c3 { color: #15803d; }
+.nick-c4 { color: #b45309; }
+.nick-c5 { color: #0284c7; }
+.nick-c6 { color: #4338ca; }
+.nick-c7 { color: #be185d; }
+.nick-c8 { color: #047857; }
+
+/* System & Notice Messages */
+.sys-line {
+  color: #0d9488;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+.sys-line.error { color: #dc2626; }
+.sys-line.success { color: #16a34a; }
+.sys-line.info { color: #2563eb; }
+
+/* Right User List Sidebar */
+.mobile-userlist-container {
+  width: 140px;
+  background-color: var(--sidebar-bg);
+  border: 2px solid var(--chat-border);
+  overflow-y: auto;
+  border-radius: 2px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-group-banner {
+  background-color: var(--header-banner-bg);
+  color: var(--header-banner-text);
+  font-weight: 800;
+  font-size: 12px;
+  text-align: center;
+  padding: 4px 2px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.user-group-list {
+  list-style: none;
+  padding: 4px 0 8px 0;
+}
+
+.user-group-item {
+  padding: 3px 8px;
+  font-size: 13px;
+  color: #000000;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.user-group-item:hover {
+  background-color: #f1f5f9;
+}
+
+/* Bottom Input Dock */
+.mobile-input-dock {
+  background-color: #f8fafc;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+  border-top: 1px solid #e2e8f0;
+  position: relative;
+}
+
+/* Toolbar Buttons matching user image */
+.toolbar-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+}
+
+.fmt-btn {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  min-width: 38px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #0f172a;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: all 0.15s ease;
+}
+
+.fmt-btn:hover, .fmt-btn:active {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.fmt-btn.active {
+  background: #dcfce7;
+  border-color: #15803d;
+  color: #15803d;
+}
+
+.fmt-btn-b { font-weight: 800; font-family: 'Inter', sans-serif; }
+.fmt-btn-i { font-style: italic; font-family: 'Georgia', serif; font-weight: 600; color: #0284c7; }
+.fmt-btn-u { text-decoration: underline; font-weight: 700; text-underline-offset: 2px; }
+
+.input-box-wrapper {
+  background-color: #ffffff;
+  border: 2px solid var(--chat-border);
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.mobile-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 6px 8px;
+  background: transparent;
+  color: #000000;
+}
+
+.btn-mobile-send {
+  background-color: #15803d;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+/* Emoji Picker Popup */
+.mobile-emoji-popover {
+  position: absolute;
+  bottom: 80px;
+  left: 6px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+.mobile-emoji-popover.hidden {
+  display: none;
+}
+
+.emoji-opt {
+  font-size: 20px;
+  text-align: center;
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.emoji-opt:hover {
+  background: #f1f5f9;
+}
+
+/* Color Picker Popup */
+.mobile-color-popover {
+  position: absolute;
+  bottom: 80px;
+  left: 48px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  z-index: 999;
+}
+
+.mobile-color-popover.hidden {
+  display: none;
+}
+
+.color-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+/* Login Modal */
+.mobile-login-modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mobile-login-card {
+  background: #ffffff;
+  border: 3px solid #15803d;
+  border-radius: 6px;
+  padding: 20px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+}
+
+.mobile-login-card h2 {
+  color: #15803d;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.mobile-login-card input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 15px;
+}
+
+.mobile-login-card button {
+  width: 100%;
+  padding: 10px;
+  background: #15803d;
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (max-width: 420px) {
+  .mobile-userlist-container {
+    width: 115px;
+  }
+}

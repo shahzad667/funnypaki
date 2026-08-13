@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnConnect.classList.add('connecting');
       }
 
-      let secondsLeft = 5;
+      let secondsLeft = 3;
       const updateButtonText = () => {
         if (btnConnect) {
           btnConnect.innerHTML = `<span class="spinner-icon">⏳</span> Connecting (${secondsLeft}s)...`;
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, 1000);
 
-      // 5 Seconds Buffer Delay
+      // 3 Seconds Buffer Delay
       setTimeout(() => {
         if (chosenNick) {
           socket.emit('change_nick', { newNick: chosenNick, deviceId: clientDeviceId });
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           if (chatInput) chatInput.focus();
         }, 400);
-      }, 5000);
+      }, 3000);
     });
   }
 
@@ -231,8 +231,36 @@ document.addEventListener('DOMContentLoaded', () => {
     switchWindow('#FunnyPaki');
   });
 
+  // Audio Sound Notifications System
+  const SOUNDS = {
+    newjoining: new Audio('/sounds/newjoining.wav'),
+    tagnick: new Audio('/sounds/tagnick.wav'),
+    private: new Audio('/sounds/private.wav')
+  };
+  let soundMuted = false;
+
+  function playNotificationSound(type) {
+    if (soundMuted) return;
+    try {
+      const snd = SOUNDS[type] || new Audio(`/sounds/${type}.mp3`);
+      snd.currentTime = 0;
+      snd.play().catch(() => {});
+    } catch (e) {}
+  }
+
+  const btnSoundToggle = document.getElementById('btn-sound-toggle');
+  if (btnSoundToggle) {
+    btnSoundToggle.addEventListener('click', () => {
+      soundMuted = !soundMuted;
+      btnSoundToggle.textContent = soundMuted ? '🔇 Sound OFF' : '🔊 Sound ON';
+    });
+  }
+
   socket.on('system_notice', ({ type, message }) => {
     appendSystemMessage(activeWindow, type, message);
+    if (type === 'join' || (message && message.toLowerCase().includes('joined'))) {
+      playNotificationSound('newjoining');
+    }
   });
 
   socket.on('banned', ({ reason }) => {
@@ -272,6 +300,13 @@ document.addEventListener('DOMContentLoaded', () => {
   socket.on('chat_message', ({ channel, nick, prefix, roleName, message, textColor, bgColor, timestamp }) => {
     const isSelf = nick.toLowerCase() === currentNick.toLowerCase();
     appendChatMessage(channel, nick, prefix, roleName, message, timestamp, false, isSelf, textColor, bgColor);
+
+    if (!isSelf && currentNick) {
+      const nickRegex = new RegExp(`\\b@?${currentNick}\\b`, 'i');
+      if (nickRegex.test(message)) {
+        playNotificationSound('tagnick');
+      }
+    }
   });
 
   socket.on('chat_action', ({ channel, nick, action, timestamp }) => {
@@ -283,6 +318,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ensurePMTabExists(otherParty);
 
     const isSelf = from.toLowerCase() === currentNick.toLowerCase();
+    if (!isSelf) {
+      playNotificationSound('private');
+    }
     appendChatMessage(otherParty, from, '', 'User', message, timestamp, true, isSelf, textColor, bgColor);
 
     if (activeWindow.toLowerCase() !== otherParty.toLowerCase()) {
@@ -554,21 +592,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (mobileUserCount) mobileUserCount.textContent = users.length;
 
     const groups = {
-      owner: { title: '👑 Owners (~)', sticker: '🏡', list: [] },
-      admin: { title: '🛡️ Admins (&)', sticker: '🔑', list: [] },
-      op: { title: '⭐ Operators (@)', sticker: '⭐', list: [] },
-      halfop: { title: '⚡ Half-Ops (%)', sticker: '⚡', list: [] },
-      voice: { title: '🔊 Voice / Reg (+)', sticker: '🔊', list: [] },
-      guest: { title: '💬 Users / Guests', sticker: '👤', list: [] }
+      owner: { title: '👑 OWNER', list: [] },
+      admin: { title: 'ADMIN', list: [] },
+      op: { title: 'OP', list: [] },
+      halfop: { title: 'HALF-OP', list: [] },
+      online: { title: 'ONLINE', list: [] }
     };
 
     users.forEach(u => {
-      if (u.prefix === '~') groups.owner.list.push(u);
-      else if (u.prefix === '&') groups.admin.list.push(u);
-      else if (u.prefix === '@') groups.op.list.push(u);
-      else if (u.prefix === '%') groups.halfop.list.push(u);
-      else if (u.prefix === '+') groups.voice.list.push(u);
-      else groups.guest.list.push(u);
+      const role = (u.roleName || '').toLowerCase();
+      const prefix = u.prefix || '';
+      const rank = u.rank || 0;
+
+      if (rank >= 5 || prefix === '~' || role.includes('owner') || role.includes('founder')) {
+        groups.owner.list.push(u);
+      } else if (rank >= 4 || prefix === '&' || role.includes('admin') || role.includes('oper') || u.is_oper) {
+        groups.admin.list.push(u);
+      } else if (rank >= 3 || prefix === '@' || role.includes('op') || role.includes('operator')) {
+        groups.op.list.push(u);
+      } else if (rank >= 2 || prefix === '%' || role.includes('halfop')) {
+        groups.halfop.list.push(u);
+      } else {
+        groups.online.list.push(u);
+      }
     });
 
     Object.keys(groups).forEach(key => {
@@ -576,7 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (group.list.length > 0) {
         const titleDiv = document.createElement('div');
         titleDiv.className = 'rank-group-title';
-        titleDiv.textContent = `${group.title} (${group.list.length})`;
+        titleDiv.textContent = group.title;
         userListContainer.appendChild(titleDiv);
 
         const ul = document.createElement('ul');
@@ -588,8 +634,7 @@ document.addEventListener('DOMContentLoaded', () => {
           li.className = 'user-item';
           li.innerHTML = `
             <span class="u-icon">👤</span>
-            <span class="u-nick" style="color: ${nickColor}" title="${u.prefix || ''}${u.nick}">${u.prefix || ''}${u.nick}</span>
-            <span class="u-sticker">${group.sticker}</span>
+            <span class="u-nick" style="color: ${nickColor}" title="${u.nick}">${u.nick}</span>
           `;
 
           li.addEventListener('contextmenu', (e) => {
