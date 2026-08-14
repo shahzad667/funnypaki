@@ -6,9 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const nickInput = document.getElementById('mobile-nick-input');
   const passInput = document.getElementById('mobile-pass-input');
 
-  const chatLogs = document.getElementById('mobile-chat-logs');
+  const chatLogsViewport = document.getElementById('mobile-chat-logs');
   const chatForm = document.getElementById('mobile-chat-form');
   const msgInput = document.getElementById('mobile-msg-input');
+  const tabList = document.getElementById('mobile-tab-list');
 
   const topicDisplay = document.getElementById('mobile-topic');
   const btnNick = document.getElementById('btn-mobile-nick');
@@ -18,12 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const bannerAdmin = document.getElementById('banner-admin');
   const bannerOp = document.getElementById('banner-op');
   const bannerHalfOp = document.getElementById('banner-halfop');
+  const bannerVip = document.getElementById('banner-vip');
   const bannerOnline = document.getElementById('banner-online');
 
   const listOwner = document.getElementById('list-owner');
   const listAdmin = document.getElementById('list-admin');
   const listOp = document.getElementById('list-op');
   const listHalfOp = document.getElementById('list-halfop');
+  const listVip = document.getElementById('list-vip');
   const listOnline = document.getElementById('list-online');
 
   // Toolbar buttons
@@ -37,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const colorPopover = document.getElementById('mobile-color-popover');
 
   let currentNick = '';
-  let currentChannel = '#FunnyPaki';
+  let activeMobileWindow = '#FunnyPaki';
+  let unreadCounts = {};
 
   // Formatting state
   let isBold = false;
@@ -56,30 +60,214 @@ document.addEventListener('DOMContentLoaded', () => {
     return `nick-c${colorIdx}`;
   }
 
-  function appendSysLine(msg, type = 'info') {
-    const div = document.createElement('div');
-    div.className = `sys-line ${type}`;
-    div.textContent = msg;
-    chatLogs.appendChild(div);
-    chatLogs.scrollTop = chatLogs.scrollHeight;
+  // Audio Sound Notifications System (HTML5 Audio + Web Audio Synthesizer Fallback)
+  let soundMuted = localStorage.getItem('chat_sound_muted') === '1';
+  let audioCtxMobile = null;
+
+  function initMobileAudioContext() {
+    if (!audioCtxMobile) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) audioCtxMobile = new AudioContext();
+    }
+    if (audioCtxMobile && audioCtxMobile.state === 'suspended') {
+      audioCtxMobile.resume().catch(() => {});
+    }
+  }
+
+  document.addEventListener('click', initMobileAudioContext, { once: false });
+
+  const btnSoundMobile = document.getElementById('btn-sound-toggle-mobile');
+  function updateMobileSoundButton() {
+    if (btnSoundMobile) {
+      btnSoundMobile.textContent = soundMuted ? '🔇 OFF' : '🔊 ON';
+      btnSoundMobile.style.background = soundMuted ? '#64748b' : '#16a34a';
+    }
+  }
+
+  if (btnSoundMobile) {
+    updateMobileSoundButton();
+    btnSoundMobile.addEventListener('click', () => {
+      soundMuted = !soundMuted;
+      localStorage.setItem('chat_sound_muted', soundMuted ? '1' : '0');
+      updateMobileSoundButton();
+    });
+  }
+
+  function playSynthBeepMobile(freqs, durations) {
+    try {
+      initMobileAudioContext();
+      if (!audioCtxMobile) return;
+      let now = audioCtxMobile.currentTime;
+      freqs.forEach((freq, idx) => {
+        const dur = durations[idx];
+        const osc = audioCtxMobile.createOscillator();
+        const gain = audioCtxMobile.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+        osc.connect(gain);
+        gain.connect(audioCtxMobile.destination);
+        osc.start(now);
+        osc.stop(now + dur);
+        now += dur + 0.05;
+      });
+    } catch (e) {}
+  }
+
+  function playNotificationSound(type) {
+    if (soundMuted) return;
+    initMobileAudioContext();
+
+    const audioFile = `/sounds/${type}.wav`;
+    const audio = new Audio(audioFile);
+    audio.currentTime = 0;
+    audio.play().catch(() => {
+      if (type === 'newjoining') playSynthBeepMobile([523.25, 783.99], [0.15, 0.25]);
+      else if (type === 'tagnick') playSynthBeepMobile([880, 1046.5], [0.1, 0.15]);
+      else if (type === 'private') playSynthBeepMobile([659.25, 880], [0.12, 0.2]);
+    });
+  }
+
+  function getOrCreateMobileWindowElement(winName) {
+    const cleanId = 'm-window-' + winName.replace(/^#/, '').replace(/[^a-zA-Z0-9_-]/g, '_');
+    let winEl = document.getElementById(cleanId);
+    if (!winEl) {
+      winEl = document.createElement('div');
+      winEl.id = cleanId;
+      winEl.className = 'm-chat-window';
+      winEl.setAttribute('data-name', winName);
+
+      if (!winName.startsWith('#')) {
+        const pmNotice = document.createElement('div');
+        pmNotice.className = 'sys-line info';
+        pmNotice.textContent = `*** Private Message session with ${winName} initialized.`;
+        winEl.appendChild(pmNotice);
+      }
+
+      chatLogsViewport.appendChild(winEl);
+    }
+    return winEl;
+  }
+
+  function switchMobileWindow(winName) {
+    activeMobileWindow = winName;
+
+    // Update tab styles
+    document.querySelectorAll('.mobile-tab').forEach(el => {
+      if (el.getAttribute('data-target') === winName) {
+        el.classList.add('active');
+        const badge = el.querySelector('.unread-badge');
+        if (badge) badge.remove();
+        unreadCounts[winName] = 0;
+      } else {
+        el.classList.remove('active');
+      }
+    });
+
+    // Update window views
+    document.querySelectorAll('.m-chat-window').forEach(el => el.classList.remove('active'));
+    const targetWin = getOrCreateMobileWindowElement(winName);
+    targetWin.classList.add('active');
+
+    chatLogsViewport.scrollTop = chatLogsViewport.scrollHeight;
+  }
+
+  function ensureMobilePMTabExists(targetNick) {
+    if (!tabList) return;
+    let existingTab = document.querySelector(`.mobile-tab[data-target="${targetNick}"]`);
+    if (!existingTab) {
+      const tab = document.createElement('div');
+      tab.className = 'mobile-tab';
+      tab.setAttribute('data-target', targetNick);
+
+      const labelSpan = document.createElement('span');
+      labelSpan.textContent = targetNick;
+
+      const closeSpan = document.createElement('span');
+      closeSpan.className = 'tab-close';
+      closeSpan.innerHTML = '&times;';
+
+      closeSpan.onclick = (e) => {
+        e.stopPropagation();
+        tab.remove();
+        const cleanId = 'm-window-' + targetNick.replace(/^#/, '').replace(/[^a-zA-Z0-9_-]/g, '_');
+        const winEl = document.getElementById(cleanId);
+        if (winEl) winEl.remove();
+        delete unreadCounts[targetNick];
+
+        if (activeMobileWindow === targetNick) {
+          switchMobileWindow('#FunnyPaki');
+        }
+      };
+
+      tab.appendChild(labelSpan);
+      tab.appendChild(closeSpan);
+
+      tab.onclick = () => {
+        switchMobileWindow(targetNick);
+      };
+
+      tabList.appendChild(tab);
+    }
+
+    getOrCreateMobileWindowElement(targetNick);
   }
 
   function formatMessageText(text) {
-    let safe = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    safe = safe.replace(/&lt;b&gt;/g, '<b>').replace(/&lt;\/b&gt;/g, '</b>');
-    safe = safe.replace(/&lt;i&gt;/g, '<i>').replace(/&lt;\/i&gt;/g, '</i>');
-    safe = safe.replace(/&lt;u&gt;/g, '<u>').replace(/&lt;\/u&gt;/g, '</u>');
-    safe = safe.replace(/&lt;span style="color:(.*?)"&gt;/g, '<span style="color:$1">').replace(/&lt;\/span&gt;/g, '</span>');
+    if (!text) return '';
+    let safe = text.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    safe = safe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    safe = safe.replace(/&lt;(\/)?(b|i|u|em|strong|ins|sub|sup)&gt;/gi, '<$1$2>');
+    safe = safe.replace(/&lt;span style=["']color:\s*(.*?)["']&gt;/gi, '<span style="color:$1">');
+    safe = safe.replace(/&lt;span class=["']msg-text-colored["'] style=["'](.*?)["']&gt;/gi, '<span class="msg-text-colored" style="$1">');
+    safe = safe.replace(/&lt;\/span&gt;/gi, '</span>');
     return safe;
   }
 
-  function appendChatLine(nick, text) {
+  function appendSysLine(msg, type = 'info', targetWin = null) {
+    const winName = targetWin || activeMobileWindow || '#FunnyPaki';
+    const winEl = getOrCreateMobileWindowElement(winName);
+
     const div = document.createElement('div');
-    div.className = 'msg-line';
+    div.className = `sys-line ${type}`;
+    div.textContent = msg;
+    winEl.appendChild(div);
+
+    if (activeMobileWindow === winName) {
+      chatLogsViewport.scrollTop = chatLogsViewport.scrollHeight;
+    }
+  }
+
+  function tagNickInMobileInput(nick) {
+    if (!msgInput) return;
+    const currentVal = msgInput.value;
+    if (!currentVal) {
+      msgInput.value = `${nick}: `;
+    } else if (currentVal.endsWith(' ')) {
+      msgInput.value = `${currentVal}${nick} `;
+    } else {
+      msgInput.value = `${currentVal} ${nick} `;
+    }
+    msgInput.focus();
+  }
+
+  function appendChatLine(winName, nick, text, isPM = false) {
+    const winEl = getOrCreateMobileWindowElement(winName);
+
+    const div = document.createElement('div');
+    div.className = `msg-line ${isPM ? 'pm' : ''}`;
 
     const nickSpan = document.createElement('span');
     nickSpan.className = `msg-nick ${getNickColorClass(nick)}`;
     nickSpan.textContent = nick;
+    nickSpan.style.cursor = 'pointer';
+    nickSpan.title = 'Tap to tag nick';
+
+    nickSpan.addEventListener('click', (e) => {
+      e.stopPropagation();
+      tagNickInMobileInput(nick);
+    });
 
     const arrowSpan = document.createElement('span');
     arrowSpan.className = 'msg-arrow';
@@ -93,38 +281,17 @@ document.addEventListener('DOMContentLoaded', () => {
     div.appendChild(arrowSpan);
     div.appendChild(msgSpan);
 
-    chatLogs.appendChild(div);
-    chatLogs.scrollTop = chatLogs.scrollHeight;
-  }
+    winEl.appendChild(div);
 
-  // Audio Sound Notifications System
-  const SOUNDS = {
-    newjoining: new Audio('/sounds/newjoining.wav'),
-    tagnick: new Audio('/sounds/tagnick.wav'),
-    private: new Audio('/sounds/private.wav')
-  };
-  let soundMuted = false;
-
-  function playNotificationSound(type) {
-    if (soundMuted) return;
-    try {
-      const snd = SOUNDS[type] || new Audio(`/sounds/${type}.mp3`);
-      snd.currentTime = 0;
-      snd.play().catch(() => {});
-    } catch (e) {}
-  }
-
-  const btnSoundMobile = document.getElementById('btn-sound-toggle-mobile');
-  if (btnSoundMobile) {
-    btnSoundMobile.addEventListener('click', () => {
-      soundMuted = !soundMuted;
-      btnSoundMobile.textContent = soundMuted ? '🔇 OFF' : '🔊 ON';
-    });
+    if (activeMobileWindow === winName) {
+      chatLogsViewport.scrollTop = chatLogsViewport.scrollHeight;
+    }
   }
 
   // Socket Initial Handshake
   socket.on('connect', () => {
     console.log('Mobile Socket Connected');
+    socket.emit('request_user_list', { channel: '#FunnyPaki' });
   });
 
   socket.on('user_init', (data) => {
@@ -132,13 +299,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nickInput && !nickInput.value) {
       nickInput.value = currentNick;
     }
-    appendSysLine(`*** Connected as ${currentNick}`, 'success');
+    appendSysLine(`*** Connected as ${currentNick}`, 'success', '#FunnyPaki');
+    socket.emit('request_user_list', { channel: '#FunnyPaki' });
   });
 
   socket.on('chat_message', (data) => {
-    if (data.channel === currentChannel || !data.channel) {
-      appendChatLine(data.nick, data.message);
-    }
+    const targetChan = data.channel || '#FunnyPaki';
+    appendChatLine(targetChan, data.nick, data.message);
+
     if (data.nick && data.nick.toLowerCase() !== currentNick.toLowerCase() && currentNick) {
       const nickRegex = new RegExp(`\\b@?${currentNick}\\b`, 'i');
       if (nickRegex.test(data.message)) {
@@ -147,25 +315,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  socket.on('system_notice', (data) => {
-    appendSysLine(data.message, data.type || 'info');
-    if (data.type === 'join' || (data.message && data.message.toLowerCase().includes('joined'))) {
-      playNotificationSound('newjoining');
+  socket.on('private_message', (data) => {
+    const fromNick = data.from;
+    const toNick = data.to;
+    const isSelf = fromNick.toLowerCase() === currentNick.toLowerCase();
+    const otherParty = isSelf ? toNick : fromNick;
+
+    ensureMobilePMTabExists(otherParty);
+    appendChatLine(otherParty, fromNick, data.message, true);
+
+    if (!isSelf) {
+      playNotificationSound('private');
+      if (activeMobileWindow !== otherParty) {
+        unreadCounts[otherParty] = (unreadCounts[otherParty] || 0) + 1;
+        const pmTab = document.querySelector(`.mobile-tab[data-target="${otherParty}"]`);
+        if (pmTab) {
+          let badge = pmTab.querySelector('.unread-badge');
+          if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'unread-badge';
+            pmTab.appendChild(badge);
+          }
+          badge.textContent = unreadCounts[otherParty];
+        }
+      }
     }
   });
 
-  socket.on('private_message', (data) => {
-    if (data.from && data.from.toLowerCase() !== currentNick.toLowerCase()) {
-      playNotificationSound('private');
+  socket.on('system_notice', (data) => {
+    appendSysLine(data.message, data.type || 'info', activeMobileWindow);
+    if (data.type === 'join' || (data.message && data.message.toLowerCase().includes('joined'))) {
+      playNotificationSound('newjoining');
     }
   });
 
   socket.on('nick_changed', (data) => {
     if (data.oldNick === currentNick) {
       currentNick = data.newNick;
-      appendSysLine(`*** You are now known as ${currentNick}`, 'success');
+      appendSysLine(`*** You are now known as ${currentNick}`, 'success', '#FunnyPaki');
     } else {
-      appendSysLine(`*** ${data.oldNick} is now known as ${data.newNick}`, 'info');
+      appendSysLine(`*** ${data.oldNick} is now known as ${data.newNick}`, 'info', '#FunnyPaki');
     }
   });
 
@@ -179,43 +368,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (listAdmin) listAdmin.innerHTML = '';
     if (listOp) listOp.innerHTML = '';
     if (listHalfOp) listHalfOp.innerHTML = '';
+    if (listVip) listVip.innerHTML = '';
     if (listOnline) listOnline.innerHTML = '';
 
     let countOwner = 0;
     let countAdmin = 0;
     let countOp = 0;
     let countHalfOp = 0;
+    let countVip = 0;
     let countOnline = 0;
 
-    if (data.users) {
+    if (data.users && Array.isArray(data.users)) {
       data.users.forEach(u => {
         const li = document.createElement('li');
         li.className = 'user-group-item';
         li.textContent = (u.prefix || '') + u.nick;
         li.title = `${u.nick} (${u.roleName || 'User'})`;
 
+        // 1-CLICK PM WINDOW SWITCHING
         li.onclick = () => {
-          msgInput.value = `/msg ${u.nick} `;
-          msgInput.focus();
+          if (u.nick.toLowerCase() !== currentNick.toLowerCase()) {
+            ensureMobilePMTabExists(u.nick);
+            switchMobileWindow(u.nick);
+          }
         };
 
         const role = (u.roleName || '').toLowerCase();
         const prefix = u.prefix || '';
         const rank = u.rank || 0;
 
-        // Group classification: OWNER, ADMIN, OP, HALF-OP, ONLINE
         if (rank >= 5 || prefix === '~' || role.includes('owner') || role.includes('founder')) {
           if (listOwner) listOwner.appendChild(li);
           countOwner++;
         } else if (rank >= 4 || prefix === '&' || role.includes('admin') || role.includes('oper') || u.is_oper) {
           if (listAdmin) listAdmin.appendChild(li);
           countAdmin++;
-        } else if (rank >= 3 || prefix === '@' || role.includes('op') || role.includes('operator')) {
+        } else if (rank === 3 || prefix === '@' || (role.includes('op') && !role.includes('half') && role !== 'half-op')) {
           if (listOp) listOp.appendChild(li);
           countOp++;
-        } else if (rank >= 2 || prefix === '%' || role.includes('halfop')) {
+        } else if (rank === 2 || prefix === '%' || role.includes('half')) {
           if (listHalfOp) listHalfOp.appendChild(li);
           countHalfOp++;
+        } else if (rank === 1 || prefix === '+' || role.includes('vip') || role.includes('voice')) {
+          if (listVip) listVip.appendChild(li);
+          countVip++;
         } else {
           if (listOnline) listOnline.appendChild(li);
           countOnline++;
@@ -223,13 +419,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Dynamically show banner ONLY if at least 1 user is present
+    // Show banners ONLY if at least 1 user is present
     if (bannerOwner) bannerOwner.style.display = countOwner > 0 ? 'block' : 'none';
     if (bannerAdmin) bannerAdmin.style.display = countAdmin > 0 ? 'block' : 'none';
     if (bannerOp) bannerOp.style.display = countOp > 0 ? 'block' : 'none';
     if (bannerHalfOp) bannerHalfOp.style.display = countHalfOp > 0 ? 'block' : 'none';
+    if (bannerVip) bannerVip.style.display = countVip > 0 ? 'block' : 'none';
     if (bannerOnline) bannerOnline.style.display = countOnline > 0 ? 'block' : 'none';
   });
+
+  // Tab 1 default setup
+  const mainTab = document.querySelector('.mobile-tab[data-target="#FunnyPaki"]');
+  if (mainTab) {
+    mainTab.onclick = () => switchMobileWindow('#FunnyPaki');
+  }
 
   // Toolbar Functionality
   btnBold.addEventListener('click', () => {
@@ -291,14 +494,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const chosenNick = nickInput.value.trim();
     const chosenPass = passInput.value.trim();
 
-    if (chosenNick && chosenNick !== currentNick) {
-      socket.emit('change_nick', { newNick: chosenNick });
-      currentNick = chosenNick;
-    }
+    socket.emit('user_enter_lobby', {
+      nick: chosenNick,
+      password: chosenPass
+    });
 
-    if (chosenPass) {
-      socket.emit('identify', { nick: currentNick, password: chosenPass });
-    }
+    if (chosenNick) currentNick = chosenNick;
 
     loginOverlay.style.display = 'none';
     msgInput.focus();
@@ -310,15 +511,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let text = msgInput.value.trim();
     if (!text) return;
 
-    if (text.startsWith('/')) {
-      socket.emit('execute_command', { command: text, channel: currentChannel });
+    if (text.startsWith('/') || text.startsWith('.') || text.startsWith('!')) {
+      const targetChan = activeMobileWindow.startsWith('#') ? activeMobileWindow : '#FunnyPaki';
+      socket.emit('send_message', { channel: targetChan, message: text });
     } else {
       if (isBold) text = `<b>${text}</b>`;
       if (isItalic) text = `<i>${text}</i>`;
       if (isUnderline) text = `<u>${text}</u>`;
       if (selectedColor) text = `<span style="color:${selectedColor}">${text}</span>`;
 
-      socket.emit('send_message', { channel: currentChannel, message: text });
+      if (activeMobileWindow.startsWith('#')) {
+        socket.emit('send_message', { channel: activeMobileWindow, message: text });
+      } else {
+        // Send PM to target nick!
+        socket.emit('send_message', { target: activeMobileWindow, message: text });
+      }
     }
 
     msgInput.value = '';

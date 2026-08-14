@@ -126,28 +126,28 @@ function getChannel(chName) {
 // User rank calculator with HalfOp % support
 function getUserRankInChannel(socketId, channelObj) {
   const u = users.get(socketId);
-  if (!u) return { rank: 0, prefix: '', roleName: 'User' };
+  if (!u) return { rank: 0, prefix: '', roleName: 'User', mode: '' };
 
   if (socketId === BOT_SOCKET_ID) {
-    return { rank: 3, prefix: '@', roleName: 'AI Bot' };
+    return { rank: 3, prefix: '@', roleName: 'AI Bot', mode: '+o' };
   }
 
   if (channelObj.owners.has(socketId) || u.global_role === 'owner' || u.is_oper) {
-    return { rank: 5, prefix: '~', roleName: 'Owner' };
+    return { rank: 5, prefix: '~', roleName: 'Owner', mode: '+q' };
   }
   if (channelObj.admins.has(socketId) || u.global_role === 'admin') {
-    return { rank: 4, prefix: '&', roleName: 'Admin' };
+    return { rank: 4, prefix: '&', roleName: 'Admin', mode: '+a' };
   }
   if (channelObj.ops.has(socketId)) {
-    return { rank: 3, prefix: '@', roleName: 'Operator' };
+    return { rank: 3, prefix: '@', roleName: 'Operator', mode: '+o' };
   }
   if (channelObj.halfops.has(socketId)) {
-    return { rank: 2, prefix: '%', roleName: 'Half-Op' };
+    return { rank: 2, prefix: '%', roleName: 'Half-Op', mode: '+h' };
   }
-  if (channelObj.voices.has(socketId) || db.isRegistered(u.nick)) {
-    return { rank: 1, prefix: '+', roleName: 'Voice' };
+  if (channelObj.voices.has(socketId)) {
+    return { rank: 1, prefix: '+', roleName: 'VIP', mode: '+v' };
   }
-  return { rank: 0, prefix: '', roleName: 'Guest' };
+  return { rank: 0, prefix: '', roleName: 'User', mode: '' };
 }
 
 function checkAndGrantPersistentRank(socket, chanObj) {
@@ -578,8 +578,9 @@ io.on('connection', (socket) => {
     message: `*** Welcome to #FunnyPaki Chat Room Server! IP: ${clientIP}`
   });
   socket.emit('system_notice', {
-    type: 'info',
-    message: `*** Connected as '${initialNick}'. Type /help for commands. Welcome to #FunnyPaki!`
+    type: 'status_info',
+    target: 'Status',
+    message: `*** ${initialNick} user is going to join #FunnyPaki ... with ${clientIP} IP address ...`
   });
   socket.emit('user_init', {
     nick: initialNick,
@@ -587,7 +588,34 @@ io.on('connection', (socket) => {
     channels: Array.from(channels.values()).map(c => c.name)
   });
 
-  joinChannel(socket, DEFAULT_MAIN_CHANNEL);
+  socket.on('user_enter_lobby', async ({ nick, password, deviceId }) => {
+    const u = users.get(socket.id);
+    if (!u) return;
+
+    if (deviceId) {
+      socket.deviceId = deviceId;
+      u.deviceId = deviceId;
+      db.logUserIP(u.nick, u.ip, socket.handshake.headers['user-agent'] || '', deviceId);
+    }
+
+    if (nick && nick.toLowerCase() !== u.nick.toLowerCase()) {
+      handleNickChange(socket, nick);
+    }
+
+    if (password) {
+      const res = await db.verifyNick(u.nick, password);
+      if (res.success) {
+        u.identified = true;
+        u.global_role = res.user.global_role || (res.user.is_admin ? 'admin' : 'user');
+        u.is_admin = u.global_role === 'admin' || u.global_role === 'owner' || u.global_role === 'oper';
+        u.is_oper = u.global_role === 'oper' || u.global_role === 'owner';
+        socket.emit('system_notice', { type: 'success', message: `*** Identified successfully as '${u.nick}'` });
+      }
+    }
+
+    // Formally join main channel ONLY when user enters lobby!
+    joinChannel(socket, DEFAULT_MAIN_CHANNEL);
+  });
 
   socket.on('set_device_id', ({ deviceId }) => {
     if (!deviceId) return;
@@ -843,7 +871,7 @@ io.on('connection', (socket) => {
       }
     }
 
-    if (message.startsWith('.') || message.startsWith('!') || message.startsWith('!seen') || message.startsWith('!SEEN')) {
+    if (message.startsWith('.') || message.startsWith('!') || message.startsWith('/') || message.startsWith('!seen') || message.startsWith('!SEEN')) {
       const handled = handleDotCommand(socket, target.startsWith('#') ? target : DEFAULT_MAIN_CHANNEL, message);
       if (handled) return;
     }
@@ -2394,22 +2422,152 @@ function handleDotCommand(socket, channelName, text) {
   if (!chanObj) return false;
 
   const parts = text.trim().split(' ');
-  const cmd = parts[0].toLowerCase();
+  let rawCmd = parts[0].toLowerCase();
+  let cmd = rawCmd;
+  if (cmd.startsWith('/') || cmd.startsWith('!') || cmd.startsWith('.')) {
+    cmd = '.' + cmd.substring(1);
+  }
   const targetNick = parts[1];
 
-  if (cmd === '!seen' || cmd === '.seen') {
+  if (rawCmd === '/nick' || rawCmd === '.nick') {
+    if (!targetNick) {
+      socket.emit('system_notice', { type: 'error', message: '*** Usage: /nick <new_nickname>' });
+      return true;
+    }
+    handleNickChange(socket, targetNick);
+    return true;
+  }
+
+  if (rawCmd === '/register' || rawCmd === '.register') {
+    const pass = parts.slice(1).join(' ');
+    if (!pass) {
+      socket.emit('system_notice', { type: 'error', message: '*** Usage: /register <password>' });
+      return true;
+    }
+    db.registerNick(u.nick, pass).then(res => {
+      if (res.success) {
+        u.identified = true;
+        socket.emit('system_notice', { type: 'success', message: `*** ${res.message}` });
+        notifyNickUpdatedAcrossChannels(socket);
+      } else {
+        socket.emit('system_notice', { type: 'error', message: `*** ${res.message}` });
+      }
+    });
+    return true;
+  }
+
+  if (rawCmd === '/identify' || rawCmd === '.identify') {
+    const pass = parts.slice(1).join(' ');
+    if (!pass) {
+      socket.emit('system_notice', { type: 'error', message: '*** Usage: /identify <password>' });
+      return true;
+    }
+    db.verifyNick(u.nick, pass).then(res => {
+      if (res.success) {
+        u.identified = true;
+        u.global_role = res.user.global_role || (res.user.is_admin ? 'admin' : 'user');
+        u.is_admin = u.global_role === 'admin' || u.global_role === 'owner' || u.global_role === 'oper';
+        u.is_oper = u.global_role === 'oper' || u.global_role === 'owner';
+        socket.emit('system_notice', { type: 'success', message: `*** Identified successfully as '${u.nick}'` });
+        notifyNickUpdatedAcrossChannels(socket);
+      } else {
+        socket.emit('system_notice', { type: 'error', message: `*** ${res.message}` });
+      }
+    });
+    return true;
+  }
+
+  if (rawCmd === '/topic' || rawCmd === '.topic') {
+    const newTopic = parts.slice(1).join(' ');
+    const rankInfo = getUserRankInChannel(socket.id, chanObj);
+    if (rankInfo.rank < 3 && !u.is_oper) {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires Operator (@) rank or higher to set topic.' });
+      return true;
+    }
+    chanObj.topic = newTopic;
+    io.to(chanObj.name).emit('topic_changed', { channel: chanObj.name, topic: newTopic, setBy: u.nick });
+    broadcastChannelUserList(chanObj.name);
+    return true;
+  }
+
+  if (rawCmd === '/mode' || rawCmd === '.mode') {
+    const mArg = parts[1];
+    const nArg = parts[2];
+    if (mArg === '+v' || mArg === '+h' || mArg === '+o' || mArg === '+a' || mArg === '+q' ||
+        mArg === '-v' || mArg === '-h' || mArg === '-o' || mArg === '-a' || mArg === '-q') {
+      const isAdd = mArg.startsWith('+');
+      const modeChar = mArg.substring(1);
+      const roleMap = { q: 'owner', a: 'admin', o: 'op', h: 'halfop', v: 'voice' };
+      const targetRole = roleMap[modeChar] || 'voice';
+      if (nArg) {
+        handleSetRole(socket, chanObj.name, nArg, targetRole, isAdd);
+      }
+    } else if (mArg) {
+      handleSetChannelMode(socket, chanObj.name, mArg, parts[2] || '');
+    }
+    return true;
+  }
+
+  if (rawCmd === '/me') {
+    const actText = parts.slice(1).join(' ');
+    if (actText) {
+      io.to(chanObj.name).emit('chat_action', {
+        channel: chanObj.name,
+        nick: u.nick,
+        action: actText,
+        timestamp: new Date().toLocaleTimeString()
+      });
+    }
+    return true;
+  }
+
+  if (rawCmd === '/cs' || rawCmd === '/chanserv') {
+    handleChanServCommand(socket, parts[1], parts.slice(2));
+    return true;
+  }
+
+  if (rawCmd === '/ns' || rawCmd === '/nickserv') {
+    const sub = (parts[1] || '').toLowerCase();
+    if (sub === 'register') {
+      db.registerNick(u.nick, parts[2]).then(res => {
+        socket.emit('system_notice', { type: res.success ? 'success' : 'error', message: `*** ${res.message}` });
+      });
+    } else if (sub === 'identify') {
+      db.verifyNick(u.nick, parts[2]).then(res => {
+        socket.emit('system_notice', { type: res.success ? 'success' : 'error', message: `*** ${res.message}` });
+      });
+    }
+    return true;
+  }
+
+  if (rawCmd === '!seen' || rawCmd === '.seen' || rawCmd === '/seen') {
     handleSeenInquiry(socket, targetNick);
     return true;
   }
 
-  if (cmd === '!whowas' || cmd === '.whowas' || cmd === '/whowas') {
+  if (rawCmd === '/drop' || rawCmd === '.drop' || rawCmd === '!drop') {
+    const senderRank = getUserRankInChannel(socket.id, chanObj);
+    if (senderRank.rank < 4 && !u.is_oper && !u.is_admin && u.global_role !== 'owner') {
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires Admin (&) or Owner (~) rank to drop registered nicks.' });
+      return true;
+    }
+    if (!targetNick) {
+      socket.emit('system_notice', { type: 'error', message: '*** Usage: /drop <nickname>' });
+      return true;
+    }
+    const result = db.dropNick(targetNick);
+    socket.emit('system_notice', { type: result.success ? 'success' : 'error', message: `*** ${result.message}` });
+    return true;
+  }
+
+  if (rawCmd === '!whowas' || rawCmd === '.whowas' || rawCmd === '/whowas') {
     handleWhowas(socket, targetNick);
     return true;
   }
 
-  if (cmd === '!ttop5' || cmd === '!ttop10' || cmd === '!top5' || cmd === '!top10') {
-    const isToday = cmd.startsWith('!ttop');
-    const limit = cmd.endsWith('10') ? 10 : 5;
+  if (rawCmd === '!ttop5' || rawCmd === '!ttop10' || rawCmd === '!top5' || rawCmd === '!top10') {
+    const isToday = rawCmd.startsWith('!ttop');
+    const limit = rawCmd.endsWith('10') ? 10 : 5;
     const timeframe = isToday ? 'today' : 'all_time';
 
     const topList = db.getTopChatters(limit, timeframe);
@@ -2435,7 +2593,7 @@ function handleDotCommand(socket, channelName, text) {
     return false; // Return false so command text is echoed publicly to room!
   }
 
-  const dotRanks = ['.owner', '.admin', '.aop', '.op', '.hop', '.halfop', '.vop', '.voice', '.deop', '.dehop', '.devoice', '.kick', '.ban'];
+  const dotRanks = ['.owner', '.admin', '.sop', '.aop', '.op', '.hop', '.halfop', '.vop', '.voice', '.vip', '.deop', '.dehop', '.devoice', '.kick', '.ban'];
   if (!dotRanks.includes(cmd)) return false;
 
   if (!targetNick) {
@@ -2577,7 +2735,7 @@ function handleDotCommand(socket, channelName, text) {
     return true;
   }
 
-  if (cmd === '.admin') {
+  if (cmd === '.admin' || cmd === '.sop') {
     if (senderRank.rank < 5 && !u.is_oper) {
       socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Only Channel Owner (~) can assign Admin status.' });
       return true;
@@ -2604,9 +2762,9 @@ function handleDotCommand(socket, channelName, text) {
     return true;
   }
 
-  if (cmd === '.vop' || cmd === '.voice') {
+  if (cmd === '.vop' || cmd === '.voice' || cmd === '.vip') {
     if (senderRank.rank < 2 && !u.is_oper) {
-      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires HalfOp (%) rank or higher to grant Voice.' });
+      socket.emit('system_notice', { type: 'error', message: '*** Permission Denied: Requires HalfOp (%) rank or higher to grant VIP (+v) status.' });
       return true;
     }
     handleSetRole(socket, chanObj.name, targetNick, 'voice', true);
@@ -2717,52 +2875,64 @@ app.delete('/api/admin/spam-filters/:id', (req, res) => {
   return res.json(result);
 });
 
-app.post('/api/admin/upload-sound', express.json({ limit: '10mb' }), (req, res) => {
+app.post('/api/admin/update-role', (req, res) => {
   const token = req.headers['authorization'] || req.body.token;
   if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
-    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+    return res.status(403).json({ success: false, message: 'Unauthorized action.' });
   }
+  const { nick, role } = req.body || {};
+  const result = db.updateUserRole(nick, role);
+  return res.json(result);
+});
 
-  const { soundType, base64Data, extension } = req.body || {};
-  if (!['newjoining', 'tagnick', 'private'].includes(soundType) || !base64Data) {
-    return res.status(400).json({ success: false, message: 'Invalid sound type or payload.' });
+app.post('/api/admin/drop-nick', (req, res) => {
+  const token = req.headers['authorization'] || req.body.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized action.' });
   }
-
-  try {
-    const ext = (extension || 'wav').replace('.', '');
-    const fs = require('fs');
-    const soundsDir = path.join(__dirname, 'public', 'sounds');
-    if (!fs.existsSync(soundsDir)) {
-      fs.mkdirSync(soundsDir, { recursive: true });
-    }
-
-    const buffer = Buffer.from(base64Data.replace(/^data:audio\/\w+;base64,/, ''), 'base64');
-    const targetFile = path.join(soundsDir, `${soundType}.${ext}`);
-    fs.writeFileSync(targetFile, buffer);
-
-    const altExt = ext === 'wav' ? 'mp3' : 'wav';
-    fs.writeFileSync(path.join(soundsDir, `${soundType}.${altExt}`), buffer);
-
-    return res.json({ success: true, message: `Sound '${soundType}' updated successfully.` });
-  } catch (err) {
-    return res.status(500).json({ success: false, message: err.message });
-  }
+  const { nick } = req.body || {};
+  const result = db.dropNick(nick);
+  return res.json(result);
 });
 
 app.get('/api/admin/visitor-logs', (req, res) => {
   const token = req.headers['authorization'] || req.query.token;
   if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
-    return res.status(403).json({ success: false, message: 'Unauthorized access.' });
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
   }
-  return res.json({ success: true, data: db.getVisitorLogs() });
+  return res.json({ success: true, logs: db.getVisitorLogs() });
 });
 
-// Periodic log cleanup every 60 minutes
-setInterval(() => {
+app.post('/api/admin/upload-sound', (req, res) => {
+  const token = req.headers['authorization'] || req.body.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+  const { soundType, fileData } = req.body || {};
+  if (!soundType || !fileData) {
+    return res.status(400).json({ success: false, message: 'soundType and fileData are required.' });
+  }
+
+  const allowed = ['newjoining', 'tagnick', 'private'];
+  if (!allowed.includes(soundType)) {
+    return res.status(400).json({ success: false, message: 'Invalid sound type.' });
+  }
+
   try {
-    db.purgeVisitorLogsOlderThan3Days();
-  } catch (err) {}
-}, 60 * 60 * 1000);
+    const base64Data = fileData.replace(/^data:audio\/\w+;base64,/, '');
+    const buffer = Buffer.from(base64Data, 'base64');
+    const soundsDir = path.join(__dirname, 'public', 'sounds');
+    if (!fs.existsSync(soundsDir)) {
+      fs.mkdirSync(soundsDir, { recursive: true });
+    }
+    const ext = fileData.includes('audio/mp3') || fileData.includes('audio/mpeg') ? '.mp3' : '.wav';
+    const filePath = path.join(soundsDir, `${soundType}${ext}`);
+    fs.writeFileSync(filePath, buffer);
+    return res.json({ success: true, message: `Successfully updated ${soundType} sound file!` });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Failed to save audio file.' });
+  }
+});
 
 app.get('/admin.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));

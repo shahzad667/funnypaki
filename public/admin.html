@@ -351,14 +351,57 @@
     <main class="admin-container">
       <!-- Main Nav Tabs -->
       <div class="main-nav-tabs">
-        <button id="tab-btn-bans" class="nav-tab-btn active" data-tab="bans-section">🛡️ Ban Management</button>
+        <button id="tab-btn-users" class="nav-tab-btn active" data-tab="users-section">👥 Registered Users Directory</button>
+        <button id="tab-btn-bans" class="nav-tab-btn" data-tab="bans-section">🛡️ Ban Management</button>
         <button id="tab-btn-spam" class="nav-tab-btn" data-tab="spam-section">🚫 Anti-Spam & Bad Words Filter</button>
         <button id="tab-btn-sounds" class="nav-tab-btn" data-tab="sounds-section">🔊 Sound Notifications</button>
-        <button id="tab-btn-visitors" class="nav-tab-btn" data-tab="visitors-section">👥 Unique Visitor Logs (3-Day)</button>
+        <button id="tab-btn-logs" class="nav-tab-btn" data-tab="visitor-logs-section">👥 Unique Visitor Logs (3-Day)</button>
       </div>
 
-      <!-- SECTION 1: BAN MANAGEMENT -->
-      <div id="bans-section">
+      <!-- SECTION 0: REGISTERED USERS DIRECTORY -->
+      <div id="users-section">
+        <!-- Stat Summary Cards -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-card-label">Total Registered Accounts</span>
+            <span id="stat-user-total" class="stat-card-value">0</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-label">Registered Today</span>
+            <span id="stat-user-today" class="stat-card-value">0</span>
+          </div>
+        </div>
+
+        <!-- Registered Users Directory Card -->
+        <div class="admin-card">
+          <h2 style="font-size: 18px; font-weight: 800; margin-top: 0; color: #0e6231;">📋 Registered Users & Registration History</h2>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Directory of all registered NickServ user accounts with registration dates and timestamps.</p>
+          
+          <div class="controls-row">
+            <input type="text" id="users-search-input" class="search-input" placeholder="🔍 Search Nickname..." autocomplete="off">
+          </div>
+
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">#</th>
+                  <th>Registered Nickname</th>
+                  <th>Registration Date & Time</th>
+                  <th>Account Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <tr>
+                  <td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">Loading registered users directory...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div id="bans-section" class="hidden">
         <!-- Stat Summary Cards -->
         <div class="stats-row">
           <div class="stat-card">
@@ -456,80 +499,93 @@
         </div>
       </div>
 
-      <!-- SECTION 3: AUDIO SOUND NOTIFICATIONS MANAGEMENT -->
+      <!-- SECTION 3: SOUND NOTIFICATIONS -->
       <div id="sounds-section" class="hidden">
-        <div class="admin-card">
-          <h2 style="font-size: 18px; font-weight: 800; margin-top: 0; color: #0e6231;">🔊 Audio Notification Sounds Management</h2>
-          <p style="font-size: 14px; color: #64748b; margin-bottom: 20px;">Upload and customize chat sound notifications for <strong>Newjoining</strong>, <strong>Tagnick (Peep Peep)</strong>, and <strong>Private Messages</strong>. Supported formats: .mp3, .wav</p>
+        <div class="admin-card" style="border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 24px;">
+          <h2 style="font-size: 20px; font-weight: 800; margin-top: 0; color: #047857; display: flex; align-items: center; gap: 8px;">
+            <span>🔊</span> Audio Notification Sounds Management
+          </h2>
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 24px;">
+            Upload and customize chat sound notifications for <strong>Newjoining</strong>, <strong>Tagnick (Peep Peep)</strong>, and <strong>Private Messages</strong>. Supported formats: .mp3, .wav
+          </p>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
-            <!-- Sound 1: Newjoining -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-              <h3 style="margin-top: 0; font-size: 16px; font-weight: 700; color: #0f172a;">👋 Newjoining Sound</h3>
-              <p style="font-size: 13px; color: #64748b;">Plays when a new user joins the chatroom.</p>
-              <audio id="audio-preview-newjoining" controls src="/sounds/newjoining.wav" style="width: 100%; margin: 10px 0;"></audio>
-              <form class="upload-sound-form" data-type="newjoining" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-                <input type="file" accept="audio/*" required class="file-input-newjoining" style="font-size: 13px;">
-                <button type="submit" class="btn-primary-action" style="padding: 8px 12px; font-size: 13px;">📤 Upload & Replace Newjoining Sound</button>
-              </form>
+            <!-- Newjoining Card -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+                  <span>👏</span> Newjoining Sound
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 4px 0 0 0;">Plays when a new user joins the chatroom.</p>
+              </div>
+              <audio id="audio-preview-newjoining" controls src="/sounds/newjoining.wav" style="width: 100%; height: 38px; border-radius: 20px;"></audio>
+              <input type="file" id="file-newjoining" accept="audio/*" style="font-size: 12px; color: #475569; width: 100%;">
+              <button type="button" id="btn-upload-newjoining" style="background: #059669; color: #ffffff; font-size: 13px; font-weight: 700; border-radius: 8px; padding: 10px 14px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 4px;">
+                <span>📥</span> Upload & Replace Newjoining Sound
+              </button>
             </div>
 
-            <!-- Sound 2: Tagnick -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-              <h3 style="margin-top: 0; font-size: 16px; font-weight: 700; color: #0f172a;">🏷️ Tagnick Peep Sound</h3>
-              <p style="font-size: 13px; color: #64748b;">Plays when someone tags/mentions a user's nick.</p>
-              <audio id="audio-preview-tagnick" controls src="/sounds/tagnick.wav" style="width: 100%; margin: 10px 0;"></audio>
-              <form class="upload-sound-form" data-type="tagnick" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-                <input type="file" accept="audio/*" required class="file-input-tagnick" style="font-size: 13px;">
-                <button type="submit" class="btn-primary-action" style="padding: 8px 12px; font-size: 13px;">📤 Upload & Replace Tagnick Sound</button>
-              </form>
+            <!-- Tagnick Card -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+                  <span>🏷️</span> Tagnick Peep Sound
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 4px 0 0 0;">Plays when someone tags/mentions a user's nick.</p>
+              </div>
+              <audio id="audio-preview-tagnick" controls src="/sounds/tagnick.wav" style="width: 100%; height: 38px; border-radius: 20px;"></audio>
+              <input type="file" id="file-tagnick" accept="audio/*" style="font-size: 12px; color: #475569; width: 100%;">
+              <button type="button" id="btn-upload-tagnick" style="background: #059669; color: #ffffff; font-size: 13px; font-weight: 700; border-radius: 8px; padding: 10px 14px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 4px;">
+                <span>📥</span> Upload & Replace Tagnick Sound
+              </button>
             </div>
 
-            <!-- Sound 3: Private PM -->
-            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px;">
-              <h3 style="margin-top: 0; font-size: 16px; font-weight: 700; color: #0f172a;">💬 Private Message Sound</h3>
-              <p style="font-size: 13px; color: #64748b;">Plays when receiving a direct private message.</p>
-              <audio id="audio-preview-private" controls src="/sounds/private.wav" style="width: 100%; margin: 10px 0;"></audio>
-              <form class="upload-sound-form" data-type="private" style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
-                <input type="file" accept="audio/*" required class="file-input-private" style="font-size: 13px;">
-                <button type="submit" class="btn-primary-action" style="padding: 8px 12px; font-size: 13px;">📤 Upload & Replace Private Sound</button>
-              </form>
+            <!-- Private Message Card -->
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <div style="font-size: 16px; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+                  <span>💬</span> Private Message Sound
+                </div>
+                <p style="font-size: 12px; color: #64748b; margin: 4px 0 0 0;">Plays when receiving a direct private message.</p>
+              </div>
+              <audio id="audio-preview-private" controls src="/sounds/private.wav" style="width: 100%; height: 38px; border-radius: 20px;"></audio>
+              <input type="file" id="file-private" accept="audio/*" style="font-size: 12px; color: #475569; width: 100%;">
+              <button type="button" id="btn-upload-private" style="background: #059669; color: #ffffff; font-size: 13px; font-weight: 700; border-radius: 8px; padding: 10px 14px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 4px;">
+                <span>📥</span> Upload & Replace Private Sound
+              </button>
             </div>
           </div>
         </div>
-      <!-- SECTION 4: UNIQUE VISITOR LOGS (3-DAY TRACKING) -->
-      <div id="visitors-section" class="hidden">
+      </div>
+
+      <!-- SECTION 4: 3-DAY UNIQUE VISITOR LOGS -->
+      <div id="visitor-logs-section" class="hidden">
         <!-- Stat Summary Cards -->
         <div class="stats-row">
           <div class="stat-card">
             <span class="stat-card-label">Today Unique IPs</span>
-            <span id="stat-visitor-ips" class="stat-card-value">0</span>
+            <span id="stat-log-ips" class="stat-card-value">0</span>
           </div>
           <div class="stat-card">
             <span class="stat-card-label">Today Unique Nicks</span>
-            <span id="stat-visitor-nicks" class="stat-card-value">0</span>
+            <span id="stat-log-nicks" class="stat-card-value">0</span>
           </div>
           <div class="stat-card">
             <span class="stat-card-label">Today Unique Devices</span>
-            <span id="stat-visitor-devices" class="stat-card-value">0</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-card-label">Total 3-Day Visits</span>
-            <span id="stat-visitor-total" class="stat-card-value">0</span>
+            <span id="stat-log-devices" class="stat-card-value">0</span>
           </div>
         </div>
 
         <div class="admin-card">
-          <h2 style="font-size: 18px; font-weight: 800; margin-top: 0; color: #0e6231;">👥 3-Day Unique Visitor Logs & Daily Access</h2>
-          <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">Track who joined the chatroom (Nickname, IP, Device, Timestamp). Logs older than 3 days (72h) are automatically purged.</p>
-
+          <h2 style="font-size: 18px; font-weight: 800; margin-top: 0; color: #0e6231;">👥 3-Day Unique Visitor & Connection History</h2>
+          
           <div class="controls-row">
-            <input type="text" id="visitors-search-input" class="search-input" placeholder="🔍 Search Nickname, IP Address, Device ID, or Timestamp..." autocomplete="off">
+            <input type="text" id="logs-search-input" class="search-input" placeholder="🔍 Search IP Address, Nickname, Device ID or User Agent..." autocomplete="off">
             <div class="filter-tabs">
-              <button class="day-filter-btn active" data-day="day1">Today (Day 1)</button>
-              <button class="day-filter-btn" data-day="day2">Yesterday (Day 2)</button>
-              <button class="day-filter-btn" data-day="day3">2 Days Ago (Day 3)</button>
-              <button class="day-filter-btn" data-day="all">All 3 Days</button>
+              <button class="filter-btn active" data-log-filter="today">Today (Day 1)</button>
+              <button class="filter-btn" data-log-filter="yesterday">Yesterday (Day 2)</button>
+              <button class="filter-btn" data-log-filter="day3">Day 3</button>
+              <button class="filter-btn" data-log-filter="all">All 3 Days</button>
             </div>
           </div>
 
@@ -537,25 +593,24 @@
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Date & Time</th>
                   <th>Nickname</th>
                   <th>IP Address</th>
-                  <th>Device ID Fingerprint</th>
-                  <th>Quick Action</th>
+                  <th>Device ID</th>
+                  <th>User-Agent / Browser</th>
+                  <th>Last Connection Time</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="visitors-table-body">
+              <tbody id="logs-table-body">
                 <tr>
-                  <td colspan="5" style="text-align: center; padding: 20px; color: #64748b;">Loading 3-day visitor logs...</td>
+                  <td colspan="6" style="text-align: center; padding: 20px; color: #64748b;">Loading visitor history logs...</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-
     </main>
-
   </div>
 
   <script src="js/admin.js"></script>

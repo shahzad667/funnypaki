@@ -53,8 +53,62 @@ html, body {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 8px;
-  overflow: hidden;
+  gap: 6px;
+  overflow-x: auto;
+  max-width: calc(100vw - 70px);
+}
+
+.mobile-tabs-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mobile-tab {
+  background: #111111;
+  color: #a3a3a3;
+  font-weight: 700;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid #333333;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.mobile-tab.active {
+  background: #15803d;
+  color: #ffffff;
+  border-color: #15803d;
+}
+
+.mobile-tab .tab-close {
+  font-size: 12px;
+  color: #fca5a5;
+  margin-left: 2px;
+  cursor: pointer;
+}
+
+.mobile-tab .unread-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 8px;
+}
+
+.m-chat-window {
+  display: none;
+  flex-direction: column;
+  padding: 8px 10px;
+  min-height: 100%;
+}
+
+.m-chat-window.active {
+  display: flex;
 }
 
 .channel-tag {

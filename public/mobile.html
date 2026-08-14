@@ -28,7 +28,11 @@
     <!-- Top Header Bar -->
     <header class="mobile-header">
       <div class="header-left">
-        <span class="channel-tag">#FunnyPaki</span>
+        <div id="mobile-tab-list" class="mobile-tabs-bar">
+          <div class="mobile-tab active" data-target="#FunnyPaki">
+            <span>#FunnyPaki</span>
+          </div>
+        </div>
         <span id="mobile-topic" class="topic-text">Topic : Welcome To Our chatroom Enjoy and Safe</span>
       </div>
       <div class="header-right-btns">
@@ -42,7 +46,9 @@
       <!-- Left Chat Log Window -->
       <section class="mobile-chat-container">
         <div id="mobile-chat-logs" class="mobile-chat-viewport">
-          <div class="sys-line info">*** Welcome to #FunnyPaki Mobile Chatroom!</div>
+          <div id="m-window-FunnyPaki" class="m-chat-window active" data-name="#FunnyPaki">
+            <div class="sys-line info">*** Welcome to #FunnyPaki Mobile Chatroom!</div>
+          </div>
         </div>
       </section>
 
@@ -63,6 +69,10 @@
         <!-- HALF-OP Section -->
         <div id="banner-halfop" class="user-group-banner" style="display:none">HALF-OP</div>
         <ul id="list-halfop" class="user-group-list"></ul>
+
+        <!-- VIP Section -->
+        <div id="banner-vip" class="user-group-banner" style="display:none">VIP</div>
+        <ul id="list-vip" class="user-group-list"></ul>
 
         <!-- ONLINE Section -->
         <div id="banner-online" class="user-group-banner" style="display:none">ONLINE</div>

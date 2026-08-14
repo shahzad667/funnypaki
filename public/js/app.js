@@ -72,6 +72,75 @@ document.addEventListener('DOMContentLoaded', () => {
   const userStatusBadge = document.getElementById('user-status-badge');
   const userCount = document.getElementById('user-count');
   const btnAdminModal = document.getElementById('btn-admin-modal');
+  const btnSoundTogglePc = document.getElementById('btn-sound-toggle-pc');
+
+  // --- SOUND NOTIFICATION ENGINE (Web Audio API & Audio Elements) ---
+  let soundMuted = localStorage.getItem('chat_sound_muted') === '1';
+  let audioCtx = null;
+
+  function initAudioContext() {
+    if (!audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) audioCtx = new AudioContext();
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+  }
+
+  document.addEventListener('click', initAudioContext, { once: false });
+
+  function updateSoundToggleButton() {
+    if (btnSoundTogglePc) {
+      btnSoundTogglePc.textContent = soundMuted ? '🔇 Sound OFF' : '🔊 Sound ON';
+      btnSoundTogglePc.style.color = soundMuted ? '#cbd5e1' : '#ffffff';
+    }
+  }
+
+  if (btnSoundTogglePc) {
+    updateSoundToggleButton();
+    btnSoundTogglePc.addEventListener('click', () => {
+      soundMuted = !soundMuted;
+      localStorage.setItem('chat_sound_muted', soundMuted ? '1' : '0');
+      updateSoundToggleButton();
+    });
+  }
+
+  function playSynthBeep(freqs, durations) {
+    try {
+      initAudioContext();
+      if (!audioCtx) return;
+      let now = audioCtx.currentTime;
+      freqs.forEach((freq, idx) => {
+        const dur = durations[idx];
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + dur);
+        now += dur + 0.05;
+      });
+    } catch (e) {}
+  }
+
+  function playNotificationSound(type) {
+    if (soundMuted) return;
+    initAudioContext();
+
+    const audioFile = `/sounds/${type}.wav`;
+    const audio = new Audio(audioFile);
+    audio.currentTime = 0;
+    audio.play().catch(() => {
+      if (type === 'newjoining') playSynthBeep([523.25, 783.99], [0.15, 0.25]);
+      else if (type === 'tagnick') playSynthBeep([880, 1046.5], [0.1, 0.15]);
+      else if (type === 'private') playSynthBeep([659.25, 880], [0.12, 0.2]);
+    });
+  }
 
   // Context Menu
   const contextMenu = document.getElementById('user-context-menu');
@@ -170,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnConnect.classList.add('connecting');
       }
 
-      let secondsLeft = 3;
+      let secondsLeft = 5;
       const updateButtonText = () => {
         if (btnConnect) {
           btnConnect.innerHTML = `<span class="spinner-icon">⏳</span> Connecting (${secondsLeft}s)...`;
@@ -188,17 +257,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, 1000);
 
-      // 3 Seconds Buffer Delay
+      // 5 Seconds Buffer Delay
       setTimeout(() => {
-        if (chosenNick) {
-          socket.emit('change_nick', { newNick: chosenNick, deviceId: clientDeviceId });
-        }
-
-        if (chosenPass) {
-          setTimeout(() => {
-            socket.emit('identify', { nick: chosenNick || currentNick, password: chosenPass });
-          }, 300);
-        }
+        socket.emit('user_enter_lobby', {
+          nick: chosenNick,
+          password: chosenPass,
+          deviceId: clientDeviceId
+        });
 
         if (loginOverlay) {
           loginOverlay.style.opacity = '0';
@@ -210,8 +275,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
           if (chatInput) chatInput.focus();
-        }, 400);
-      }, 3000);
+        }, 350);
+      }, 5000);
     });
   }
 
@@ -231,36 +296,9 @@ document.addEventListener('DOMContentLoaded', () => {
     switchWindow('#FunnyPaki');
   });
 
-  // Audio Sound Notifications System
-  const SOUNDS = {
-    newjoining: new Audio('/sounds/newjoining.wav'),
-    tagnick: new Audio('/sounds/tagnick.wav'),
-    private: new Audio('/sounds/private.wav')
-  };
-  let soundMuted = false;
-
-  function playNotificationSound(type) {
-    if (soundMuted) return;
-    try {
-      const snd = SOUNDS[type] || new Audio(`/sounds/${type}.mp3`);
-      snd.currentTime = 0;
-      snd.play().catch(() => {});
-    } catch (e) {}
-  }
-
-  const btnSoundToggle = document.getElementById('btn-sound-toggle');
-  if (btnSoundToggle) {
-    btnSoundToggle.addEventListener('click', () => {
-      soundMuted = !soundMuted;
-      btnSoundToggle.textContent = soundMuted ? '🔇 Sound OFF' : '🔊 Sound ON';
-    });
-  }
-
-  socket.on('system_notice', ({ type, message }) => {
-    appendSystemMessage(activeWindow, type, message);
-    if (type === 'join' || (message && message.toLowerCase().includes('joined'))) {
-      playNotificationSound('newjoining');
-    }
+  socket.on('system_notice', ({ type, target, message }) => {
+    const targetWin = target || (type === 'status_info' ? 'Status' : activeWindow);
+    appendSystemMessage(targetWin, type, message);
   });
 
   socket.on('banned', ({ reason }) => {
@@ -301,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isSelf = nick.toLowerCase() === currentNick.toLowerCase();
     appendChatMessage(channel, nick, prefix, roleName, message, timestamp, false, isSelf, textColor, bgColor);
 
-    if (!isSelf && currentNick) {
+    if (!isSelf && currentNick && message) {
       const nickRegex = new RegExp(`\\b@?${currentNick}\\b`, 'i');
       if (nickRegex.test(message)) {
         playNotificationSound('tagnick');
@@ -318,10 +356,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ensurePMTabExists(otherParty);
 
     const isSelf = from.toLowerCase() === currentNick.toLowerCase();
+    appendChatMessage(otherParty, from, '', 'User', message, timestamp, true, isSelf, textColor, bgColor);
+
     if (!isSelf) {
       playNotificationSound('private');
     }
-    appendChatMessage(otherParty, from, '', 'User', message, timestamp, true, isSelf, textColor, bgColor);
 
     if (activeWindow.toLowerCase() !== otherParty.toLowerCase()) {
       incrementUnread(otherParty);
@@ -330,6 +369,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('user_joined', ({ channel, nick, ip }) => {
     appendSystemMessage(channel, 'join', `*** ${nick} [${ip}] has joined ${channel}`);
+    if (nick && nick.toLowerCase() !== currentNick.toLowerCase()) {
+      playNotificationSound('newjoining');
+    }
   });
 
   socket.on('user_part', ({ channel, nick, reason }) => {
@@ -586,16 +628,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderUserListGrouped(users, channel) {
+    if (!userListContainer || !users) return;
     userListContainer.innerHTML = '';
-    userCount.textContent = users.length;
+    if (userCount) userCount.textContent = users.length;
     const mobileUserCount = document.getElementById('mobile-user-count');
     if (mobileUserCount) mobileUserCount.textContent = users.length;
 
     const groups = {
-      owner: { title: '👑 OWNER', list: [] },
-      admin: { title: 'ADMIN', list: [] },
-      op: { title: 'OP', list: [] },
-      halfop: { title: 'HALF-OP', list: [] },
+      owner: { title: '👑 OWNER (+q)', list: [] },
+      admin: { title: 'ADMIN (+a)', list: [] },
+      op: { title: 'OP (+o)', list: [] },
+      halfop: { title: 'HALF-OP (+h)', list: [] },
+      vip: { title: '⭐ VIP (+v)', list: [] },
       online: { title: 'ONLINE', list: [] }
     };
 
@@ -608,10 +652,12 @@ document.addEventListener('DOMContentLoaded', () => {
         groups.owner.list.push(u);
       } else if (rank >= 4 || prefix === '&' || role.includes('admin') || role.includes('oper') || u.is_oper) {
         groups.admin.list.push(u);
-      } else if (rank >= 3 || prefix === '@' || role.includes('op') || role.includes('operator')) {
+      } else if (rank === 3 || prefix === '@' || (role.includes('op') && !role.includes('half') && role !== 'half-op')) {
         groups.op.list.push(u);
-      } else if (rank >= 2 || prefix === '%' || role.includes('halfop')) {
+      } else if (rank === 2 || prefix === '%' || role.includes('half')) {
         groups.halfop.list.push(u);
+      } else if (rank === 1 || prefix === '+' || role.includes('vip') || role.includes('voice')) {
+        groups.vip.list.push(u);
       } else {
         groups.online.list.push(u);
       }
@@ -668,6 +714,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
   }
 
+  function formatMessageHTML(str) {
+    if (!str) return '';
+    let safe = str.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    safe = safe.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    safe = safe.replace(/&lt;(\/)?(b|i|u|em|strong|ins|sub|sup)&gt;/gi, '<$1$2>');
+    safe = safe.replace(/&lt;span style=["']color:\s*(.*?)["']&gt;/gi, '<span style="color:$1">');
+    safe = safe.replace(/&lt;span class=["']msg-text-colored["'] style=["'](.*?)["']&gt;/gi, '<span class="msg-text-colored" style="$1">');
+    safe = safe.replace(/&lt;\/span&gt;/gi, '</span>');
+    return safe;
+  }
+
   function appendChatMessage(winName, nick, prefix, roleName, message, timestamp, isPM = false, isSelf = false, textColor = null, bgColor = null) {
     const winEl = getOrCreateWindowElement(winName);
     const line = document.createElement('div');
@@ -675,8 +732,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nickColor = getNickColor(nick);
 
-    // AUTO-CONVERT TEXT SMILIES & ENHANCE EMOJI SIZING
-    let formattedMsg = parseEmojiShortcuts(escapeHTML(message));
+    // AUTO-CONVERT TEXT SMILIES, SAFE HTML FORMATTING & ENHANCE EMOJI SIZING
+    let formattedMsg = parseEmojiShortcuts(formatMessageHTML(message));
 
     if (textColor || (bgColor && bgColor !== 'transparent')) {
       const styles = [];
@@ -1100,6 +1157,11 @@ document.addEventListener('DOMContentLoaded', () => {
         appendSystemMessage('Status', 'error', '*** Please join a #channel or PM a user to send messages.');
         return;
       }
+      if (isBold) text = `<b>${text}</b>`;
+      if (isItalic) text = `<i>${text}</i>`;
+      if (isUnderline) text = `<u>${text}</u>`;
+      if (activeTextColor) text = `<span style="color:${activeTextColor}">${text}</span>`;
+
       socket.emit('send_message', {
         target: activeWindow,
         message: text,
@@ -1128,6 +1190,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     switch (cmd) {
+      case 'drop':
+        if (!args[0]) {
+          appendSystemMessage(activeWindow, 'error', 'Usage: /drop <nickname>');
+          return;
+        }
+        socket.emit('send_chat', {
+          channel: activeWindow,
+          message: `/drop ${args[0]}`,
+          textColor: activeTextColor,
+          bgColor: activeBgColor
+        });
+        break;
+
       case 'cs':
       case 'chanserv':
         if (!args[0]) {
