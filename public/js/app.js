@@ -1,6 +1,24 @@
-// #FunnyPaki WebIRC JavaScript Client (Emoji Sizing & Text Smilies Auto-Converter)
 document.addEventListener('DOMContentLoaded', () => {
-  const socket = io();
+  const socket = io({
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    timeout: 20000
+  });
+
+  // 24/7 Keep-Alive Heartbeat Timer
+  setInterval(() => {
+    if (socket && socket.connected) {
+      socket.emit('keep_alive');
+    }
+  }, 15000);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && socket && socket.connected) {
+      socket.emit('keep_alive');
+    }
+  });
 
   // State
   let currentNick = '';
