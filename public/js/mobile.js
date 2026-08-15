@@ -387,6 +387,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  socket.on('user_joined', (data) => {
+    appendSysLine(`*** ${data.nick} [${data.ip}] has joined ${data.channel || '#FunnyPaki'}`, 'join', data.channel || '#FunnyPaki');
+    playNotificationSound('newjoining');
+  });
+
+  socket.on('user_part', (data) => {
+    appendSysLine(`*** ${data.nick} left ${data.channel || '#FunnyPaki'} (${data.reason || 'Left channel'})`, 'part', data.channel || '#FunnyPaki');
+  });
+
+  socket.on('user_quit', (data) => {
+    appendSysLine(`*** ${data.nick} quit (${data.reason || 'Quit'})`, 'part', '#FunnyPaki');
+  });
+
   socket.on('system_notice', (data) => {
     appendSysLine(data.message, data.type || 'info', activeMobileWindow);
     if (data.type === 'join' || (data.message && data.message.toLowerCase().includes('joined'))) {
