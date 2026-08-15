@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
   return res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { etag: false, maxAge: 0 }));
 
 // Active Sockets map: socket.id -> { nick, ip, identified, global_role, is_oper, vhost, ident, realname, channels: Set, user_agent, identify_timer }
 const users = new Map();
