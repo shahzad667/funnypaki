@@ -607,18 +607,20 @@ io.on('connection', (socket) => {
 
   db.logUserIP(initialNick, clientIP, userAgent);
 
+  const initialHostmask = generateHostmask(clientIP);
+
   socket.emit('system_notice', {
     type: 'welcome',
-    message: `*** Welcome to #FunnyPaki Chat Room Server! IP: ${clientIP}`
+    message: `*** Welcome to #FunnyPaki Chat Room Server! Host: ${initialHostmask}`
   });
   socket.emit('system_notice', {
     type: 'status_info',
     target: 'Status',
-    message: `*** ${initialNick} user is going to join #FunnyPaki ... with ${clientIP} IP address ...`
+    message: `*** ${initialNick} user is going to join #FunnyPaki ... with ${initialHostmask} ...`
   });
   socket.emit('user_init', {
     nick: initialNick,
-    ip: clientIP,
+    ip: initialHostmask,
     channels: Array.from(channels.values()).map(c => c.name)
   });
 
