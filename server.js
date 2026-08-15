@@ -9,7 +9,9 @@ const db = require('./database');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: { origin: '*' }
+  cors: { origin: '*' },
+  pingTimeout: 60000,
+  pingInterval: 10000
 });
 
 const PORT = process.env.PORT || 3000;
@@ -618,6 +620,13 @@ io.on('connection', (socket) => {
     nick: initialNick,
     ip: clientIP,
     channels: Array.from(channels.values()).map(c => c.name)
+  });
+
+  socket.on('keep_alive', () => {
+    const u = users.get(socket.id);
+    if (u) {
+      u.lastActive = Date.now();
+    }
   });
 
   socket.on('user_enter_lobby', async ({ nick, password, deviceId }) => {
