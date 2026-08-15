@@ -85,6 +85,10 @@ html, body {
   border-color: #15803d;
 }
 
+#mobile-topic, .topic-text {
+  display: none !important;
+}
+
 .mobile-tab .tab-close {
   font-size: 12px;
   color: #fca5a5;
