@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/mobile.css">
+  <link rel="stylesheet" href="css/mobile.css?v=10.4">
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
@@ -33,11 +33,7 @@
             <span>#FunnyPaki</span>
           </div>
         </div>
-        <span id="mobile-topic" class="topic-text">Topic : Welcome To Our chatroom Enjoy and Safe</span>
-      </div>
-      <div class="header-right-btns">
-        <button id="btn-sound-toggle-mobile" class="btn-mini" title="Toggle Sound">🔊 ON</button>
-        <button id="btn-mobile-nick" class="btn-mini">Nick</button>
+        <span id="mobile-topic" class="topic-text" style="display:none !important">Topic : Welcome To Our chatroom Enjoy and Safe</span>
       </div>
     </header>
 
@@ -119,6 +115,8 @@
         <button type="button" id="btn-mobile-bold" class="fmt-btn fmt-btn-b" title="Bold">B</button>
         <button type="button" id="btn-mobile-italic" class="fmt-btn fmt-btn-i" title="Italic">I</button>
         <button type="button" id="btn-mobile-underline" class="fmt-btn fmt-btn-u" title="Underline">U</button>
+        <button type="button" id="btn-sound-toggle-mobile" class="fmt-btn" title="Toggle Sound" style="font-weight: 600; font-size: 12px; padding: 0 6px; min-width: unset;">🔊 ON</button>
+        <button type="button" id="btn-mobile-nick" class="fmt-btn" title="Change Nick" style="font-weight: 600; font-size: 12px; padding: 0 6px; min-width: unset;">Nick</button>
       </div>
 
       <form id="mobile-chat-form" class="input-box-wrapper">
@@ -128,6 +126,6 @@
     </footer>
   </div>
 
-  <script src="js/mobile.js"></script>
+  <script src="js/mobile.js?v=10.4"></script>
 </body>
 </html>
