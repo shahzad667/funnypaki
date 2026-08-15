@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const db = require('./database');
 
@@ -132,10 +133,10 @@ function getUserRankInChannel(socketId, channelObj) {
     return { rank: 3, prefix: '@', roleName: 'AI Bot', mode: '+o' };
   }
 
-  if (channelObj.owners.has(socketId) || u.global_role === 'owner' || u.is_oper) {
+  if (channelObj.owners.has(socketId) || u.global_role === 'owner') {
     return { rank: 5, prefix: '~', roleName: 'Owner', mode: '+q' };
   }
-  if (channelObj.admins.has(socketId) || u.global_role === 'admin') {
+  if (channelObj.admins.has(socketId)) {
     return { rank: 4, prefix: '&', roleName: 'Admin', mode: '+a' };
   }
   if (channelObj.ops.has(socketId)) {
@@ -146,6 +147,9 @@ function getUserRankInChannel(socketId, channelObj) {
   }
   if (channelObj.voices.has(socketId)) {
     return { rank: 1, prefix: '+', roleName: 'VIP', mode: '+v' };
+  }
+  if (u.global_role === 'admin' || u.is_oper || u.is_admin) {
+    return { rank: 4, prefix: '&', roleName: 'Admin', mode: '+a' };
   }
   return { rank: 0, prefix: '', roleName: 'User', mode: '' };
 }
@@ -169,7 +173,7 @@ function broadcastChannelUserList(chName) {
   const chanObj = channels.get(norm);
   if (!chanObj) return;
 
-  const userList = Array.from(chanObj.users).map(sId => {
+  const rawUserList = Array.from(chanObj.users).map(sId => {
     const u = users.get(sId);
     if (!u) return null;
     const rankInfo = getUserRankInChannel(sId, chanObj);
@@ -177,7 +181,8 @@ function broadcastChannelUserList(chName) {
     return {
       socketId: sId,
       nick: u.nick,
-      ip: u.ip,
+      realIp: u.ip,
+      vhost: u.vhost || generateHostmask(u.ip),
       rank: rankInfo.rank,
       prefix: rankInfo.prefix,
       roleName: rankInfo.roleName,
@@ -186,18 +191,36 @@ function broadcastChannelUserList(chName) {
     };
   }).filter(Boolean);
 
-  userList.sort((a, b) => {
+  rawUserList.sort((a, b) => {
     if (b.rank !== a.rank) return b.rank - a.rank;
     return a.nick.localeCompare(b.nick);
   });
 
   const modeString = getModeString(chanObj.modes);
 
-  io.to(chanObj.name).emit('channel_user_list', {
-    channel: chanObj.name,
-    topic: chanObj.topic,
-    modes: modeString,
-    users: userList
+  chanObj.users.forEach(sId => {
+    const s = io.sockets.sockets.get(sId);
+    if (!s) return;
+    const uRecv = users.get(sId);
+    const isStaff = uRecv && (uRecv.is_admin || uRecv.is_oper || uRecv.global_role === 'owner' || uRecv.global_role === 'admin');
+
+    const sanitizedList = rawUserList.map(usr => ({
+      socketId: usr.socketId,
+      nick: usr.nick,
+      ip: isStaff ? usr.realIp : usr.vhost,
+      rank: usr.rank,
+      prefix: usr.prefix,
+      roleName: usr.roleName,
+      isRegistered: usr.isRegistered,
+      identified: usr.identified
+    }));
+
+    s.emit('channel_user_list', {
+      channel: chanObj.name,
+      topic: chanObj.topic,
+      modes: modeString,
+      users: sanitizedList
+    });
   });
 }
 
@@ -220,6 +243,14 @@ function getClientIP(socket) {
     ip = '127.0.0.1';
   }
   return ip;
+}
+
+const crypto = require('crypto');
+
+function generateHostmask(ip) {
+  if (!ip) return 'PakiChat-000000.IP';
+  const hash = crypto.createHash('md5').update(ip + '-funnypaki-salt-2026').digest('hex').substring(0, 8).toUpperCase();
+  return `PakiChat-${hash}.IP`;
 }
 
 function generateGuestNick() {
@@ -561,14 +592,15 @@ io.on('connection', (socket) => {
     global_role: 'user',
     is_oper: false,
     is_admin: false,
-    vhost: '',
+    vhost: generateHostmask(clientIP),
     ident: 'guest',
     realname: 'PakiChat Guest User',
     channels: new Set(),
     user_agent: userAgent,
     connectedAt: Date.now(),
     lastActive: Date.now(),
-    identify_timer: null
+    identify_timer: null,
+    hasEnteredLobby: false
   });
 
   db.logUserIP(initialNick, clientIP, userAgent);
@@ -591,6 +623,8 @@ io.on('connection', (socket) => {
   socket.on('user_enter_lobby', async ({ nick, password, deviceId }) => {
     const u = users.get(socket.id);
     if (!u) return;
+
+    u.hasEnteredLobby = true;
 
     if (deviceId) {
       socket.deviceId = deviceId;
@@ -693,6 +727,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join_channel', ({ channel, key }) => {
+    const u = users.get(socket.id);
+    if (!u || !u.hasEnteredLobby) return;
     joinChannel(socket, channel, key);
   });
 
@@ -982,17 +1018,37 @@ io.on('connection', (socket) => {
       return;
     }
 
-    if (target.startsWith('#')) {
-      const norm = normChan(target);
-      const chanObj = channels.get(norm);
-      if (chanObj && chanObj.users.has(socket.id)) {
-        io.to(chanObj.name).emit('chat_action', {
-          channel: chanObj.name,
+    if (target && !target.startsWith('#')) {
+      const targetUser = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === target.toLowerCase());
+      if (targetUser) {
+        const targetSocket = io.sockets.sockets.get(targetUser.socketId);
+        if (targetSocket) {
+          targetSocket.emit('chat_action', {
+            channel: u.nick,
+            nick: u.nick,
+            action: action,
+            timestamp: new Date().toLocaleTimeString()
+          });
+        }
+        socket.emit('chat_action', {
+          channel: targetUser.nick,
           nick: u.nick,
           action: action,
           timestamp: new Date().toLocaleTimeString()
         });
       }
+    } else {
+      const targetChan = (target && target.startsWith('#')) ? target : DEFAULT_MAIN_CHANNEL;
+      const norm = normChan(targetChan);
+      const chanObj = channels.get(norm);
+      const roomName = chanObj ? chanObj.name : DEFAULT_MAIN_CHANNEL;
+
+      io.to(roomName).emit('chat_action', {
+        channel: roomName,
+        nick: u.nick,
+        action: action,
+        timestamp: new Date().toLocaleTimeString()
+      });
     }
   });
 
@@ -1151,10 +1207,18 @@ function joinChannel(socket, channelName, keyArg = '') {
 
   checkAndGrantPersistentRank(socket, chanObj);
 
-  io.to(chanObj.name).emit('user_joined', {
-    channel: chanObj.name,
-    nick: u.nick,
-    ip: u.ip
+  chanObj.users.forEach(sId => {
+    const s = io.sockets.sockets.get(sId);
+    if (!s) return;
+    const uRecv = users.get(sId);
+    const isStaff = uRecv && (uRecv.is_admin || uRecv.is_oper || uRecv.global_role === 'owner' || uRecv.global_role === 'admin');
+    const displayIP = isStaff ? u.ip : (u.vhost || generateHostmask(u.ip));
+
+    s.emit('user_joined', {
+      channel: chanObj.name,
+      nick: u.nick,
+      ip: displayIP
+    });
   });
 
   broadcastChannelUserList(chanObj.name);
@@ -2117,7 +2181,7 @@ function handleBan(socket, targetNickOrIP, banType = 'nick', reason = 'Banned by
     return;
   }
 
-  let targetUser = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === targetNickOrIP.toLowerCase() || usr.ip === targetNickOrIP);
+  let targetUser = Array.from(users.values()).find(usr => usr.nick.toLowerCase() === targetNickOrIP.toLowerCase() || usr.ip === targetNickOrIP || (usr.vhost && usr.vhost.toLowerCase() === targetNickOrIP.toLowerCase()));
 
   if (targetUser && !u.is_oper) {
     const senderMaxRank = Math.max(...Array.from(channels.values()).map(c => getUserRankInChannel(socket.id, c).rank));
@@ -2271,14 +2335,11 @@ function handleWhoisInquiry(socket, targetNick) {
     return;
   }
 
-  // Check if requester is Staff/Operator (HalfOp % or higher, Oper, Admin, Owner)
-  const requesterMaxRank = Math.max(0, ...Array.from(channels.values()).map(c => getUserRankInChannel(socket.id, c).rank));
-  const isStaff = requesterMaxRank >= 2 || requester.is_oper || requester.is_admin || requester.global_role === 'owner';
-
-  // IP Privacy Rule: Staff sees real IP/VHost; Normal users see masked host
+  // IP Privacy Rule: Admin and Owner see real IP; Normal users see encrypted hostmask
+  const isStaff = requester.is_admin || requester.is_oper || requester.global_role === 'owner' || requester.global_role === 'admin';
   const identStr = targetUser.ident || 'user';
   const realNameStr = targetUser.realname || 'PakiChat Member';
-  const displayHost = isStaff ? (targetUser.vhost || targetUser.ip) : `${targetUser.nick.toLowerCase()}.funnypaki.user.cloak`;
+  const displayHost = isStaff ? targetUser.ip : (targetUser.vhost || generateHostmask(targetUser.ip));
 
   socket.emit('system_notice', {
     type: 'info',
@@ -2428,6 +2489,21 @@ function handleDotCommand(socket, channelName, text) {
     cmd = '.' + cmd.substring(1);
   }
   const targetNick = parts[1];
+
+  if (rawCmd === '/me' || rawCmd === '.me' || rawCmd === '!me') {
+    const actionText = parts.slice(1).join(' ');
+    if (!actionText) {
+      socket.emit('system_notice', { type: 'error', message: '*** Usage: /me <action>' });
+      return true;
+    }
+    io.to(chanObj.name).emit('chat_action', {
+      channel: chanObj.name,
+      nick: u.nick,
+      action: actionText,
+      timestamp: new Date().toLocaleTimeString()
+    });
+    return true;
+  }
 
   if (rawCmd === '/nick' || rawCmd === '.nick') {
     if (!targetNick) {
@@ -2901,6 +2977,70 @@ app.get('/api/admin/visitor-logs', (req, res) => {
     return res.status(403).json({ success: false, message: 'Unauthorized.' });
   }
   return res.json({ success: true, logs: db.getVisitorLogs() });
+});
+
+app.get('/api/admin/export-visitor-logs', (req, res) => {
+  const token = req.headers['authorization'] || req.query.token;
+  const format = req.query.format || 'csv';
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+
+  const logs = db.getVisitorLogs();
+
+  if (format === 'json') {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', 'attachment; filename="visitor_history_logs.json"');
+    return res.json(logs);
+  }
+
+  let csv = 'Nickname,IP Address,Device ID,User Agent,Last Connection Time\n';
+  logs.forEach(log => {
+    const nick = (log.nick || '').replace(/"/g, '""');
+    const ip = (log.ip || '').replace(/"/g, '""');
+    const devId = (log.deviceId || '').replace(/"/g, '""');
+    const ua = (log.user_agent || '').replace(/"/g, '""');
+    const lastSeen = log.last_seen ? new Date(log.last_seen).toLocaleString() : '';
+    csv += `"${nick}","${ip}","${devId}","${ua}","${lastSeen}"\n`;
+  });
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="visitor_history_logs.csv"');
+  return res.send(csv);
+});
+
+app.get('/api/admin/export-database', (req, res) => {
+  const token = req.headers['authorization'] || req.query.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+  const dbPath = path.join(__dirname, 'user_database.json');
+  if (fs.existsSync(dbPath)) {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', 'attachment; filename="user_database.json"');
+    return res.sendFile(dbPath);
+  }
+  return res.status(404).json({ success: false, message: 'Database file not found.' });
+});
+
+app.post('/api/admin/import-database', (req, res) => {
+  const token = req.headers['authorization'] || req.body.token;
+  if (token !== `Bearer ${ADMIN_TOKEN}` && token !== ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, message: 'Unauthorized.' });
+  }
+  const { dbData } = req.body || {};
+  if (!dbData || typeof dbData !== 'object') {
+    return res.status(400).json({ success: false, message: 'Invalid database payload.' });
+  }
+
+  try {
+    const dbPath = path.join(__dirname, 'user_database.json');
+    fs.writeFileSync(dbPath, JSON.stringify(dbData, null, 2), 'utf8');
+    db.reloadConfig();
+    return res.json({ success: true, message: 'Database imported successfully!' });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Import failed: ' + err.message });
+  }
 });
 
 app.post('/api/admin/upload-sound', (req, res) => {
