@@ -341,8 +341,12 @@
       <div class="admin-header-title">
         🛡️ #FunnyPaki Admin & Anti-Spam Control Console
       </div>
-      <div class="admin-header-right">
+      <div class="admin-header-right" style="display: flex; align-items: center; gap: 8px;">
         <span id="logged-admin-name" style="font-weight: 600;">Admin: shahzad</span>
+        <button id="btn-export-db" class="btn btn-xs" style="background: #10b981; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer;" title="Download live user_database.json from server">📥 Export Database</button>
+        <button id="btn-import-db" class="btn btn-xs" style="background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer;" title="Upload & restore user_database.json">📤 Import Database</button>
+        <button id="btn-export-logs-top" class="btn btn-xs" style="background: #8b5cf6; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-weight: 700; cursor: pointer;" title="Download 3-Day Visitor History Logs (CSV)">📄 Export Logs</button>
+        <input type="file" id="import-db-file-input" accept=".json" style="display: none;">
         <a href="/" class="btn btn-xs btn-outline-white" style="text-decoration: none; padding: 6px 12px; color: white; border: 1px solid white; border-radius: 6px;">💬 Back to Chat</a>
         <button id="btn-admin-logout" class="btn-logout">🚪 Logout</button>
       </div>
@@ -577,7 +581,10 @@
         </div>
 
         <div class="admin-card">
-          <h2 style="font-size: 18px; font-weight: 800; margin-top: 0; color: #0e6231;">👥 3-Day Unique Visitor & Connection History</h2>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h2 style="font-size: 18px; font-weight: 800; margin: 0; color: #0e6231;">👥 3-Day Unique Visitor & Connection History</h2>
+            <button id="btn-export-tab-logs" class="filter-btn" style="background: #8b5cf6; color: white; border-color: #8b5cf6; font-weight: 700; cursor: pointer;">📄 Export Visitor Logs (CSV)</button>
+          </div>
           
           <div class="controls-row">
             <input type="text" id="logs-search-input" class="search-input" placeholder="🔍 Search IP Address, Nickname, Device ID or User Agent..." autocomplete="off">
@@ -613,6 +620,6 @@
     </main>
   </div>
 
-  <script src="js/admin.js"></script>
+  <script src="js/admin.js?v=10.3"></script>
 </body>
 </html>
