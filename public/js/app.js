@@ -218,6 +218,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  let hasEnteredLobby = false;
+
   const clientDeviceId = generateDeviceFingerprint();
 
   socket.on('connect', () => {
@@ -228,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
+      hasEnteredLobby = true;
       const chosenNick = loginNickInput ? loginNickInput.value.trim() : '';
       const chosenPass = loginPassInput ? loginPassInput.value.trim() : '';
       const btnConnect = document.getElementById('login-btn-connect');
@@ -520,7 +523,9 @@ document.addEventListener('DOMContentLoaded', () => {
         windowModesText.textContent = '';
       }
 
-      socket.emit('join_channel', { channel: winName });
+      if (hasEnteredLobby) {
+        socket.emit('join_channel', { channel: winName });
+      }
     } else if (winName === 'Status') {
       userListContainer.innerHTML = '<div class="user-item"><span class="u-icon">💻</span><span class="u-nick">Console Status</span></div>';
       userCount.textContent = '1';
@@ -650,13 +655,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (rank >= 5 || prefix === '~' || role.includes('owner') || role.includes('founder')) {
         groups.owner.list.push(u);
-      } else if (rank >= 4 || prefix === '&' || role.includes('admin') || role.includes('oper') || u.is_oper) {
+      } else if (rank === 4 || prefix === '&') {
         groups.admin.list.push(u);
-      } else if (rank === 3 || prefix === '@' || (role.includes('op') && !role.includes('half') && role !== 'half-op')) {
+      } else if (rank === 3 || prefix === '@') {
         groups.op.list.push(u);
-      } else if (rank === 2 || prefix === '%' || role.includes('half')) {
+      } else if (rank === 2 || prefix === '%') {
         groups.halfop.list.push(u);
-      } else if (rank === 1 || prefix === '+' || role.includes('vip') || role.includes('voice')) {
+      } else if (rank === 1 || prefix === '+') {
         groups.vip.list.push(u);
       } else {
         groups.online.list.push(u);
@@ -762,12 +767,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const line = document.createElement('div');
     line.className = 'chat-line action';
     const nickColor = getNickColor(nick);
-    const formattedAction = parseEmojiShortcuts(escapeHTML(action));
+    const timeStr = formatTimeHHMM(timestamp || new Date().toLocaleTimeString());
+    const formattedAction = parseEmojiShortcuts(formatMessageHTML(action));
     line.innerHTML = `
       <div class="avatar-badge" style="background-color: ${nickColor}">*</div>
-      <span class="nick-colored" style="color: ${nickColor}">${escapeHTML(nick)}</span>
-      <span class="arrow-sep">➔</span>
-      <span class="msg-text"><em>${formattedAction}</em></span>
+      <div class="time-col">${timeStr}</div>
+      <div class="msg-col msg-text" style="color: #9333ea; font-style: italic; font-weight: 600;">
+        <span style="color: ${nickColor}; font-weight: 700; font-style: normal;">* ${escapeHTML(nick)}</span> ${formattedAction}
+      </div>
     `;
     winEl.appendChild(line);
     scrollToBottom();
@@ -778,6 +785,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const line = document.createElement('div');
     line.className = `sys-msg ${type}`;
     line.textContent = message;
+    winEl.appendChild(line);
+    scrollToBottom();
+  }
+
+  function appendActionMessage(winName, nick, action, timestamp) {
+    const winEl = getOrCreateWindowElement(winName);
+    const line = document.createElement('div');
+    line.className = 'chat-message action-message';
+    line.style.color = '#7e22ce';
+    line.style.fontStyle = 'italic';
+    line.style.fontWeight = '600';
+    line.style.margin = '3px 0';
+
+    const ts = timestamp || new Date().toLocaleTimeString();
+    line.innerHTML = `<span class="time">[${escapeHTML(ts)}]</span> <span class="action-nick" style="font-weight:700;">* ${escapeHTML(nick)}</span> ${formatMessageText(action)}`;
     winEl.appendChild(line);
     scrollToBottom();
   }
@@ -1190,6 +1212,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     switch (cmd) {
+      case 'me':
+        if (!args[0]) {
+          appendSystemMessage(activeWindow, 'error', '*** Usage: /me <action>');
+          return;
+        }
+        socket.emit('send_action', {
+          target: activeWindow,
+          action: args.join(' ')
+        });
+        break;
+
       case 'drop':
         if (!args[0]) {
           appendSystemMessage(activeWindow, 'error', 'Usage: /drop <nickname>');

@@ -288,10 +288,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+      tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+    );
+  }
+
+  function appendActionLine(winName, nick, action) {
+    const winEl = getOrCreateMobileWindowElement(winName);
+    const div = document.createElement('div');
+    div.className = 'msg-line action-line';
+    div.style.color = '#7e22ce';
+    div.style.fontStyle = 'italic';
+    div.style.fontWeight = '600';
+    div.style.margin = '3px 0';
+
+    div.innerHTML = `<span style="font-weight:700;">* ${escapeHTML(nick)}</span> ${formatMessageText(action)}`;
+    winEl.appendChild(div);
+
+    if (activeMobileWindow === winName) {
+      chatLogsViewport.scrollTop = chatLogsViewport.scrollHeight;
+    }
+  }
+
   // Socket Initial Handshake
   socket.on('connect', () => {
     console.log('Mobile Socket Connected');
-    socket.emit('request_user_list', { channel: '#FunnyPaki' });
   });
 
   socket.on('user_init', (data) => {
@@ -299,8 +322,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nickInput && !nickInput.value) {
       nickInput.value = currentNick;
     }
-    appendSysLine(`*** Connected as ${currentNick}`, 'success', '#FunnyPaki');
-    socket.emit('request_user_list', { channel: '#FunnyPaki' });
+  });
+
+  socket.on('chat_action', (data) => {
+    const targetChan = data.channel || '#FunnyPaki';
+    appendActionLine(targetChan, data.nick, data.action);
   });
 
   socket.on('chat_message', (data) => {
@@ -400,16 +426,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (rank >= 5 || prefix === '~' || role.includes('owner') || role.includes('founder')) {
           if (listOwner) listOwner.appendChild(li);
           countOwner++;
-        } else if (rank >= 4 || prefix === '&' || role.includes('admin') || role.includes('oper') || u.is_oper) {
+        } else if (rank === 4 || prefix === '&') {
           if (listAdmin) listAdmin.appendChild(li);
           countAdmin++;
-        } else if (rank === 3 || prefix === '@' || (role.includes('op') && !role.includes('half') && role !== 'half-op')) {
+        } else if (rank === 3 || prefix === '@') {
           if (listOp) listOp.appendChild(li);
           countOp++;
-        } else if (rank === 2 || prefix === '%' || role.includes('half')) {
+        } else if (rank === 2 || prefix === '%') {
           if (listHalfOp) listHalfOp.appendChild(li);
           countHalfOp++;
-        } else if (rank === 1 || prefix === '+' || role.includes('vip') || role.includes('voice')) {
+        } else if (rank === 1 || prefix === '+') {
           if (listVip) listVip.appendChild(li);
           countVip++;
         } else {
@@ -510,6 +536,19 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     let text = msgInput.value.trim();
     if (!text) return;
+
+    if (text.startsWith('/me ') || text.startsWith('.me ') || text.startsWith('!me ') || text === '/me' || text === '.me' || text === '!me') {
+      const parts = text.split(' ');
+      const actionText = parts.slice(1).join(' ');
+      if (actionText) {
+        socket.emit('send_action', { target: activeMobileWindow, action: actionText });
+      } else {
+        appendSysLine('*** Usage: /me <action>', 'error', activeMobileWindow);
+      }
+      msgInput.value = '';
+      msgInput.focus();
+      return;
+    }
 
     if (text.startsWith('/') || text.startsWith('.') || text.startsWith('!')) {
       const targetChan = activeMobileWindow.startsWith('#') ? activeMobileWindow : '#FunnyPaki';

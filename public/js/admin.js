@@ -689,4 +689,77 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Error deleting filter.');
     }
   }
+
+  // --- Export & Import Database Handlers ---
+  const btnExportDb = document.getElementById('btn-export-db');
+  const btnImportDb = document.getElementById('btn-import-db');
+  const importFileInput = document.getElementById('import-db-file-input');
+
+  if (btnExportDb) {
+    btnExportDb.addEventListener('click', () => {
+      if (!adminToken) return;
+      window.location.href = `/api/admin/export-database?token=${encodeURIComponent(adminToken)}`;
+    });
+  }
+
+  if (btnImportDb && importFileInput) {
+    btnImportDb.addEventListener('click', () => {
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        try {
+          const jsonText = event.target.result;
+          const parsedData = JSON.parse(jsonText);
+
+          if (!parsedData || typeof parsedData !== 'object' || !parsedData.registered_nicks) {
+            alert('Invalid database JSON format! Missing registered_nicks.');
+            return;
+          }
+
+          const count = Object.keys(parsedData.registered_nicks).length;
+          if (!confirm(`Are you sure you want to import database containing ${count} registered users?`)) {
+            return;
+          }
+
+          const res = await fetch('/api/admin/import-database', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${adminToken}`
+            },
+            body: JSON.stringify({ dbData: parsedData })
+          });
+
+          const data = await res.json();
+          if (data.success) {
+            alert('✅ ' + data.message);
+            window.location.reload();
+          } else {
+            alert('❌ ' + (data.message || 'Import failed.'));
+          }
+        } catch (err) {
+          alert('Failed to parse selected JSON file: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  // --- Export Visitor Logs (CSV) Handler ---
+  const btnExportLogsTop = document.getElementById('btn-export-logs-top');
+  const btnExportTabLogs = document.getElementById('btn-export-tab-logs');
+
+  function triggerExportLogs() {
+    if (!adminToken) return;
+    window.location.href = `/api/admin/export-visitor-logs?token=${encodeURIComponent(adminToken)}&format=csv`;
+  }
+
+  if (btnExportLogsTop) btnExportLogsTop.addEventListener('click', triggerExportLogs);
+  if (btnExportTabLogs) btnExportTabLogs.addEventListener('click', triggerExportLogs);
 });
