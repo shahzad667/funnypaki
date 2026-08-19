@@ -1,0 +1,4468 @@
+// Auto-generated #FunnyPaki Emoji Engine (700+ Custom & Animated Emojis)
+(function() {
+  const EMOJI_LIST = [
+  {
+    "src": "images/emojis/smile.png",
+    "code": ":-)",
+    "name": "Smile",
+    "title": "Smile (:-))"
+  },
+  {
+    "src": "images/emojis/happy.png",
+    "code": "=)",
+    "name": "Happy",
+    "title": "Happy (=))"
+  },
+  {
+    "src": "images/emojis/bigsmile.png",
+    "code": ":-))",
+    "name": "Big Smile",
+    "title": "Big Smile (:-)))"
+  },
+  {
+    "src": "images/emojis/awkward.png",
+    "code": ":E",
+    "name": "Awkward",
+    "title": "Awkward (:E)"
+  },
+  {
+    "src": "images/emojis/laugh.png",
+    "code": ":L",
+    "name": "Laugh",
+    "title": "Laugh (:L)"
+  },
+  {
+    "src": "images/emojis/ecstatic.png",
+    "code": "=D",
+    "name": "Ecstatic",
+    "title": "Ecstatic (=D)"
+  },
+  {
+    "src": "images/emojis/gawk.png",
+    "code": ":->",
+    "name": "Gawk",
+    "title": "Gawk (:-&gt;)"
+  },
+  {
+    "src": "images/emojis/embarrassed.png",
+    "code": ":-[",
+    "name": "Embarrassed",
+    "title": "Embarrassed (:-[)"
+  },
+  {
+    "src": "images/emojis/angel.png",
+    "code": "O:-)",
+    "name": "Angel",
+    "title": "Angel (O:-))"
+  },
+  {
+    "src": "images/emojis/wink.png",
+    "code": ";-)",
+    "name": "Wink",
+    "title": "Wink (;-))"
+  },
+  {
+    "src": "images/emojis/flirt.png",
+    "code": ";D",
+    "name": "Flirt",
+    "title": "Flirt (;D)"
+  },
+  {
+    "src": "images/emojis/kiss.png",
+    "code": ":-*",
+    "name": "Kiss",
+    "title": "Kiss (:-*)"
+  },
+  {
+    "src": "images/emojis/tongue.png",
+    "code": ":-P",
+    "name": "Tongue",
+    "title": "Tongue (:-P)"
+  },
+  {
+    "src": "images/emojis/reactionless.png",
+    "code": ":-|",
+    "name": "Reactionless",
+    "title": "Reactionless (:-|)"
+  },
+  {
+    "src": "images/emojis/blank.png",
+    "code": ":-/",
+    "name": "Blank",
+    "title": "Blank (:-/)"
+  },
+  {
+    "src": "images/emojis/bad.png",
+    "code": ":{)",
+    "name": "Bad",
+    "title": "Bad (:{))"
+  },
+  {
+    "src": "images/emojis/shrug.png",
+    "code": ":-1",
+    "name": "Shrug",
+    "title": "Shrug (:-1)"
+  },
+  {
+    "src": "images/emojis/upset.png",
+    "code": "}:(",
+    "name": "Upset",
+    "title": "Upset (}:()"
+  },
+  {
+    "src": "images/emojis/sorry.png",
+    "code": "?-(",
+    "name": "Sorry",
+    "title": "Sorry (?-()"
+  },
+  {
+    "src": "images/emojis/regret.png",
+    "code": "=^{",
+    "name": "Regret",
+    "title": "Regret (=^{)"
+  },
+  {
+    "src": "images/emojis/sad.png",
+    "code": ":-(",
+    "name": "Sad",
+    "title": "Sad (:-()"
+  },
+  {
+    "src": "images/emojis/depressed.png",
+    "code": "._.",
+    "name": "Depressed",
+    "title": "Depressed (._.)"
+  },
+  {
+    "src": "images/emojis/cry.png",
+    "code": ":'-(",
+    "name": "Cry",
+    "title": "Cry (:'-()"
+  },
+  {
+    "src": "images/emojis/disgusted.png",
+    "code": ":$",
+    "name": "Disgusted",
+    "title": "Disgusted (:$)"
+  },
+  {
+    "src": "images/emojis/angry.png",
+    "code": ":!",
+    "name": "Angry",
+    "title": "Angry (:!)"
+  },
+  {
+    "src": "images/emojis/evil.png",
+    "code": "}:-)",
+    "name": "Evil",
+    "title": "Evil (}:-))"
+  },
+  {
+    "src": "images/emojis/teeth.png",
+    "code": ":D",
+    "name": "Teeth",
+    "title": "Teeth (:D)"
+  },
+  {
+    "src": "images/emojis/shocked.png",
+    "code": ":-o",
+    "name": "Shocked",
+    "title": "Shocked (:-o)"
+  },
+  {
+    "src": "images/emojis/surprised.png",
+    "code": "=O",
+    "name": "Surprised",
+    "title": "Surprised (=O)"
+  },
+  {
+    "src": "images/emojis/dead.png",
+    "code": "x_x",
+    "name": "Dead",
+    "title": "Dead (x_x)"
+  },
+  {
+    "src": "images/emojis/deaddisgusted.png",
+    "code": "X-$",
+    "name": "Dead Disgusted",
+    "title": "Dead Disgusted (X-$)"
+  },
+  {
+    "src": "images/emojis/deadtongue.png",
+    "code": "X-P",
+    "name": "Dead Tongue",
+    "title": "Dead Tongue (X-P)"
+  },
+  {
+    "src": "images/emojis/muted.png",
+    "code": ":X",
+    "name": "Muted",
+    "title": "Muted (:X)"
+  },
+  {
+    "src": "images/emojis/sleepy.png",
+    "code": "|-)",
+    "name": "Sleepy",
+    "title": "Sleepy (|-))"
+  },
+  {
+    "src": "images/emojis/sick.png",
+    "code": ":-###..",
+    "name": "Sick",
+    "title": "Sick (:-###..)"
+  },
+  {
+    "src": "images/emojis/emojis/slap.gif",
+    "code": ";slaps",
+    "name": "1",
+    "title": "1 (;slaps)"
+  },
+  {
+    "src": "images/emojis/emojis/chamat.gif",
+    "code": ":chamat",
+    "name": "2",
+    "title": "2 (:chamat)"
+  },
+  {
+    "src": "images/emojis/emojis/Pitai.gif",
+    "code": ":pitai",
+    "name": "3",
+    "title": "3 (:pitai)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyankhmarna.gif",
+    "code": ".bunankh.",
+    "name": "4",
+    "title": "4 (.bunankh.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnychargekhatam.gif",
+    "code": ".buncharge.",
+    "name": "5",
+    "title": "5 (.buncharge.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnychilana.gif",
+    "code": ".bunchil.",
+    "name": "6",
+    "title": "6 (.bunchil.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnydil.gif",
+    "code": ".bundil.",
+    "name": "7",
+    "title": "7 (.bundil.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnygussa.gif",
+    "code": ".bungusa.",
+    "name": "8",
+    "title": "8 (.bungusa.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyhairan.gif",
+    "code": ".bunhairan.",
+    "name": "9",
+    "title": "9 (.bunhairan.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyhansi.gif",
+    "code": ".bunhansi.",
+    "name": "10",
+    "title": "10 (.bunhansi.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyhi.gif",
+    "code": ".bunhi.",
+    "name": "11",
+    "title": "11 (.bunhi.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnykhush.gif",
+    "code": ".bunkhushi.",
+    "name": "12",
+    "title": "12 (.bunkhushi.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnylotery.gif",
+    "code": ".bunlotery.",
+    "name": "13",
+    "title": "13 (.bunlotery.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnypasand.gif",
+    "code": ".bunpasand.",
+    "name": "14",
+    "title": "14 (.bunpasand.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnypasena.gif",
+    "code": ".bunpasena.",
+    "name": "15",
+    "title": "15 (.bunpasena.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnypyar.gif",
+    "code": ".bunpyar.",
+    "name": "16",
+    "title": "16 (.bunpyar.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyrona.gif",
+    "code": ".bunrona.",
+    "name": "17",
+    "title": "17 (.bunrona.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnytapahowa.gif",
+    "code": ".buntapa.",
+    "name": "18",
+    "title": "18 (.buntapa.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyunlike.gif",
+    "code": ".bundislike.",
+    "name": "19",
+    "title": "19 (.bundislike.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnygajarkhana.gif",
+    "code": ".bungajar.",
+    "name": "20",
+    "title": "20 (.bungajar.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnykhush.gif",
+    "code": ".bunhappy.",
+    "name": "21",
+    "title": "21 (.bunhappy.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnymissyou.gif",
+    "code": ".bunmissyou.",
+    "name": "22",
+    "title": "22 (.bunmissyou.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyparty.gif",
+    "code": ".bunparty.",
+    "name": "23",
+    "title": "23 (.bunparty.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnysochna.gif",
+    "code": ".bunthink.",
+    "name": "24",
+    "title": "24 (.bunthink.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnysona.gif",
+    "code": ".bunsleep.",
+    "name": "25",
+    "title": "25 (.bunsleep.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnywah.gif",
+    "code": ".bunwah.",
+    "name": "26",
+    "title": "26 (.bunwah.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnywhat.gif",
+    "code": ".bunwhat.",
+    "name": "27",
+    "title": "27 (.bunwhat.)"
+  },
+  {
+    "src": "images/emojis/emojis/MiaBunny/bunnyzorrona.gif",
+    "code": ".bunzorcry.",
+    "name": "28",
+    "title": "28 (.bunzorcry.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mchai.gif",
+    "code": ".mchai.",
+    "name": "29",
+    "title": "29 (.mchai.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mchilkay.gif",
+    "code": ".mchilkay.",
+    "name": "30",
+    "title": "30 (.mchilkay.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mcycle.gif",
+    "code": ".mcycle.",
+    "name": "31",
+    "title": "31 (.mcycle.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mdildena.gif",
+    "code": ".mdildena.",
+    "name": "32",
+    "title": "32 (.mdildena.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mgussa.gif",
+    "code": ".mgussa.",
+    "name": "33",
+    "title": "33 (.mgussa.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mhug.gif",
+    "code": ".mhug.",
+    "name": "34",
+    "title": "34 (.mhug.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mkhakmota.gif",
+    "code": ".mkhakmota.",
+    "name": "35",
+    "title": "35 (.mkhakmota.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mlikekarna.gif",
+    "code": ".mlikekarna.",
+    "name": "36",
+    "title": "36 (.mlikekarna.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mnahinsunna.gif",
+    "code": ".mnahinsunna.",
+    "name": "37",
+    "title": "37 (.mnahinsunna.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mnana.gif",
+    "code": ".mnana.",
+    "name": "38",
+    "title": "38 (.mnana.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/morange.gif",
+    "code": ".morange.",
+    "name": "39",
+    "title": "39 (.morange.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mrona.gif",
+    "code": ".mrona.",
+    "name": "40",
+    "title": "40 (.mrona.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mshock.gif",
+    "code": ".mshock.",
+    "name": "41",
+    "title": "41 (.mshock.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/msotaysochna.gif",
+    "code": ".msotaysochna.",
+    "name": "42",
+    "title": "42 (.msotaysochna.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mtissue.gif",
+    "code": ".mtissue.",
+    "name": "43",
+    "title": "43 (.mtissue.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/muff.gif",
+    "code": ".muff.",
+    "name": "44",
+    "title": "44 (.muff.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/maaaha.gif",
+    "code": ".maaaha.",
+    "name": "45",
+    "title": "45 (.maaaha.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mghor.gif",
+    "code": ".mghor.",
+    "name": "46",
+    "title": "46 (.mghor.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mhayn.gif",
+    "code": ".mhayn.",
+    "name": "47",
+    "title": "47 (.mhayn.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mhosaktahai.gif",
+    "code": ".mhosaktahai.",
+    "name": "48",
+    "title": "48 (.mhosaktahai.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mkhafa.gif",
+    "code": ".mkhafa.",
+    "name": "49",
+    "title": "49 (.mkhafa.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mmudance.gif",
+    "code": ".mmudance.",
+    "name": "50",
+    "title": "50 (.mmudance.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/moonaioo.gif",
+    "code": ".moonaioo.",
+    "name": "51",
+    "title": "51 (.moonaioo.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/moyeee.gif",
+    "code": ".moyeee.",
+    "name": "52",
+    "title": "52 (.moyeee.)"
+  },
+  {
+    "src": "images/emojis/emojis/Cheburashka/mshaetani.gif",
+    "code": ".mshaetani.",
+    "name": "53",
+    "title": "53 (.mshaetani.)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BARGH.gif",
+    "code": ";bargh",
+    "name": "54",
+    "title": "54 (;bargh)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BBLAH.gif",
+    "code": ";bblah",
+    "name": "55",
+    "title": "55 (;bblah)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BBOO.gif",
+    "code": ";bboo",
+    "name": "56",
+    "title": "56 (;bboo)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BBOOM.gif",
+    "code": ";bbom",
+    "name": "57",
+    "title": "57 (;bbom)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BCOOL.gif",
+    "code": ";bcool",
+    "name": "58",
+    "title": "58 (;bcool)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BCRAZY.gif",
+    "code": ";bcrazy",
+    "name": "59",
+    "title": "59 (;bcrazy)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BCRY.gif",
+    "code": ";bcru",
+    "name": "60",
+    "title": "60 (;bcru)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BDEAL.gif",
+    "code": ";bdeal",
+    "name": "61",
+    "title": "61 (;bdeal)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BGO.gif",
+    "code": ";bgo",
+    "name": "62",
+    "title": "62 (;bgo)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BHELLO.gif",
+    "code": ";bhello",
+    "name": "63",
+    "title": "63 (;bhello)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BLOL.gif",
+    "code": ";blol",
+    "name": "64",
+    "title": "64 (;blol)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BLOVE.gif",
+    "code": ";blove",
+    "name": "65",
+    "title": "65 (;blove)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BNO.gif",
+    "code": ";bno",
+    "name": "66",
+    "title": "66 (;bno)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BOK.gif",
+    "code": ";bok",
+    "name": "67",
+    "title": "67 (;bok)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BOMG.gif",
+    "code": ";bomg",
+    "name": "68",
+    "title": "68 (;bomg)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BOOPS.gif",
+    "code": ";boops",
+    "name": "69",
+    "title": "69 (;boops)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BOUCH.gif",
+    "code": ";bouch",
+    "name": "70",
+    "title": "70 (;bouch)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BPLEASE.gif",
+    "code": ";bplease",
+    "name": "71",
+    "title": "71 (;bplease)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BSHIT.gif",
+    "code": ";bshit",
+    "name": "72",
+    "title": "72 (;bshit)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BSICK.gif",
+    "code": ";bsick",
+    "name": "73",
+    "title": "73 (;bsick)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BSMACK.gif",
+    "code": ";bsmack",
+    "name": "74",
+    "title": "74 (;bsmack)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BTHANKYOU.gif",
+    "code": ";bthankyou",
+    "name": "75",
+    "title": "75 (;bthankyou)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BTIKTAK.gif",
+    "code": ";btiktak",
+    "name": "76",
+    "title": "76 (;btiktak)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BWHAT.gif",
+    "code": ";bwhat",
+    "name": "77",
+    "title": "77 (;bwhat)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BWHAT.gif",
+    "code": ";bwhat",
+    "name": "78",
+    "title": "78 (;bwhat)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BWHY.gif",
+    "code": ";bwhy",
+    "name": "79",
+    "title": "79 (;bwhy)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BWINK.gif",
+    "code": ";bwink",
+    "name": "80",
+    "title": "80 (;bwink)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BWOW.gif",
+    "code": ";bwow",
+    "name": "81",
+    "title": "81 (;bwow)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BYEAH.gif",
+    "code": ";byeah",
+    "name": "82",
+    "title": "82 (;byeah)"
+  },
+  {
+    "src": "images/emojis/emojis/KBOOM1/BZZZ.gif",
+    "code": ";bzzz",
+    "name": "83",
+    "title": "83 (;bzzz)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/beaming_face_with_smiling_eyes.gif",
+    "code": ";jumphansna",
+    "name": "84",
+    "title": "84 (;jumphansna)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/butterfly.gif",
+    "code": ";butterfly",
+    "name": "85",
+    "title": "85 (;butterfly)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/cowboy_hat_face.gif",
+    "code": ";topiankh",
+    "name": "86",
+    "title": "86 (;topiankh)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/crying_face.gif",
+    "code": ";masomrona",
+    "name": "87",
+    "title": "87 (;masomrona)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/dizzy_face.gif",
+    "code": ";ankhgol",
+    "name": "88",
+    "title": "88 (;ankhgol)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/drooling_face.gif",
+    "code": ";munhpani",
+    "name": "89",
+    "title": "89 (;munhpani)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/exploding_head.gif",
+    "code": ";demghdahi",
+    "name": "90",
+    "title": "90 (;demghdahi)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_blowing_a_kiss.gif",
+    "code": ";flirtkiss",
+    "name": "91",
+    "title": "91 (;flirtkiss)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_screaming_in_fear.gif",
+    "code": ";pareshan",
+    "name": "92",
+    "title": "92 (;pareshan)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_vomiting.gif",
+    "code": ";ulti",
+    "name": "93",
+    "title": "93 (;ulti)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_with_head_bandage.gif",
+    "code": ";sarphta",
+    "name": "94",
+    "title": "94 (;sarphta)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_with_monocle.gif",
+    "code": ";chshghor",
+    "name": "95",
+    "title": "95 (;chshghor)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_with_rolling_eyes.gif",
+    "code": ";namona",
+    "name": "96",
+    "title": "96 (;namona)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_with_steam_from_nose.gif",
+    "code": ";ghusa",
+    "name": "97",
+    "title": "97 (;ghusa)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_with_symbols_on_mouth.gif",
+    "code": ";bkwas",
+    "name": "98",
+    "title": "98 (;bkwas)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_with_tears_of_joy.gif",
+    "code": ";tearjoy",
+    "name": "99",
+    "title": "99 (;tearjoy)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/face_with_thermometer.gif",
+    "code": ";bukhar",
+    "name": "100",
+    "title": "100 (;bukhar)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/flushed_face.gif",
+    "code": ";khulaeye",
+    "name": "101",
+    "title": "101 (;khulaeye)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/frowning_face.gif",
+    "code": ";mayoos",
+    "name": "102",
+    "title": "102 (;mayoos)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/grinning_face_with_smiling_eyes.gif",
+    "code": ";bhutkhush",
+    "name": "103",
+    "title": "103 (;bhutkhush)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/grinning_squinting_face.gif",
+    "code": ";badmashihasi",
+    "name": "104",
+    "title": "104 (;badmashihasi)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/hot_face.gif",
+    "code": ";gharmi",
+    "name": "105",
+    "title": "105 (;gharmi)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/hugging_face.gif",
+    "code": ";hugysmile",
+    "name": "106",
+    "title": "106 (;hugysmile)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/hushed_face.gif",
+    "code": ";wowmunh",
+    "name": "107",
+    "title": "107 (;wowmunh)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/loudly_crying_face.gif",
+    "code": ";bhutrona",
+    "name": "108",
+    "title": "108 (;bhutrona)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/lying_face.gif",
+    "code": ";jhootinak",
+    "name": "109",
+    "title": "109 (;jhootinak)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/money_mouth_face.gif",
+    "code": ";paisa",
+    "name": "110",
+    "title": "110 (;paisa)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/nerd_face.gif",
+    "code": ";chashmu",
+    "name": "111",
+    "title": "111 (;chashmu)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/partying_face.gif",
+    "code": ";khushipeep",
+    "name": "112",
+    "title": "112 (;khushipeep)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/pleading_face.gif",
+    "code": ";eyemasum",
+    "name": "113",
+    "title": "113 (;eyemasum)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/pouting_face.gif",
+    "code": ";gusakrna",
+    "name": "114",
+    "title": "114 (;gusakrna)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/relieved_face.gif",
+    "code": ";mzamehsos",
+    "name": "115",
+    "title": "115 (;mzamehsos)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/rolling_on_the_floor_laughing.gif",
+    "code": ";rolhasna",
+    "name": "116",
+    "title": "116 (;rolhasna)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/shushing_face.gif",
+    "code": ";sshh",
+    "name": "117",
+    "title": "117 (;sshh)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sleeping_face.gif",
+    "code": ";zzz",
+    "name": "118",
+    "title": "118 (;zzz)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/smiling_face.gif",
+    "code": ";laligal",
+    "name": "119",
+    "title": "119 (;laligal)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/smiling_face_with_halo.gif",
+    "code": ";angel",
+    "name": "120",
+    "title": "120 (;angel)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/smiling_face_with_heart_eyes.gif",
+    "code": ";pyrhepyr",
+    "name": "121",
+    "title": "121 (;pyrhepyr)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/smiling_face_with_hearts.gif",
+    "code": ";dilpyr",
+    "name": "122",
+    "title": "122 (;dilpyr)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/smiling_face_with_horns.gif",
+    "code": ";ekdumbadmash",
+    "name": "123",
+    "title": "123 (;ekdumbadmash)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/smiling_face_with_sunglasses.gif",
+    "code": ";showmrna",
+    "name": "124",
+    "title": "124 (;showmrna)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/smirking_face.gif",
+    "code": ";nakrismile",
+    "name": "125",
+    "title": "125 (;nakrismile)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sneezing_face.gif",
+    "code": ";corona",
+    "name": "126",
+    "title": "126 (;corona)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/star_struck.gif",
+    "code": ";starteeth",
+    "name": "127",
+    "title": "127 (;starteeth)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/thinking_face.gif",
+    "code": ";eyehmm",
+    "name": "128",
+    "title": "128 (;eyehmm)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/unamused_face.gif",
+    "code": ";unamusedface",
+    "name": "129",
+    "title": "129 (;unamusedface)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/upside_down_face.gif",
+    "code": ";golmol",
+    "name": "130",
+    "title": "130 (;golmol)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/weary_face.gif",
+    "code": ";beyzarrona",
+    "name": "131",
+    "title": "131 (;beyzarrona)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/winking_face.gif",
+    "code": ";hyeankh",
+    "name": "132",
+    "title": "132 (;hyeankh)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/winking_face_with_tongue.gif",
+    "code": ";shararat",
+    "name": "133",
+    "title": "133 (;shararat)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woozy_face.gif",
+    "code": ";nashaii",
+    "name": "134",
+    "title": "134 (;nashaii)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/yawning_face.gif",
+    "code": ";yawn;",
+    "name": "135",
+    "title": "135 (;yawn;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/zany_face.gif",
+    "code": ";zuban;",
+    "name": "136",
+    "title": "136 (;zuban;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/zipper_mouth_face.gif",
+    "code": ";zip;",
+    "name": "137",
+    "title": "137 (;zip;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/zombie.gif",
+    "code": ";zombie;",
+    "name": "138",
+    "title": "138 (;zombie;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/writing_hand.gif",
+    "code": ";write;",
+    "name": "139",
+    "title": "139 (;write;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/women_with_bunny_ears.gif",
+    "code": ";rabbitnach;",
+    "name": "140",
+    "title": "140 (;rabbitnach;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_zombie.gif",
+    "code": ";larkizombie;",
+    "name": "141",
+    "title": "141 (;larkizombie;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_tipping_hand.gif",
+    "code": ";womantipp;",
+    "name": "142",
+    "title": "142 (;womantipp;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_shrugging.gif",
+    "code": ";womanshrug",
+    "name": "143",
+    "title": "143 (;womanshrug)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_running.gif",
+    "code": ";womanrunning",
+    "name": "144",
+    "title": "144 (;womanrunning)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_raising_hand.gif",
+    "code": ";womanraisehand",
+    "name": "145",
+    "title": "145 (;womanraisehand)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_juggling.gif",
+    "code": ";womanjuggling",
+    "name": "146",
+    "title": "146 (;womanjuggling)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_fairy.gif",
+    "code": ";womanfairy",
+    "name": "147",
+    "title": "147 (;womanfairy)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_facepalming.gif",
+    "code": ";womanfacepalm",
+    "name": "148",
+    "title": "148 (;womanfacepalm)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_dancing.gif",
+    "code": ";reddance",
+    "name": "149",
+    "title": "149 (;reddance)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/woman_biking.gif",
+    "code": ";womanbike",
+    "name": "150",
+    "title": "150 (;womanbike)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/waving_hand.gif",
+    "code": ";wave;",
+    "name": "151",
+    "title": "151 (;wave;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/warning.gif",
+    "code": ";warning;",
+    "name": "152",
+    "title": "152 (;warning;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/volcano.gif",
+    "code": ";volcano;",
+    "name": "153",
+    "title": "153 (;volcano;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/violin.gif",
+    "code": ";violin;",
+    "name": "154",
+    "title": "154 (;violin;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/unicorn.gif",
+    "code": ";unicorn;",
+    "name": "155",
+    "title": "155 (;unicorn;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/umbrella_with_rain_drops.gif",
+    "code": ";umbrella;",
+    "name": "156",
+    "title": "156 (;umbrella;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/trophy.gif",
+    "code": ";trophy;",
+    "name": "157",
+    "title": "157 (;trophy;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/tornado.gif",
+    "code": ";tornado;",
+    "name": "158",
+    "title": "158 (;tornado;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/thumbs_up.gif",
+    "code": "(y)",
+    "name": "Thumbs Up",
+    "title": "Thumbs Up ((y))"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/thumbs_down.gif",
+    "code": ";thumbsdown;",
+    "name": "160",
+    "title": "160 (;thumbsdown;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/thought_balloon.gif",
+    "code": ";thoughtballon;",
+    "name": "161",
+    "title": "161 (;thoughtballon;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/thinking_face.gif",
+    "code": ";thinkingface;",
+    "name": "162",
+    "title": "162 (;thinkingface;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/teddy_bear.gif",
+    "code": ";teddybear;",
+    "name": "163",
+    "title": "163 (;teddybear;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sunrise.gif",
+    "code": ";sunrise;",
+    "name": "164",
+    "title": "164 (;sunrise;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sun.gif",
+    "code": ";sun;",
+    "name": "165",
+    "title": "165 (;sun;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/spouting_whale.gif",
+    "code": ";spoutingwhale;",
+    "name": "166",
+    "title": "166 (;spoutingwhale;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sport_utility_vehicle.gif",
+    "code": ";sportsvehicle;",
+    "name": "167",
+    "title": "167 (;sportsvehicle;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/speak_no_evil_monkey.gif",
+    "code": ";noevilspeak;",
+    "name": "168",
+    "title": "168 (;noevilspeak;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sparkling_heart.gif",
+    "code": "<3",
+    "name": "Sparkling Heart",
+    "title": "Sparkling Heart (<3)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sparkles.gif",
+    "code": ";spark;",
+    "name": "170",
+    "title": "170 (;spark;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/soccer_ball.gif",
+    "code": ";football;",
+    "name": "171",
+    "title": "171 (;football;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/snowman.gif",
+    "code": ";snowman;",
+    "name": "172",
+    "title": "172 (;snowman;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/snake.gif",
+    "code": ";snake;",
+    "name": "173",
+    "title": "173 (;snake;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sloth.gif",
+    "code": ";sloth;",
+    "name": "174",
+    "title": "174 (;sloth;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/slot_machine.gif",
+    "code": ";slotmachine;",
+    "name": "175",
+    "title": "175 (;slotmachine;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/see_no_evil_monkey.gif",
+    "code": ";noseenevil;",
+    "name": "176",
+    "title": "176 (;noseenevil;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/santa_claus.gif",
+    "code": ";santa;",
+    "name": "177",
+    "title": "177 (;santa;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/sandwich.gif",
+    "code": ";sandwich;",
+    "name": "178",
+    "title": "178 (;sandwich;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/rooster.gif",
+    "code": ";rooster;",
+    "name": "179",
+    "title": "179 (;rooster;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/roller_coaster.gif",
+    "code": ";rollercoaster;",
+    "name": "180",
+    "title": "180 (;rollercoaster;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/rocket.gif",
+    "code": ";rocket;",
+    "name": "181",
+    "title": "181 (;rocket;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/robot.gif",
+    "code": ";robot;",
+    "name": "182",
+    "title": "182 (;robot;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/ring.gif",
+    "code": ";ring;",
+    "name": "183",
+    "title": "183 (;ring;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/revolving_hearts.gif",
+    "code": ";dildil;",
+    "name": "184",
+    "title": "184 (;dildil;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/raising_hands.gif",
+    "code": ";raisinghand;",
+    "name": "185",
+    "title": "185 (;raisinghand;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/rainbow_flag.gif",
+    "code": ";rainbowflag;",
+    "name": "186",
+    "title": "186 (;rainbowflag;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/rabbit_face.gif",
+    "code": ";rabbitface;",
+    "name": "187",
+    "title": "187 (;rabbitface;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/prohibited.gif",
+    "code": ";prohibited;",
+    "name": "188",
+    "title": "188 (;prohibited;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/popcorn.gif",
+    "code": ";popcorn;",
+    "name": "189",
+    "title": "189 (;popcorn;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/police_car_light.gif",
+    "code": ";policecarlight;",
+    "name": "190",
+    "title": "190 (;policecarlight;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/pistol.gif",
+    "code": ";pistol;",
+    "name": "191",
+    "title": "191 (;pistol;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/pile_of_poo.gif",
+    "code": ";pileofpoo;",
+    "name": "192",
+    "title": "192 (;pileofpoo;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/pig_face.gif",
+    "code": "hunk",
+    "name": "193",
+    "title": "193 (hunk)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/person_tipping_hand.gif",
+    "code": ";persontipping;",
+    "name": "194",
+    "title": "194 (;persontipping;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/person_shrugging.gif",
+    "code": ";personshrugging;",
+    "name": "195",
+    "title": "195 (;personshrugging;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/person_running.gif",
+    "code": ";personrunning;",
+    "name": "196",
+    "title": "196 (;personrunning;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/person_raising_hand.gif",
+    "code": ";personraisinghand;",
+    "name": "197",
+    "title": "197 (;personraisinghand;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/person_juggling.gif",
+    "code": ";personjuggling;",
+    "name": "198",
+    "title": "198 (;personjuggling;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/person_facepalming.gif",
+    "code": ";personfacepalm;",
+    "name": "199",
+    "title": "199 (;personfacepalm;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/person_biking.gif",
+    "code": ";personbike;",
+    "name": "200",
+    "title": "200 (;personbike;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/people_with_bunny_ears.gif",
+    "code": ";pbunnyears;",
+    "name": "201",
+    "title": "201 (;pbunnyears;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/penguin.gif",
+    "code": ";penguin;",
+    "name": "202",
+    "title": "202 (;penguin;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/peace_symbol.gif",
+    "code": ";peacesymbol;",
+    "name": "203",
+    "title": "203 (;peacesymbol;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/party_popper.gif",
+    "code": ";partypopper;",
+    "name": "204",
+    "title": "204 (;partypopper;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/pancakes.gif",
+    "code": ";pancakes;",
+    "name": "205",
+    "title": "205 (;pancakes;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/owl.gif",
+    "code": ";owl;",
+    "name": "206",
+    "title": "206 (;owl;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/oncoming_police_car.gif",
+    "code": ";oncomingpolice;",
+    "name": "207",
+    "title": "207 (;oncomingpolice;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/oncoming_fist.gif",
+    "code": ";oncomingfist;",
+    "name": "208",
+    "title": "208 (;oncomingfist;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/musical_notes.gif",
+    "code": ";musicalnotes;",
+    "name": "209",
+    "title": "209 (;musicalnotes;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/money_with_wings.gif",
+    "code": ";moneywings;",
+    "name": "210",
+    "title": "210 (;moneywings;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/middle_finger.gif",
+    "code": ";middlefinger;",
+    "name": "211",
+    "title": "211 (;middlefinger;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/men_with_bunny_ears.gif",
+    "code": ";mbunnyears;",
+    "name": "212",
+    "title": "212 (;mbunnyears;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_zombie.gif",
+    "code": ";manzombie;",
+    "name": "213",
+    "title": "213 (;manzombie;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_tipping_hand.gif",
+    "code": ";mantipping;",
+    "name": "214",
+    "title": "214 (;mantipping;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_shrugging.gif",
+    "code": ";manshrugging;",
+    "name": "215",
+    "title": "215 (;manshrugging;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_running.gif",
+    "code": ";manrunning;",
+    "name": "216",
+    "title": "216 (;manrunning;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_raising_hand.gif",
+    "code": ";manraisinghand;",
+    "name": "217",
+    "title": "217 (;manraisinghand;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_juggling.gif",
+    "code": ";manjuggling;",
+    "name": "218",
+    "title": "218 (;manjuggling;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_fairy.gif",
+    "code": ";manfairy;",
+    "name": "219",
+    "title": "219 (;manfairy;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_facepalming.gif",
+    "code": ";manfacepalm;",
+    "name": "220",
+    "title": "220 (;manfacepalm;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_dancing.gif",
+    "code": ";mandance;",
+    "name": "221",
+    "title": "221 (;mandance;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/man_biking.gif",
+    "code": ";manbike;",
+    "name": "222",
+    "title": "222 (;manbike;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/love_you_gesture.gif",
+    "code": ";loveyougesture;",
+    "name": "223",
+    "title": "223 (;loveyougesture;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/locomotive.gif",
+    "code": ";locomotive;",
+    "name": "224",
+    "title": "224 (;locomotive;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/light_bulb.gif",
+    "code": ";lightbulb;",
+    "name": "225",
+    "title": "225 (;lightbulb;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/kiss_mark.gif",
+    "code": ";kissmark;",
+    "name": "226",
+    "title": "226 (;kissmark;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/kangaroo.gif",
+    "code": ";kangaroo;",
+    "name": "227",
+    "title": "227 (;kangaroo;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/jack_o_lantern.gif",
+    "code": ";jackolantern;",
+    "name": "228",
+    "title": "228 (;jackolantern;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/hundred_points.gif",
+    "code": ";hundredpoints;",
+    "name": "229",
+    "title": "229 (;hundredpoints;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/hot_beverage.gif",
+    "code": ";hotbeverge;",
+    "name": "230",
+    "title": "230 (;hotbeverge;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/horse.gif",
+    "code": ";horse;",
+    "name": "231",
+    "title": "231 (;horse;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/honeybee.gif",
+    "code": ";honeybee;",
+    "name": "232",
+    "title": "232 (;honeybee;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/helicopter.gif",
+    "code": ";helicopter;",
+    "name": "233",
+    "title": "233 (;helicopter;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/heart_with_arrow.gif",
+    "code": ";heartwarrow;",
+    "name": "234",
+    "title": "234 (;heartwarrow;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/hear_no_evil_monkey.gif",
+    "code": ";nohearevil;",
+    "name": "235",
+    "title": "235 (;nohearevil;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/handshake.gif",
+    "code": ";handshake;",
+    "name": "236",
+    "title": "236 (;handshake;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/hamburger.gif",
+    "code": ";hamburger;",
+    "name": "237",
+    "title": "237 (;hamburger;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/growing_heart.gif",
+    "code": ";growingheart;",
+    "name": "238",
+    "title": "238 (;growingheart;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/globe.gif",
+    "code": ";globe;",
+    "name": "239",
+    "title": "239 (;globe;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/ghost.gif",
+    "code": ";ghost;",
+    "name": "240",
+    "title": "240 (;ghost;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/frog.gif",
+    "code": ";frog;",
+    "name": "241",
+    "title": "241 (;frog;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/flying_saucer.gif",
+    "code": ";flyingsaucer;",
+    "name": "242",
+    "title": "242 (;flyingsaucer;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/flexed_biceps.gif",
+    "code": ";flexedbiceps;",
+    "name": "243",
+    "title": "243 (;flexedbiceps;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/flag_in_hole.gif",
+    "code": ";flaginhole;",
+    "name": "244",
+    "title": "244 (;flaginhole;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/fishing_pole.gif",
+    "code": ";fishingnpole;",
+    "name": "245",
+    "title": "245 (;fishingnpole;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/fish.gif",
+    "code": ";fish;",
+    "name": "246",
+    "title": "246 (;fish;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/fireworks.gif",
+    "code": ";firework;",
+    "name": "247",
+    "title": "247 (;firework;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/fire_engine.gif",
+    "code": ";fireengine;",
+    "name": "248",
+    "title": "248 (;fireengine;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/fire.gif",
+    "code": ";fire;",
+    "name": "249",
+    "title": "249 (;fire;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/ferris_wheel.gif",
+    "code": ";ferriswheel;",
+    "name": "250",
+    "title": "250 (;ferriswheel;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/fairy.gif",
+    "code": ";fairy;",
+    "name": "251",
+    "title": "251 (;fairy;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/drum.gif",
+    "code": ";drum;",
+    "name": "252",
+    "title": "252 (;drum;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/eyes.gif",
+    "code": ";eyes;",
+    "name": "253",
+    "title": "253 (;eyes;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/dog_face.gif",
+    "code": "Hunk",
+    "name": "254",
+    "title": "254 (Hunk)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/direct_hit.gif",
+    "code": ";directhit;",
+    "name": "255",
+    "title": "255 (;directhit;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/desert_island.gif",
+    "code": ";desertisland;",
+    "name": "256",
+    "title": "256 (;desertisland;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/crown.gif",
+    "code": ";crown;",
+    "name": "257",
+    "title": "257 (;crown;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/crossed_fingers.gif",
+    "code": ";crossfinger;",
+    "name": "258",
+    "title": "258 (;crossfinger;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/cow_face.gif",
+    "code": ";cowface;",
+    "name": "259",
+    "title": "259 (;cowface;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/confetti_ball.gif",
+    "code": ";confettiball;",
+    "name": "260",
+    "title": "260 (;confettiball;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/collision.gif",
+    "code": ";collision;",
+    "name": "261",
+    "title": "261 (;collision;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/clock.gif",
+    "code": ";clock;",
+    "name": "262",
+    "title": "262 (;clock;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/clinking_glasses.gif",
+    "code": ";clinkingglasses;",
+    "name": "263",
+    "title": "263 (;clinkingglasses;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/clinking_beer_mugs.gif",
+    "code": ";clinkingbeermugs;",
+    "name": "264",
+    "title": "264 (;clinkingbeermugs;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/clapping_hands.gif",
+    "code": ";clappinghands;",
+    "name": "265",
+    "title": "265 (;clappinghands;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/clapper_board.gif",
+    "code": ";clapperboard;",
+    "name": "266",
+    "title": "266 (;clapperboard;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/christmas_tree.gif",
+    "code": ";christmastree",
+    "name": "267",
+    "title": "267 (;christmastree)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/check_mark_button.gif",
+    "code": ";checkmarkbutton;",
+    "name": "268",
+    "title": "268 (;checkmarkbutton;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/cat_with_tears_of_joy.gif",
+    "code": ";catwtears;",
+    "name": "269",
+    "title": "269 (;catwtears;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/camera_with_flash.gif",
+    "code": ";camerawflash;",
+    "name": "270",
+    "title": "270 (;camerawflash;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/broken_heart.gif",
+    "code": ";brokenheart;",
+    "name": "271",
+    "title": "271 (;brokenheart;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/bowling.gif",
+    "code": ";bowling;",
+    "name": "272",
+    "title": "272 (;bowling;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/bottle_with_popping_cork.gif",
+    "code": ";bottlewpopping;",
+    "name": "273",
+    "title": "273 (;bottlewpopping;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/bomb.gif",
+    "code": ";bomb;",
+    "name": "274",
+    "title": "274 (;bomb;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/birthday_cake.gif",
+    "code": ";birthdaycake;",
+    "name": "275",
+    "title": "275 (;birthdaycake;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/backhand_index_pointing_up.gif",
+    "code": ";fingerup;",
+    "name": "276",
+    "title": "276 (;fingerup;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/backhand_index_pointing_right.gif",
+    "code": ";fingerright;",
+    "name": "277",
+    "title": "277 (;fingerright;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/backhand_index_pointing_left.gif",
+    "code": ";fingerleft;",
+    "name": "278",
+    "title": "278 (;fingerleft;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/backhand_index_pointing_down.gif",
+    "code": ";fingerdown;",
+    "name": "279",
+    "title": "279 (;fingerdown;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/automobile.gif",
+    "code": ";automobile;",
+    "name": "280",
+    "title": "280 (;automobile;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/alien.gif",
+    "code": ";alien;",
+    "name": "281",
+    "title": "281 (;alien;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/alarm_clock.gif",
+    "code": ";alarmclock;",
+    "name": "282",
+    "title": "282 (;alarmclock;)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/airplane.gif",
+    "code": ";airplane;",
+    "name": "283",
+    "title": "283 (;airplane;)"
+  },
+  {
+    "src": "images/emojis/emojis/hehe.gif",
+    "code": ":hehe",
+    "name": "284",
+    "title": "284 (:hehe)"
+  },
+  {
+    "src": "images/emojis/emojis/hmmm.gif",
+    "code": ":hmmm",
+    "name": "285",
+    "title": "285 (:hmmm)"
+  },
+  {
+    "src": "images/emojis/emojis/sochna.gif",
+    "code": ":sochna1",
+    "name": "286",
+    "title": "286 (:sochna1)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/table torna.gif",
+    "code": ":tabletorna",
+    "name": "287",
+    "title": "287 (:tabletorna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/sullah karna.gif",
+    "code": ":sullahkarna",
+    "name": "288",
+    "title": "288 (:sullahkarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/sona.gif",
+    "code": ":sonaa",
+    "name": "289",
+    "title": "289 (:sonaa)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/sochna.gif",
+    "code": ":sochna",
+    "name": "290",
+    "title": "290 (:sochna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/rona.gif",
+    "code": ":ronaa",
+    "name": "291",
+    "title": "291 (:ronaa)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/pyar say uthana.gif",
+    "code": ":pyarsayuthana",
+    "name": "292",
+    "title": "292 (:pyarsayuthana)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/paseenay chuht gay.gif",
+    "code": ":paseenay",
+    "name": "293",
+    "title": "293 (:paseenay)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/na-na.gif",
+    "code": ":nanakarna",
+    "name": "294",
+    "title": "294 (:nanakarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/nakhray karna.gif",
+    "code": ":nakhraykarna",
+    "name": "295",
+    "title": "295 (:nakhraykarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/nahin choronga.gif",
+    "code": ":nahinchoronga",
+    "name": "296",
+    "title": "296 (:nahinchoronga)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/na karna.gif",
+    "code": ":nakarna",
+    "name": "297",
+    "title": "297 (:nakarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/mazza le kar hansna.gif",
+    "code": ":mazzalekarhansna",
+    "name": "298",
+    "title": "298 (:mazzalekarhansna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/koshish karna.gif",
+    "code": ":koshishkarna",
+    "name": "299",
+    "title": "299 (:koshishkarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/khushi say dance.gif",
+    "code": ":khushidance",
+    "name": "300",
+    "title": "300 (:khushidance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/ishqiya mood.gif",
+    "code": ":ishqiyamood",
+    "name": "301",
+    "title": "301 (:ishqiyamood)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/hairaangi dekhana.gif",
+    "code": ":hairanagi",
+    "name": "302",
+    "title": "302 (:hairanagi)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/gussay say aag bhagola.gif",
+    "code": ":aagbhagola",
+    "name": "303",
+    "title": "303 (:aagbhagola)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/drinking.gif",
+    "code": ":peena",
+    "name": "304",
+    "title": "304 (:peena)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/dil toot jana.gif",
+    "code": ":diltootjana",
+    "name": "305",
+    "title": "305 (:diltootjana)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/dard utarna.gif",
+    "code": ":dardutarana",
+    "name": "306",
+    "title": "306 (:dardutarana)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/dance karna.gif",
+    "code": ":dancekarna",
+    "name": "307",
+    "title": "307 (:dancekarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/claps.gif",
+    "code": ":taliyaan",
+    "name": "308",
+    "title": "308 (:taliyaan)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/chair karna.gif",
+    "code": ":chairkarna",
+    "name": "309",
+    "title": "309 (:chairkarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/badmashi.gif",
+    "code": ":badmashi",
+    "name": "310",
+    "title": "310 (:badmashi)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/ankh marna.gif",
+    "code": ":ankhmarna",
+    "name": "311",
+    "title": "311 (:ankhmarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/2e dance.gif",
+    "code": ":dodance",
+    "name": "312",
+    "title": "312 (:dodance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/badmashgadha.gif",
+    "code": ":badmashgadha",
+    "name": "313",
+    "title": "313 (:badmashgadha)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/chashmosoch.gif",
+    "code": ":chashmsoch",
+    "name": "314",
+    "title": "314 (:chashmsoch)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/chotidg.gif",
+    "code": ":chotidg",
+    "name": "315",
+    "title": "315 (:chotidg)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/cutebilidance.gif",
+    "code": ":cutebilidance",
+    "name": "316",
+    "title": "316 (:cutebilidance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/cutedogipayala.gif",
+    "code": ":cutedogipayala",
+    "name": "317",
+    "title": "317 (:cutedogipayala)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/cutelarki.gif",
+    "code": ":cutelarki",
+    "name": "318",
+    "title": "318 (:cutelarki)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/flylarki.gif",
+    "code": ":flylarki",
+    "name": "319",
+    "title": "319 (:flylarki)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/gadha1.gif",
+    "code": ":gadha1",
+    "name": "320",
+    "title": "320 (:gadha1)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/gadha2.gif",
+    "code": ":gadha2",
+    "name": "321",
+    "title": "321 (:gadha2)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/gadha3.gif",
+    "code": ":gadha3",
+    "name": "322",
+    "title": "322 (:gadha3)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/hellobili.gif",
+    "code": ":hellobili",
+    "name": "323",
+    "title": "323 (:hellobili)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/narazgadha.gif",
+    "code": ":narazgadha",
+    "name": "324",
+    "title": "324 (:narazgadha)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/phoolilarki.gif",
+    "code": ":phoolilarki",
+    "name": "325",
+    "title": "325 (:phoolilarki)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/pyardg.gif",
+    "code": ":pyardg",
+    "name": "326",
+    "title": "326 (:pyardg)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/choco1.gif",
+    "code": ":choco1",
+    "name": "327",
+    "title": "327 (:choco1)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/choco2.gif",
+    "code": ":choco2",
+    "name": "328",
+    "title": "328 (:choco2)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/choco3.gif",
+    "code": ":choco3",
+    "name": "329",
+    "title": "329 (:choco3)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/choco4.gif",
+    "code": ":choco4",
+    "name": "330",
+    "title": "330 (:choco4)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/choco5.png",
+    "code": ":choco5",
+    "name": "331",
+    "title": "331 (:choco5)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/rose.png",
+    "code": ":rose1",
+    "name": "332",
+    "title": "332 (:rose1)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/rose1.png",
+    "code": ":rose2",
+    "name": "333",
+    "title": "333 (:rose2)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/rose2.png",
+    "code": ":rose3",
+    "name": "334",
+    "title": "334 (:rose3)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/rose3.png",
+    "code": ":rose4",
+    "name": "335",
+    "title": "335 (:rose4)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/rose4.png",
+    "code": ":rose5",
+    "name": "336",
+    "title": "336 (:rose5)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/murgha.gif",
+    "code": ":murga",
+    "name": "337",
+    "title": "337 (:murga)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/murghi.gif",
+    "code": ":murgi",
+    "name": "338",
+    "title": "338 (:murgi)"
+  },
+  {
+    "src": "images/emojis/emojis/warn.gif",
+    "code": "KING IS BACKK",
+    "name": "342",
+    "title": "342 (KING IS BACKK)"
+  },
+  {
+    "src": "images/emojis/emojis/by.gif",
+    "code": "(queen)",
+    "name": "343",
+    "title": "343 ((queen))"
+  },
+  {
+    "src": "images/emojis/emojis/murder.gif",
+    "code": "(MURDER)",
+    "name": "344",
+    "title": "344 ((MURDER))"
+  },
+  {
+    "src": "images/emojis/emojis/myb.gif",
+    "code": "(MYB)",
+    "name": "345",
+    "title": "345 ((MYB))"
+  },
+  {
+    "src": "images/emojis/emojis/nosmoking.gif",
+    "code": "(NOSMOKING)",
+    "name": "346",
+    "title": "346 ((NOSMOKING))"
+  },
+  {
+    "src": "images/emojis/emojis/omg2.gif",
+    "code": "(04)",
+    "name": "347",
+    "title": "347 ((04))"
+  },
+  {
+    "src": "images/emojis/emojis/romana.gif",
+    "code": "(romana",
+    "name": "348",
+    "title": "348 ((romana)"
+  },
+  {
+    "src": "images/emojis/emojis/radio.png",
+    "code": "(RADIO)",
+    "name": "349",
+    "title": "349 ((RADIO))"
+  },
+  {
+    "src": "images/emojis/emojis/rjmusic.gif",
+    "code": "(SOUND)",
+    "name": "350",
+    "title": "350 ((SOUND))"
+  },
+  {
+    "src": "images/emojis/emojis/rockchick.gif",
+    "code": "(ROCKCHICK)",
+    "name": "351",
+    "title": "351 ((ROCKCHICK))"
+  },
+  {
+    "src": "images/emojis/emojis/roro.gif",
+    "code": "(RO)",
+    "name": "352",
+    "title": "352 ((RO))"
+  },
+  {
+    "src": "images/emojis/emojis/salam.gif",
+    "code": "(SALAM)",
+    "name": "353",
+    "title": "353 ((SALAM))"
+  },
+  {
+    "src": "images/emojis/emojis/dancer.gif",
+    "code": "(DANCER)",
+    "name": "354",
+    "title": "354 ((DANCER))"
+  },
+  {
+    "src": "images/emojis/emojis/dance8.gif",
+    "code": "(GDANCE)",
+    "name": "355",
+    "title": "355 ((GDANCE))"
+  },
+  {
+    "src": "images/emojis/emojis/club.gif",
+    "code": "(CLUB)",
+    "name": "356",
+    "title": "356 ((CLUB))"
+  },
+  {
+    "src": "images/emojis/emojis/clp.gif",
+    "code": "(CLP)",
+    "name": "357",
+    "title": "357 ((CLP))"
+  },
+  {
+    "src": "images/emojis/emojis/churail.gif",
+    "code": "(CHURAIL)",
+    "name": "358",
+    "title": "358 ((CHURAIL))"
+  },
+  {
+    "src": "images/emojis/emojis/chips.gif",
+    "code": "(CHIPS)",
+    "name": "359",
+    "title": "359 ((CHIPS))"
+  },
+  {
+    "src": "images/emojis/emojis/by.gif",
+    "code": "(BY)",
+    "name": "360",
+    "title": "360 ((BY))"
+  },
+  {
+    "src": "images/emojis/emojis/ban.gif",
+    "code": "(BAN)",
+    "name": "361",
+    "title": "361 ((BAN))"
+  },
+  {
+    "src": "images/emojis/emojis/az.gif",
+    "code": "(AZ)",
+    "name": "362",
+    "title": "362 ((AZ))"
+  },
+  {
+    "src": "images/emojis/emojis/av.gif",
+    "code": "(AV)",
+    "name": "363",
+    "title": "363 ((AV))"
+  },
+  {
+    "src": "images/emojis/emojis/ap.gif",
+    "code": "(AP)",
+    "name": "364",
+    "title": "364 ((AP))"
+  },
+  {
+    "src": "images/emojis/emojis/aoa.gif",
+    "code": "(AOA)",
+    "name": "365",
+    "title": "365 ((AOA))"
+  },
+  {
+    "src": "images/emojis/emojis/anyone.gif",
+    "code": "(ANYONE)",
+    "name": "366",
+    "title": "366 ((ANYONE))"
+  },
+  {
+    "src": "images/emojis/emojis/angryy.gif",
+    "code": "(06)",
+    "name": "367",
+    "title": "367 ((06))"
+  },
+  {
+    "src": "images/emojis/emojis/angryspin.gif",
+    "code": "(05)",
+    "name": "368",
+    "title": "368 ((05))"
+  },
+  {
+    "src": "images/emojis/emojis/anamta.gif",
+    "code": "(QUEEN)",
+    "name": "369",
+    "title": "369 ((QUEEN))"
+  },
+  {
+    "src": "images/emojis/emojis/alh.gif",
+    "code": "(04)",
+    "name": "370",
+    "title": "370 ((04))"
+  },
+  {
+    "src": "images/emojis/emojis/1793.gif",
+    "code": "(03)",
+    "name": "371",
+    "title": "371 ((03))"
+  },
+  {
+    "src": "images/emojis/emojis/0231.gif",
+    "code": "(02)",
+    "name": "372",
+    "title": "372 ((02))"
+  },
+  {
+    "src": "images/emojis/emojis/guess.gif",
+    "code": "(GUESS)",
+    "name": "373",
+    "title": "373 ((GUESS))"
+  },
+  {
+    "src": "images/emojis/emojis/gudmorning.gif",
+    "code": "(GDM)",
+    "name": "374",
+    "title": "374 ((GDM))"
+  },
+  {
+    "src": "images/emojis/emojis/haha1.gif",
+    "code": "(HAHA)",
+    "name": "375",
+    "title": "375 ((HAHA))"
+  },
+  {
+    "src": "images/emojis/emojis/hdp.gif",
+    "code": "(HDP)",
+    "name": "376",
+    "title": "376 ((HDP))"
+  },
+  {
+    "src": "images/emojis/emojis/hwaa.gif",
+    "code": "(HAWA)",
+    "name": "377",
+    "title": "377 ((HAWA))"
+  },
+  {
+    "src": "images/emojis/emojis/ilu.gif",
+    "code": "(ILU)",
+    "name": "378",
+    "title": "378 ((ILU))"
+  },
+  {
+    "src": "images/emojis/emojis/hugg.gif",
+    "code": "(HUGG)",
+    "name": "379",
+    "title": "379 ((HUGG))"
+  },
+  {
+    "src": "images/emojis/emojis/huqa.gif",
+    "code": "(HUQA)",
+    "name": "380",
+    "title": "380 ((HUQA))"
+  },
+  {
+    "src": "images/emojis/emojis/bp.gif",
+    "code": "(bp)",
+    "name": "381",
+    "title": "381 ((bp))"
+  },
+  {
+    "src": "images/emojis/emojis/jalpari.gif",
+    "code": "(jalpari)",
+    "name": "382",
+    "title": "382 ((jalpari))"
+  },
+  {
+    "src": "images/emojis/emojis/kicko.gif",
+    "code": "(kicko)",
+    "name": "383",
+    "title": "383 ((kicko))"
+  },
+  {
+    "src": "images/emojis/emojis/lovely.gif",
+    "code": "(lovely)",
+    "name": "384",
+    "title": "384 ((lovely))"
+  },
+  {
+    "src": "images/emojis/emojis/moto.gif",
+    "code": "(moto)",
+    "name": "385",
+    "title": "385 ((moto))"
+  },
+  {
+    "src": "images/emojis/emojis/mzt.gif",
+    "code": "(MZT)",
+    "name": "386",
+    "title": "386 ((MZT))"
+  },
+  {
+    "src": "images/emojis/emojis/opss.gif",
+    "code": "(opss)",
+    "name": "387",
+    "title": "387 ((opss))"
+  },
+  {
+    "src": "images/emojis/emojis/pty.gif",
+    "code": "(PTY)",
+    "name": "388",
+    "title": "388 ((PTY))"
+  },
+  {
+    "src": "images/emojis/emojis/rnn.gif",
+    "code": "(RNN)",
+    "name": "389",
+    "title": "389 ((RNN))"
+  },
+  {
+    "src": "images/emojis/emojis/rm.gif",
+    "code": "(RM)",
+    "name": "390",
+    "title": "390 ((RM))"
+  },
+  {
+    "src": "images/emojis/emojis/slap.gif",
+    "code": "(SLAP)",
+    "name": "391",
+    "title": "391 ((SLAP))"
+  },
+  {
+    "src": "images/emojis/emojis/slap.gif",
+    "code": "(SLAP)",
+    "name": "392",
+    "title": "392 ((SLAP))"
+  },
+  {
+    "src": "images/emojis/emojis/smilee.gif",
+    "code": "(SMILEE)",
+    "name": "393",
+    "title": "393 ((SMILEE))"
+  },
+  {
+    "src": "images/emojis/emojis/swng.gif",
+    "code": "(SWNG)",
+    "name": "394",
+    "title": "394 ((SWNG))"
+  },
+  {
+    "src": "images/emojis/emojis/tarbuz.gif",
+    "code": "(TARBUZ)",
+    "name": "395",
+    "title": "395 ((TARBUZ))"
+  },
+  {
+    "src": "images/emojis/emojis/sucide.gif",
+    "code": "(SUCIDE)",
+    "name": "396",
+    "title": "396 ((SUCIDE))"
+  },
+  {
+    "src": "images/emojis/emojis/superman.gif",
+    "code": "(superman)",
+    "name": "397",
+    "title": "397 ((superman))"
+  },
+  {
+    "src": "images/emojis/emojis/surprise.gif",
+    "code": "(surprise)",
+    "name": "398",
+    "title": "398 ((surprise))"
+  },
+  {
+    "src": "images/emojis/emojis/surprised.gif",
+    "code": "(surprised)",
+    "name": "399",
+    "title": "399 ((surprised))"
+  },
+  {
+    "src": "images/emojis/emojis/testo.png",
+    "code": "(WL1",
+    "name": "400",
+    "title": "400 ((WL1)"
+  },
+  {
+    "src": "images/emojis/emojis/thudda.gif",
+    "code": "(thudda)",
+    "name": "401",
+    "title": "401 ((thudda))"
+  },
+  {
+    "src": "images/emojis/emojis/tnx.gif",
+    "code": "(TNX)",
+    "name": "402",
+    "title": "402 ((TNX))"
+  },
+  {
+    "src": "images/emojis/emojis/troll.gif",
+    "code": "(troll)",
+    "name": "403",
+    "title": "403 ((troll))"
+  },
+  {
+    "src": "images/emojis/emojis/ty.gif",
+    "code": "(TY)",
+    "name": "404",
+    "title": "404 ((TY))"
+  },
+  {
+    "src": "images/emojis/emojis/urw.gif",
+    "code": "(youw)",
+    "name": "405",
+    "title": "405 ((youw))"
+  },
+  {
+    "src": "images/emojis/emojis/w2.gif",
+    "code": "(W2)",
+    "name": "406",
+    "title": "406 ((W2))"
+  },
+  {
+    "src": "images/emojis/emojis/weekend.gif",
+    "code": "(weekend)",
+    "name": "407",
+    "title": "407 ((weekend))"
+  },
+  {
+    "src": "images/emojis/emojis/warn.gif",
+    "code": "(WARN)",
+    "name": "408",
+    "title": "408 ((WARN))"
+  },
+  {
+    "src": "images/emojis/emojis/wcb.gif",
+    "code": "(wcb)",
+    "name": "409",
+    "title": "409 ((wcb))"
+  },
+  {
+    "src": "images/emojis/emojis/welcomeback.png",
+    "code": "(WCB)",
+    "name": "410",
+    "title": "410 ((WCB))"
+  },
+  {
+    "src": "images/emojis/emojis/wlcmrj.png",
+    "code": "(WRJ)",
+    "name": "411",
+    "title": "411 ((WRJ))"
+  },
+  {
+    "src": "images/emojis/emojis/ws.gif",
+    "code": "(ws)",
+    "name": "412",
+    "title": "412 ((ws))"
+  },
+  {
+    "src": "images/emojis/emojis/wrj.gif",
+    "code": "(wrj)",
+    "name": "413",
+    "title": "413 ((wrj))"
+  },
+  {
+    "src": "images/emojis/emojis/yahoo.gif",
+    "code": "(yahoo)",
+    "name": "414",
+    "title": "414 ((yahoo))"
+  },
+  {
+    "src": "images/emojis/emojis/yummy.gif",
+    "code": "(YMY",
+    "name": "415",
+    "title": "415 ((YMY)"
+  },
+  {
+    "src": "images/emojis/emojis/zas.gif",
+    "code": "(zas)",
+    "name": "416",
+    "title": "416 ((zas))"
+  },
+  {
+    "src": "images/emojis/emojis/zzzz.gif",
+    "code": "(AWS)",
+    "name": "417",
+    "title": "417 ((AWS))"
+  },
+  {
+    "src": "images/emojis/emojis/yrw.gif",
+    "code": "(YRW)",
+    "name": "418",
+    "title": "418 ((YRW))"
+  },
+  {
+    "src": "images/emojis/emojis/thankyou.gif",
+    "code": "(TYOU)",
+    "name": "419",
+    "title": "419 ((TYOU))"
+  },
+  {
+    "src": "images/emojis/emojis/loool.gif",
+    "code": "(LOL)",
+    "name": "420",
+    "title": "420 ((LOL))"
+  },
+  {
+    "src": "images/emojis/emojis/dnc.gif",
+    "code": "(DNC)",
+    "name": "421",
+    "title": "421 ((DNC))"
+  },
+  {
+    "src": "images/emojis/emojis/drum.gif",
+    "code": "(drum",
+    "name": "422",
+    "title": "422 ((drum)"
+  },
+  {
+    "src": "images/emojis/emojis/dpanda.gif",
+    "code": "(DP)",
+    "name": "423",
+    "title": "423 ((DP))"
+  },
+  {
+    "src": "images/emojis/emojis/faha.gif",
+    "code": "(faha)",
+    "name": "424",
+    "title": "424 ((faha))"
+  },
+  {
+    "src": "images/emojis/emojis/106.gif",
+    "code": ":bhangra",
+    "name": "425",
+    "title": "425 (:bhangra)"
+  },
+  {
+    "src": "images/emojis/emojis/103.gif",
+    "code": ":cheekh",
+    "name": "426",
+    "title": "426 (:cheekh)"
+  },
+  {
+    "src": "images/emojis/emojis/yes.gif",
+    "code": ":yes",
+    "name": "427",
+    "title": "427 (:yes)"
+  },
+  {
+    "src": "images/emojis/emojis/timepass.gif",
+    "code": ":timepass",
+    "name": "428",
+    "title": "428 (:timepass)"
+  },
+  {
+    "src": "images/emojis/emojis/paint.gif",
+    "code": ":paint",
+    "name": "429",
+    "title": "429 (:paint)"
+  },
+  {
+    "src": "images/emojis/emojis/robot.gif",
+    "code": ":robot",
+    "name": "430",
+    "title": "430 (:robot)"
+  },
+  {
+    "src": "images/emojis/emojis/injured.gif",
+    "code": ":hurt",
+    "name": "431",
+    "title": "431 (:hurt)"
+  },
+  {
+    "src": "images/emojis/emojis/nosepick.gif",
+    "code": ":nosepick",
+    "name": "432",
+    "title": "432 (:nosepick)"
+  },
+  {
+    "src": "images/emojis/emojis/hungry.gif",
+    "code": ":hungry",
+    "name": "433",
+    "title": "433 (:hungry)"
+  },
+  {
+    "src": "images/emojis/emojis/diving.gif",
+    "code": ":diving",
+    "name": "434",
+    "title": "434 (:diving)"
+  },
+  {
+    "src": "images/emojis/emojis/bubble.gif",
+    "code": ":bubble",
+    "name": "435",
+    "title": "435 (:bubble)"
+  },
+  {
+    "src": "images/emojis/emojis/breakit.gif",
+    "code": ":breakit",
+    "name": "436",
+    "title": "436 (:breakit)"
+  },
+  {
+    "src": "images/emojis/emojis/festival.gif",
+    "code": ":festival",
+    "name": "437",
+    "title": "437 (:festival)"
+  },
+  {
+    "src": "images/emojis/emojis/holidayspirit.gif",
+    "code": ":hds",
+    "name": "438",
+    "title": "438 (:hds)"
+  },
+  {
+    "src": "images/emojis/emojis/holidayspirit.gif",
+    "code": ":holidayspirit",
+    "name": "439",
+    "title": "439 (:holidayspirit)"
+  },
+  {
+    "src": "images/emojis/emojis/oliver.gif",
+    "code": ":oliver",
+    "name": "440",
+    "title": "440 (:oliver)"
+  },
+  {
+    "src": "images/emojis/emojis/tauri.gif",
+    "code": ":tauri",
+    "name": "441",
+    "title": "441 (:tauri)"
+  },
+  {
+    "src": "images/emojis/emojis/malthe.gif",
+    "code": ":malthe",
+    "name": "442",
+    "title": "442 (:malthe)"
+  },
+  {
+    "src": "images/emojis/emojis/holdon.gif",
+    "code": ":hourglass",
+    "name": "443",
+    "title": "443 (:hourglass)"
+  },
+  {
+    "src": "images/emojis/emojis/holdon.gif",
+    "code": ":holdon",
+    "name": "444",
+    "title": "444 (:holdon)"
+  },
+  {
+    "src": "images/emojis/emojis/plane.gif",
+    "code": ":plane",
+    "name": "445",
+    "title": "445 (:plane)"
+  },
+  {
+    "src": "images/emojis/emojis/rainbow.gif",
+    "code": ":rainbow",
+    "name": "446",
+    "title": "446 (:rainbow)"
+  },
+  {
+    "src": "images/emojis/emojis/umbrella.gif",
+    "code": ":umbrella",
+    "name": "448",
+    "title": "448 (:umbrella)"
+  },
+  {
+    "src": "images/emojis/emojis/bug.gif",
+    "code": "(bug)",
+    "name": "449",
+    "title": "449 ((bug))"
+  },
+  {
+    "src": "images/emojis/emojis/bug.gif",
+    "code": ":bug",
+    "name": "450",
+    "title": "450 (:bug)"
+  },
+  {
+    "src": "images/emojis/emojis/stop.gif",
+    "code": ":stop",
+    "name": "451",
+    "title": "451 (:stop)"
+  },
+  {
+    "src": "images/emojis/emojis/smoking.gif",
+    "code": ":smoking",
+    "name": "452",
+    "title": "452 (:smoking)"
+  },
+  {
+    "src": "images/emojis/emojis/smoking.gif",
+    "code": ":smoke",
+    "name": "453",
+    "title": "453 (:smoke)"
+  },
+  {
+    "src": "images/emojis/emojis/upset.gif",
+    "code": ":S",
+    "name": "454",
+    "title": "454 (:S)"
+  },
+  {
+    "src": "images/emojis/emojis/giggling.gif",
+    "code": ":-)",
+    "name": "455",
+    "title": "455 (:-))"
+  },
+  {
+    "src": "images/emojis/emojis/gottarun.gif",
+    "code": ":gtr",
+    "name": "456",
+    "title": "456 (:gtr)"
+  },
+  {
+    "src": "images/emojis/emojis/gottarun.gif",
+    "code": ":gottarun",
+    "name": "457",
+    "title": "457 (:gottarun)"
+  },
+  {
+    "src": "images/emojis/emojis/drunk.gif",
+    "code": ":drunk",
+    "name": "458",
+    "title": "458 (:drunk)"
+  },
+  {
+    "src": "images/emojis/emojis/ghost.gif",
+    "code": ":ghost",
+    "name": "459",
+    "title": "459 (:ghost)"
+  },
+  {
+    "src": "images/emojis/emojis/vampire.gif",
+    "code": ":vampire",
+    "name": "460",
+    "title": "460 (:vampire)"
+  },
+  {
+    "src": "images/emojis/emojis/man.gif",
+    "code": ":man",
+    "name": "461",
+    "title": "461 (:man)"
+  },
+  {
+    "src": "images/emojis/emojis/woman.gif",
+    "code": ":woman",
+    "name": "462",
+    "title": "462 (:woman)"
+  },
+  {
+    "src": "images/emojis/emojis/pumpkin.gif",
+    "code": ":pumpkin",
+    "name": "463",
+    "title": "463 (:pumpkin)"
+  },
+  {
+    "src": "images/emojis/emojis/ladyvamp.gif",
+    "code": ":ladyvamp",
+    "name": "464",
+    "title": "464 (:ladyvamp)"
+  },
+  {
+    "src": "images/emojis/emojis/vampire.gif",
+    "code": ":vamp",
+    "name": "465",
+    "title": "465 (:vamp)"
+  },
+  {
+    "src": "images/emojis/emojis/skull.gif",
+    "code": ":skull",
+    "name": "466",
+    "title": "466 (:skull)"
+  },
+  {
+    "src": "images/emojis/emojis/thriller.gif",
+    "code": ":thrill",
+    "name": "467",
+    "title": "467 (:thrill)"
+  },
+  {
+    "src": "images/emojis/emojis/computerrage.gif",
+    "code": ":trage",
+    "name": "468",
+    "title": "468 (:trage)"
+  },
+  {
+    "src": "images/emojis/emojis/computerrage.gif",
+    "code": ":crage",
+    "name": "469",
+    "title": "469 (:crage)"
+  },
+  {
+    "src": "images/emojis/emojis/naturescall.gif",
+    "code": ":nc",
+    "name": "470",
+    "title": "470 (:nc)"
+  },
+  {
+    "src": "images/emojis/emojis/laddu.gif",
+    "code": ":laddu",
+    "name": "471",
+    "title": "471 (:laddu)"
+  },
+  {
+    "src": "images/emojis/emojis/bowled.gif",
+    "code": ":wicket",
+    "name": "472",
+    "title": "472 (:wicket)"
+  },
+  {
+    "src": "images/emojis/emojis/bowled.gif",
+    "code": ":out",
+    "name": "473",
+    "title": "473 (:out)"
+  },
+  {
+    "src": "images/emojis/emojis/bowled.gif",
+    "code": ":bowled",
+    "name": "474",
+    "title": "474 (:bowled)"
+  },
+  {
+    "src": "images/emojis/emojis/tubelight.gif",
+    "code": ":tl",
+    "name": "475",
+    "title": "475 (:tl)"
+  },
+  {
+    "src": "images/emojis/emojis/tubelight.gif",
+    "code": ":tubeligh",
+    "name": "476",
+    "title": "476 (:tubeligh)"
+  },
+  {
+    "src": "images/emojis/emojis/tandoori.gif",
+    "code": ":tandoori",
+    "name": "477",
+    "title": "477 (:tandoori)"
+  },
+  {
+    "src": "images/emojis/emojis/bhangra.gif",
+    "code": ":bhangra",
+    "name": "478",
+    "title": "478 (:bhangra)"
+  },
+  {
+    "src": "images/emojis/emojis/rickshaw.gif",
+    "code": ":rikshaw",
+    "name": "479",
+    "title": "479 (:rikshaw)"
+  },
+  {
+    "src": "images/emojis/emojis/rickshaw.gif",
+    "code": ":rickshaw",
+    "name": "480",
+    "title": "480 (:rickshaw)"
+  },
+  {
+    "src": "images/emojis/emojis/shot.gif",
+    "code": ":shot",
+    "name": "481",
+    "title": "481 (:shot)"
+  },
+  {
+    "src": "images/emojis/emojis/nahi.gif",
+    "code": ":naheen",
+    "name": "482",
+    "title": "482 (:naheen)"
+  },
+  {
+    "src": "images/emojis/emojis/nahi.gif",
+    "code": ":nahi",
+    "name": "483",
+    "title": "483 (:nahi)"
+  },
+  {
+    "src": "images/emojis/emojis/sorry.gif",
+    "code": ":sorry",
+    "name": "484",
+    "title": "484 (:sorry)"
+  },
+  {
+    "src": "images/emojis/emojis/dhakkan.gif",
+    "code": ":dhakan",
+    "name": "485",
+    "title": "485 (:dhakan)"
+  },
+  {
+    "src": "images/emojis/emojis/dhakkan.gif",
+    "code": ":dhakkan",
+    "name": "486",
+    "title": "486 (:dhakkan)"
+  },
+  {
+    "src": "images/emojis/emojis/chappal.gif",
+    "code": ":sandal",
+    "name": "487",
+    "title": "487 (:sandal)"
+  },
+  {
+    "src": "images/emojis/emojis/chappal.gif",
+    "code": ":chappal",
+    "name": "488",
+    "title": "488 (:chappal)"
+  },
+  {
+    "src": "images/emojis/emojis/chai.gif",
+    "code": ":tea",
+    "name": "489",
+    "title": "489 (:tea)"
+  },
+  {
+    "src": "images/emojis/emojis/bell.gif",
+    "code": ":bell",
+    "name": "490",
+    "title": "490 (:bell)"
+  },
+  {
+    "src": "images/emojis/emojis/football.gif",
+    "code": ":football",
+    "name": "491",
+    "title": "491 (:football)"
+  },
+  {
+    "src": "images/emojis/emojis/fireworks.gif",
+    "code": ":fireworks",
+    "name": "492",
+    "title": "492 (:fireworks)"
+  },
+  {
+    "src": "images/emojis/emojis/cheese.gif",
+    "code": ":cheese",
+    "name": "493",
+    "title": "493 (:cheese)"
+  },
+  {
+    "src": "images/emojis/emojis/bomb.gif",
+    "code": ":bomb",
+    "name": "494",
+    "title": "494 (:bomb)"
+  },
+  {
+    "src": "images/emojis/emojis/monkey.gif",
+    "code": ":monkey",
+    "name": "495",
+    "title": "495 (:monkey)"
+  },
+  {
+    "src": "images/emojis/emojis/barlett.gif",
+    "code": ":barlett",
+    "name": "496",
+    "title": "496 (:barlett)"
+  },
+  {
+    "src": "images/emojis/emojis/bike.gif",
+    "code": ":bike",
+    "name": "497",
+    "title": "497 (:bike)"
+  },
+  {
+    "src": "images/emojis/emojis/cat.gif",
+    "code": ":cat",
+    "name": "498",
+    "title": "498 (:cat)"
+  },
+  {
+    "src": "images/emojis/emojis/sheep.gif",
+    "code": ":sheep",
+    "name": "499",
+    "title": "499 (:sheep)"
+  },
+  {
+    "src": "images/emojis/emojis/time.gif",
+    "code": ":clock",
+    "name": "500",
+    "title": "500 (:clock)"
+  },
+  {
+    "src": "images/emojis/emojis/time.gif",
+    "code": ":time",
+    "name": "501",
+    "title": "501 (:time)"
+  },
+  {
+    "src": "images/emojis/emojis/movie.gif",
+    "code": ":movie",
+    "name": "502",
+    "title": "502 (:movie)"
+  },
+  {
+    "src": "images/emojis/emojis/star.gif",
+    "code": ":star",
+    "name": "503",
+    "title": "503 (:star)"
+  },
+  {
+    "src": "images/emojis/emojis/ninja.gif",
+    "code": ":ninja",
+    "name": "504",
+    "title": "504 (:ninja)"
+  },
+  {
+    "src": "images/emojis/emojis/dance.gif",
+    "code": "(dance)",
+    "name": "505",
+    "title": "505 ((dance))"
+  },
+  {
+    "src": "images/emojis/emojis/dance.gif",
+    "code": ":dancing",
+    "name": "506",
+    "title": "506 (:dancing)"
+  },
+  {
+    "src": "images/emojis/emojis/dance.gif",
+    "code": ":dance",
+    "name": "507",
+    "title": "507 (:dance)"
+  },
+  {
+    "src": "images/emojis/emojis/drink.gif",
+    "code": ":drink",
+    "name": "508",
+    "title": "508 (:drink)"
+  },
+  {
+    "src": "images/emojis/emojis/cake.gif",
+    "code": ":cake",
+    "name": "509",
+    "title": "509 (:cake)"
+  },
+  {
+    "src": "images/emojis/emojis/cash.gif",
+    "code": ":money",
+    "name": "510",
+    "title": "510 (:money)"
+  },
+  {
+    "src": "images/emojis/emojis/cash.gif",
+    "code": ":cash",
+    "name": "511",
+    "title": "511 (:cash)"
+  },
+  {
+    "src": "images/emojis/emojis/pizza.gif",
+    "code": "(pizza)",
+    "name": "512",
+    "title": "512 ((pizza))"
+  },
+  {
+    "src": "images/emojis/emojis/pizza.gif",
+    "code": ":pizza",
+    "name": "513",
+    "title": "513 (:pizza)"
+  },
+  {
+    "src": "images/emojis/emojis/coffee.gif",
+    "code": "(coffee)",
+    "name": "514",
+    "title": "514 ((coffee))"
+  },
+  {
+    "src": "images/emojis/emojis/coffee.gif",
+    "code": ":coffee",
+    "name": "515",
+    "title": "515 (:coffee)"
+  },
+  {
+    "src": "images/emojis/emojis/music.gif",
+    "code": ":music",
+    "name": "516",
+    "title": "516 (:music)"
+  },
+  {
+    "src": "images/emojis/emojis/sunshine.gif",
+    "code": ":sun",
+    "name": "517",
+    "title": "517 (:sun)"
+  },
+  {
+    "src": "images/emojis/emojis/handshake.gif",
+    "code": ":shakehands",
+    "name": "518",
+    "title": "518 (:shakehands)"
+  },
+  {
+    "src": "images/emojis/emojis/handshake.gif",
+    "code": ":handshake",
+    "name": "519",
+    "title": "519 (:handshake)"
+  },
+  {
+    "src": "images/emojis/emojis/no.gif",
+    "code": ":no",
+    "name": "520",
+    "title": "520 (:no)"
+  },
+  {
+    "src": "images/emojis/emojis/yes.gif",
+    "code": ":yes",
+    "name": "521",
+    "title": "521 (:yes)"
+  },
+  {
+    "src": "images/emojis/emojis/wfh.gif",
+    "code": ":wfh",
+    "name": "522",
+    "title": "522 (:wfh)"
+  },
+  {
+    "src": "images/emojis/emojis/brb.gif",
+    "code": "brb",
+    "name": "523",
+    "title": "523 (brb)"
+  },
+  {
+    "src": "images/emojis/emojis/brb.gif",
+    "code": "BRB",
+    "name": "524",
+    "title": "524 (BRB)"
+  },
+  {
+    "src": "images/emojis/emojis/brb.gif",
+    "code": ":brb",
+    "name": "525",
+    "title": "525 (:brb)"
+  },
+  {
+    "src": "images/emojis/emojis/handsinair.gif",
+    "code": ":handsinair",
+    "name": "526",
+    "title": "526 (:handsinair)"
+  },
+  {
+    "src": "images/emojis/emojis/handsinair.gif",
+    "code": ":handinair",
+    "name": "527",
+    "title": "527 (:handinair)"
+  },
+  {
+    "src": "images/emojis/emojis/victory.gif",
+    "code": ":victory",
+    "name": "528",
+    "title": "528 (:victory)"
+  },
+  {
+    "src": "images/emojis/emojis/poke.gif",
+    "code": ":poke",
+    "name": "529",
+    "title": "529 (:poke)"
+  },
+  {
+    "src": "images/emojis/emojis/fistbump.gif",
+    "code": ":bump",
+    "name": "530",
+    "title": "530 (:bump)"
+  },
+  {
+    "src": "images/emojis/emojis/fistbump.gif",
+    "code": ":fistbump",
+    "name": "531",
+    "title": "531 (:fistbump)"
+  },
+  {
+    "src": "images/emojis/emojis/bearhug.gif",
+    "code": ":bearhug",
+    "name": "532",
+    "title": "532 (:bearhug)"
+  },
+  {
+    "src": "images/emojis/emojis/broken.gif",
+    "code": ":broken",
+    "name": "533",
+    "title": "533 (:broken)"
+  },
+  {
+    "src": "images/emojis/emojis/heart.gif",
+    "code": ":heart1",
+    "name": "534",
+    "title": "534 (&lt;3)"
+  },
+  {
+    "src": "images/emojis/emojis/heart.gif",
+    "code": ":heart",
+    "name": "535",
+    "title": "535 (:heart)"
+  },
+  {
+    "src": "images/emojis/emojis/bow.gif",
+    "code": ":bow",
+    "name": "536",
+    "title": "536 (:bow)"
+  },
+  {
+    "src": "images/emojis/emojis/fallinlove.gif",
+    "code": ":fallinlove",
+    "name": "537",
+    "title": "537 (:fallinlove)"
+  },
+  {
+    "src": "images/emojis/emojis/coutinho.gif",
+    "code": ":coutinho",
+    "name": "538",
+    "title": "538 (:coutinho)"
+  },
+  {
+    "src": "images/emojis/emojis/gift.gif",
+    "code": ":gift",
+    "name": "539",
+    "title": "539 (:gift)"
+  },
+  {
+    "src": "images/emojis/emojis/penguin.gif",
+    "code": ":penguin",
+    "name": "540",
+    "title": "540 (:penguin)"
+  },
+  {
+    "src": "images/emojis/emojis/key.gif",
+    "code": ":key",
+    "name": "541",
+    "title": "541 (:key)"
+  },
+  {
+    "src": "images/emojis/emojis/angrybird.gif",
+    "code": ":angrybird",
+    "name": "542",
+    "title": "542 (:angrybird)"
+  },
+  {
+    "src": "images/emojis/emojis/tvbinge.gif",
+    "code": ":tvbinge",
+    "name": "543",
+    "title": "543 (:tvbinge)"
+  },
+  {
+    "src": "images/emojis/emojis/unsee.gif",
+    "code": ":unsee",
+    "name": "544",
+    "title": "544 (:unsee)"
+  },
+  {
+    "src": "images/emojis/emojis/whoisthis.gif",
+    "code": ":whoisthis",
+    "name": "545",
+    "title": "545 (:whoisthis)"
+  },
+  {
+    "src": "images/emojis/emojis/whistle.gif",
+    "code": ":seeti",
+    "name": "546",
+    "title": "546 (:seeti)"
+  },
+  {
+    "src": "images/emojis/emojis/whistle.gif",
+    "code": ":whistle",
+    "name": "547",
+    "title": "547 (:whistle)"
+  },
+  {
+    "src": "images/emojis/emojis/slaps.gif",
+    "code": "(slap)",
+    "name": "548",
+    "title": "548 ((slap))"
+  },
+  {
+    "src": "images/emojis/emojis/slaps.gif",
+    "code": ":slap",
+    "name": "549",
+    "title": "549 (:slap)"
+  },
+  {
+    "src": "images/emojis/emojis/nazar.gif",
+    "code": ":nazar",
+    "name": "550",
+    "title": "550 (:nazar)"
+  },
+  {
+    "src": "images/emojis/emojis/donttalk.gif",
+    "code": "(donttalk)",
+    "name": "551",
+    "title": "551 ((donttalk))"
+  },
+  {
+    "src": "images/emojis/emojis/donttalk.gif",
+    "code": ":donttalk",
+    "name": "552",
+    "title": "552 (:donttalk)"
+  },
+  {
+    "src": "images/emojis/emojis/wtf.gif",
+    "code": ":wtf",
+    "name": "553",
+    "title": "553 (:wtf)"
+  },
+  {
+    "src": "images/emojis/emojis/cwl.gif",
+    "code": ":cwl",
+    "name": "554",
+    "title": "554 (:cwl)"
+  },
+  {
+    "src": "images/emojis/emojis/call.gif",
+    "code": ":call",
+    "name": "555",
+    "title": "555 (:call)"
+  },
+  {
+    "src": "images/emojis/emojis/talktohand.gif",
+    "code": ":talktohand",
+    "name": "556",
+    "title": "556 (:talktohand)"
+  },
+  {
+    "src": "images/emojis/emojis/talktohand.gif",
+    "code": "(talktothehand)",
+    "name": "557",
+    "title": "557 ((talktothehand))"
+  },
+  {
+    "src": "images/emojis/emojis/talktohand.gif",
+    "code": ":tth",
+    "name": "558",
+    "title": "558 (:tth)"
+  },
+  {
+    "src": "images/emojis/emojis/idea.gif",
+    "code": "(idea)",
+    "name": "559",
+    "title": "559 ((idea))"
+  },
+  {
+    "src": "images/emojis/emojis/idea.gif",
+    "code": ":idea",
+    "name": "560",
+    "title": "560 (:idea)"
+  },
+  {
+    "src": "images/emojis/emojis/talking.gif",
+    "code": ":talking",
+    "name": "561",
+    "title": "561 (:talking)"
+  },
+  {
+    "src": "images/emojis/emojis/punch.gif",
+    "code": ":punch",
+    "name": "562",
+    "title": "562 (:punch)"
+  },
+  {
+    "src": "images/emojis/emojis/headbang.gif",
+    "code": "(headbang)",
+    "name": "563",
+    "title": "563 ((headbang))"
+  },
+  {
+    "src": "images/emojis/emojis/headbang.gif",
+    "code": ":headbang",
+    "name": "564",
+    "title": "564 (:headbang)"
+  },
+  {
+    "src": "images/emojis/emojis/rock.gif",
+    "code": ":rock",
+    "name": "565",
+    "title": "565 (:rock)"
+  },
+  {
+    "src": "images/emojis/emojis/bandit.gif",
+    "code": ":bandit",
+    "name": "566",
+    "title": "566 (:bandit)"
+  },
+  {
+    "src": "images/emojis/emojis/tmi.gif",
+    "code": ":tmi",
+    "name": "567",
+    "title": "567 (:tmi)"
+  },
+  {
+    "src": "images/emojis/emojis/lalala.gif",
+    "code": ":lalala",
+    "name": "568",
+    "title": "568 (:lalala)"
+  },
+  {
+    "src": "images/emojis/emojis/emo.gif",
+    "code": ":emo",
+    "name": "569",
+    "title": "569 (:emo)"
+  },
+  {
+    "src": "images/emojis/emojis/waiting.gif",
+    "code": "(waiting)",
+    "name": "570",
+    "title": "570 ((waiting))"
+  },
+  {
+    "src": "images/emojis/emojis/waiting.gif",
+    "code": ":waiting",
+    "name": "571",
+    "title": "571 (:waiting)"
+  },
+  {
+    "src": "images/emojis/emojis/shake.gif",
+    "code": "(shake)",
+    "name": "572",
+    "title": "572 ((shake))"
+  },
+  {
+    "src": "images/emojis/emojis/shake.gif",
+    "code": ":shake",
+    "name": "573",
+    "title": "573 (:shake)"
+  },
+  {
+    "src": "images/emojis/emojis/nod.gif",
+    "code": "(nod)",
+    "name": "574",
+    "title": "574 ((nod))"
+  },
+  {
+    "src": "images/emojis/emojis/nod.gif",
+    "code": ":nod",
+    "name": "575",
+    "title": "575 (:nod)"
+  },
+  {
+    "src": "images/emojis/emojis/smirk.gif",
+    "code": ":smirk",
+    "name": "576",
+    "title": "576 (:smirk)"
+  },
+  {
+    "src": "images/emojis/emojis/happy.gif",
+    "code": ":happy",
+    "name": "577",
+    "title": "577 (:happy)"
+  },
+  {
+    "src": "images/emojis/emojis/highfive.gif",
+    "code": ":highfive",
+    "name": "578",
+    "title": "578 (:highfive)"
+  },
+  {
+    "src": "images/emojis/emojis/highfive.gif",
+    "code": ":hi5",
+    "name": "579",
+    "title": "579 (:hi5)"
+  },
+  {
+    "src": "images/emojis/emojis/whew.gif",
+    "code": ":relieved",
+    "name": "580",
+    "title": "580 (:relieved)"
+  },
+  {
+    "src": "images/emojis/emojis/whew.gif",
+    "code": "(whew)",
+    "name": "581",
+    "title": "581 ((whew))"
+  },
+  {
+    "src": "images/emojis/emojis/whew.gif",
+    "code": ":whew",
+    "name": "582",
+    "title": "582 (:whew)"
+  },
+  {
+    "src": "images/emojis/emojis/rofl.gif",
+    "code": "(rofl)",
+    "name": "583",
+    "title": "583 ((rofl))"
+  },
+  {
+    "src": "images/emojis/emojis/rofl.gif",
+    "code": ":rofl",
+    "name": "584",
+    "title": "584 (:rofl)"
+  },
+  {
+    "src": "images/emojis/emojis/thinking.gif",
+    "code": ":think",
+    "name": "585",
+    "title": "585 (:think)"
+  },
+  {
+    "src": "images/emojis/emojis/thinking.gif",
+    "code": ":thinking",
+    "name": "586",
+    "title": "586 (:thinking)"
+  },
+  {
+    "src": "images/emojis/emojis/clapping.gif",
+    "code": ":claps",
+    "name": "587",
+    "title": "587 (:claps)"
+  },
+  {
+    "src": "images/emojis/emojis/clapping.gif",
+    "code": "(clap)",
+    "name": "588",
+    "title": "588 ((clap))"
+  },
+  {
+    "src": "images/emojis/emojis/clapping.gif",
+    "code": ":clap",
+    "name": "589",
+    "title": "589 (:clap)"
+  },
+  {
+    "src": "images/emojis/emojis/giggle.gif",
+    "code": "(giggle)",
+    "name": "590",
+    "title": "590 ((giggle))"
+  },
+  {
+    "src": "images/emojis/emojis/giggle.gif",
+    "code": ":giggle",
+    "name": "591",
+    "title": "591 (:giggle)"
+  },
+  {
+    "src": "images/emojis/emojis/movember.gif",
+    "code": ":movember",
+    "name": "592",
+    "title": "592 (:movember)"
+  },
+  {
+    "src": "images/emojis/emojis/makeup.gif",
+    "code": ":makeup",
+    "name": "593",
+    "title": "593 (:makeup)"
+  },
+  {
+    "src": "images/emojis/emojis/wait.gif",
+    "code": "(wait)",
+    "name": "594",
+    "title": "594 ((wait))"
+  },
+  {
+    "src": "images/emojis/emojis/wait.gif",
+    "code": ":wait",
+    "name": "595",
+    "title": "595 (:wait)"
+  },
+  {
+    "src": "images/emojis/emojis/envy.gif",
+    "code": "(envy)",
+    "name": "596",
+    "title": "596 ((envy))"
+  },
+  {
+    "src": "images/emojis/emojis/envy.gif",
+    "code": ":envy",
+    "name": "597",
+    "title": "597 (:envy)"
+  },
+  {
+    "src": "images/emojis/emojis/angel.gif",
+    "code": ":angel",
+    "name": "598",
+    "title": "598 (:angel)"
+  },
+  {
+    "src": "images/emojis/emojis/puke.gif",
+    "code": ":puke",
+    "name": "599",
+    "title": "599 (:puke)"
+  },
+  {
+    "src": "images/emojis/emojis/puke.gif",
+    "code": "(puke)",
+    "name": "600",
+    "title": "600 ((puke))"
+  },
+  {
+    "src": "images/emojis/emojis/doh.gif",
+    "code": ":doh",
+    "name": "601",
+    "title": "601 (:doh)"
+  },
+  {
+    "src": "images/emojis/emojis/angry.gif",
+    "code": ":@",
+    "name": "602",
+    "title": "602 (:@)"
+  },
+  {
+    "src": "images/emojis/emojis/wasntme.gif",
+    "code": ":wnm",
+    "name": "603",
+    "title": "603 (:wnm)"
+  },
+  {
+    "src": "images/emojis/emojis/party.gif",
+    "code": ":party",
+    "name": "604",
+    "title": "604 (:party)"
+  },
+  {
+    "src": "images/emojis/emojis/facepalm.gif",
+    "code": ":fp",
+    "name": "605",
+    "title": "605 (:fp)"
+  },
+  {
+    "src": "images/emojis/emojis/facepalm.gif",
+    "code": "(facepalm)",
+    "name": "606",
+    "title": "606 ((facepalm))"
+  },
+  {
+    "src": "images/emojis/emojis/worried.gif",
+    "code": "(worried)",
+    "name": "607",
+    "title": "607 ((worried))"
+  },
+  {
+    "src": "images/emojis/emojis/worried.gif",
+    "code": ":worried",
+    "name": "608",
+    "title": "608 (:worried)"
+  },
+  {
+    "src": "images/emojis/emojis/mmm.gif",
+    "code": ":mmm",
+    "name": "609",
+    "title": "609 (:mmm)"
+  },
+  {
+    "src": "images/emojis/emojis/mmm.gif",
+    "code": "(mmm)",
+    "name": "610",
+    "title": "610 ((mmm))"
+  },
+  {
+    "src": "images/emojis/emojis/nerd.gif",
+    "code": ":nerd",
+    "name": "611",
+    "title": "611 (:nerd)"
+  },
+  {
+    "src": "images/emojis/emojis/nerd.gif",
+    "code": "(nerd)",
+    "name": "612",
+    "title": "612 ((nerd))"
+  },
+  {
+    "src": "images/emojis/emojis/lipsealed.gif",
+    "code": ":X",
+    "name": "613",
+    "title": "613 (:X)"
+  },
+  {
+    "src": "images/emojis/emojis/lipsealed.gif",
+    "code": ":x",
+    "name": "614",
+    "title": "614 (:x)"
+  },
+  {
+    "src": "images/emojis/emojis/hi.gif",
+    "code": ":hi",
+    "name": "615",
+    "title": "615 (:hi)"
+  },
+  {
+    "src": "images/emojis/emojis/hi.gif",
+    "code": "(hi)",
+    "name": "616",
+    "title": "616 ((hi))"
+  },
+  {
+    "src": "images/emojis/emojis/devil.gif",
+    "code": ":devil",
+    "name": "617",
+    "title": "617 (:devil)"
+  },
+  {
+    "src": "images/emojis/emojis/yawning.gif",
+    "code": "(yawn)",
+    "name": "618",
+    "title": "618 ((yawn))"
+  },
+  {
+    "src": "images/emojis/emojis/yawning.gif",
+    "code": ":yawn",
+    "name": "619",
+    "title": "619 (:yawn)"
+  },
+  {
+    "src": "images/emojis/emojis/evilgrin.gif",
+    "code": "(grin)",
+    "name": "620",
+    "title": "620 ((grin))"
+  },
+  {
+    "src": "images/emojis/emojis/evilgrin.gif",
+    "code": ":grin",
+    "name": "621",
+    "title": "621 (:grin)"
+  },
+  {
+    "src": "images/emojis/emojis/inlove.gif",
+    "code": ":inlove",
+    "name": "622",
+    "title": "622 (:inlove)"
+  },
+  {
+    "src": "images/emojis/emojis/dull.gif",
+    "code": ":dull",
+    "name": "623",
+    "title": "623 (:dull)"
+  },
+  {
+    "src": "images/emojis/emojis/sleepy.gif",
+    "code": "(sleepy)",
+    "name": "624",
+    "title": "624 ((sleepy))"
+  },
+  {
+    "src": "images/emojis/emojis/sleepy.gif",
+    "code": ":sleepy",
+    "name": "625",
+    "title": "625 (:sleepy)"
+  },
+  {
+    "src": "images/emojis/emojis/wonder.gif",
+    "code": ":wonder",
+    "name": "626",
+    "title": "626 (:wonder)"
+  },
+  {
+    "src": "images/emojis/emojis/blush.gif",
+    "code": "(blush)",
+    "name": "627",
+    "title": "627 ((blush))"
+  },
+  {
+    "src": "images/emojis/emojis/blush.gif",
+    "code": ":blush",
+    "name": "628",
+    "title": "628 (:blush)"
+  },
+  {
+    "src": "images/emojis/emojis/yn.gif",
+    "code": ":yn",
+    "name": "629",
+    "title": "629 (:yn)"
+  },
+  {
+    "src": "images/emojis/emojis/tongue.gif",
+    "code": ":p",
+    "name": "630",
+    "title": "630 (:p)"
+  },
+  {
+    "src": "images/emojis/emojis/tongue.gif",
+    "code": ":P",
+    "name": "631",
+    "title": "631 (:P)"
+  },
+  {
+    "src": "images/emojis/emojis/kiss.gif",
+    "code": ":-*",
+    "name": "632",
+    "title": "632 (:-*)"
+  },
+  {
+    "src": "images/emojis/emojis/kiss.gif",
+    "code": ":kiss",
+    "name": "633",
+    "title": "633 (:kiss)"
+  },
+  {
+    "src": "images/emojis/emojis/speechless.gif",
+    "code": ":/",
+    "name": "634",
+    "title": "634 (:/)"
+  },
+  {
+    "src": "images/emojis/emojis/speechless.gif",
+    "code": "(speechless)",
+    "name": "635",
+    "title": "635 ((speechless))"
+  },
+  {
+    "src": "images/emojis/emojis/sweating.gif",
+    "code": ":sweat",
+    "name": "636",
+    "title": "636 (:sweat)"
+  },
+  {
+    "src": "images/emojis/emojis/cry.gif",
+    "code": ";-(",
+    "name": "637",
+    "title": "637 (;-()"
+  },
+  {
+    "src": "images/emojis/emojis/cry.gif",
+    "code": ";(",
+    "name": "638",
+    "title": "638 (;()"
+  },
+  {
+    "src": "images/emojis/emojis/cry.gif",
+    "code": ":cry",
+    "name": "639",
+    "title": "639 (:cry)"
+  },
+  {
+    "src": "images/emojis/emojis/surprised.gif",
+    "code": ":O",
+    "name": "640",
+    "title": "640 (:O)"
+  },
+  {
+    "src": "images/emojis/emojis/surprised.gif",
+    "code": ":o",
+    "name": "641",
+    "title": "641 (:o)"
+  },
+  {
+    "src": "images/emojis/emojis/wink.gif",
+    "code": ";-)",
+    "name": "642",
+    "title": "642 (;-))"
+  },
+  {
+    "src": "images/emojis/emojis/wink.gif",
+    "code": ";)",
+    "name": "643",
+    "title": "643 (;))"
+  },
+  {
+    "src": "images/emojis/emojis/cool.gif",
+    "code": "(8)",
+    "name": "644",
+    "title": "644 ((8))"
+  },
+  {
+    "src": "images/emojis/emojis/cool.gif",
+    "code": "(cool)",
+    "name": "645",
+    "title": "645 ((cool))"
+  },
+  {
+    "src": "images/emojis/emojis/rain.gif",
+    "code": ":rain",
+    "name": "646",
+    "title": "646 (:rain)"
+  },
+  {
+    "src": "images/emojis/emojis/bigsmile.gif",
+    "code": "(laugh)",
+    "name": "647",
+    "title": "647 ((laugh))"
+  },
+  {
+    "src": "images/emojis/emojis/bigsmile.gif",
+    "code": ":laugh",
+    "name": "648",
+    "title": "648 (:laugh)"
+  },
+  {
+    "src": "images/emojis/emojis/bigsmile.gif",
+    "code": ":D",
+    "name": "649",
+    "title": "649 (:D)"
+  },
+  {
+    "src": "images/emojis/emojis/smiling.gif",
+    "code": ":)",
+    "name": "650",
+    "title": "650 (:))"
+  },
+  {
+    "src": "images/emojis/emojis/smiling.gif",
+    "code": "(smile)",
+    "name": "651",
+    "title": "651 ((smile))"
+  },
+  {
+    "src": "images/emojis/emojis/headphones.gif",
+    "code": "(headphones)",
+    "name": "652",
+    "title": "652 ((headphones))"
+  },
+  {
+    "src": "images/emojis/emojis/headphones.gif",
+    "code": ":hphones",
+    "name": "653",
+    "title": "653 (:hphones)"
+  },
+  {
+    "src": "images/emojis/emojis/hungover.gif",
+    "code": "(hung)",
+    "name": "654",
+    "title": "654 ((hung))"
+  },
+  {
+    "src": "images/emojis/emojis/hungover.gif",
+    "code": ":hung",
+    "name": "655",
+    "title": "655 (:hung)"
+  },
+  {
+    "src": "images/emojis/emojis/listening.gif",
+    "code": "(listening)",
+    "name": "656",
+    "title": "656 ((listening))"
+  },
+  {
+    "src": "images/emojis/emojis/listening.gif",
+    "code": ":listening",
+    "name": "657",
+    "title": "657 (:listening)"
+  },
+  {
+    "src": "images/emojis/emojis/shivering.gif",
+    "code": "(cold)",
+    "name": "658",
+    "title": "658 ((cold))"
+  },
+  {
+    "src": "images/emojis/emojis/shivering.gif",
+    "code": ":cold",
+    "name": "659",
+    "title": "659 (:cold)"
+  },
+  {
+    "src": "images/emojis/emojis/shocked.gif",
+    "code": "(shock)",
+    "name": "660",
+    "title": "660 ((shock))"
+  },
+  {
+    "src": "images/emojis/emojis/shocked.gif",
+    "code": ":shock",
+    "name": "661",
+    "title": "661 (:shock)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/Kitkat1.gif",
+    "code": "Kitkat",
+    "name": "662",
+    "title": "662 (Kitkat)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/quake.gif",
+    "code": "_o<",
+    "name": "663",
+    "title": "663 (_o&lt;)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/quake.gif",
+    "code": "_:<",
+    "name": "664",
+    "title": "664 (_:&lt;)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/quake1.gif",
+    "code": "_9<",
+    "name": "665",
+    "title": "665 (_9&lt;)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/ducwhitekill.gif",
+    "code": "(duckkill)",
+    "name": "666",
+    "title": "666 ((duckkill))"
+  },
+  {
+    "src": "images/emojis/emojis/pp/duckdog.gif",
+    "code": "(noduck)",
+    "name": "667",
+    "title": "667 ((noduck))"
+  },
+  {
+    "src": "images/emojis/emojis/pp/AbleLoat.gif",
+    "code": ":ankhdekh",
+    "name": "668",
+    "title": "668 (:ankhdekh)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/aniblobpeak.gif",
+    "code": ":chupdekh",
+    "name": "669",
+    "title": "669 (:chupdekh)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/BonesDancer.gif",
+    "code": ":hadidance",
+    "name": "670",
+    "title": "670 (:hadidance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/chimmy.gif",
+    "code": ":chimmy",
+    "name": "671",
+    "title": "671 (:chimmy)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/Hammer.gif",
+    "code": ":hammer",
+    "name": "672",
+    "title": "672 (:hammer)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/happycat.gif",
+    "code": ":hcato",
+    "name": "673",
+    "title": "673 (:hcato)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/hyperthink.gif",
+    "code": ":hyperthink",
+    "name": "674",
+    "title": "674 (:hyperthink)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/JokerDeletus.gif",
+    "code": ":kalidance",
+    "name": "675",
+    "title": "675 (:kalidance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/JotaroDance.gif",
+    "code": ":jdance",
+    "name": "676",
+    "title": "676 (:jdance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/JoyRow.gif",
+    "code": ":joy",
+    "name": "677",
+    "title": "677 (:joy)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/monky.gif",
+    "code": ":mdance",
+    "name": "678",
+    "title": "678 (:mdance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/Okspin.gif",
+    "code": ":kspin",
+    "name": "679",
+    "title": "679 (:kspin)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/PandaThanos.gif",
+    "code": ":thanos",
+    "name": "680",
+    "title": "680 (:thanos)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/Penguindance.gif",
+    "code": ":gdance",
+    "name": "681",
+    "title": "681 (:gdance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/RedAlert.gif",
+    "code": ":alert",
+    "name": "682",
+    "title": "682 (:alert)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/ReeGun.gif",
+    "code": ":regun",
+    "name": "683",
+    "title": "683 (:regun)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/RumiaDance.gif",
+    "code": ":rudance",
+    "name": "684",
+    "title": "684 (:rudance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/SmugDance.gif",
+    "code": ":smdance",
+    "name": "685",
+    "title": "685 (:smdance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/spin.gif",
+    "code": ":lspin",
+    "name": "686",
+    "title": "686 (:lspin)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/Verified.gif",
+    "code": ":verified",
+    "name": "687",
+    "title": "687 (:verified)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/wearynoose.gif",
+    "code": ":kmarna",
+    "name": "688",
+    "title": "688 (:kmarna)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/woah.gif",
+    "code": ":woah",
+    "name": "689",
+    "title": "689 (:woah)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/iconrose.gif",
+    "code": ":rose",
+    "name": "690",
+    "title": "690 (:rose)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/welcomegroup.gif",
+    "code": ":grwc",
+    "name": "691",
+    "title": "691 (:grwc)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/groupdance.gif",
+    "code": ":ggdance",
+    "name": "692",
+    "title": "692 (:ggdance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/fir.gif",
+    "code": ":fire",
+    "name": "693",
+    "title": "693 (:fire)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/girldance.gif",
+    "code": ":girldance",
+    "name": "695",
+    "title": "695 (:girldance)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/desikut.gif",
+    "code": ":desikut",
+    "name": "696",
+    "title": "696 (:desikut)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/dance2.gif",
+    "code": ":trk",
+    "name": "697",
+    "title": "697 (:trk)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/dan.gif",
+    "code": ":dnn",
+    "name": "698",
+    "title": "698 (:dnn)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/danda.gif",
+    "code": ":dd1",
+    "name": "699",
+    "title": "699 (:dd1)"
+  },
+  {
+    "src": "images/emojis/emojis/pp/power1.gif",
+    "code": ":tqt",
+    "name": "700",
+    "title": "700 (:tqt)"
+  },
+  {
+    "src": "images/emojis/emojis/icon2020/thumbs_up.gif",
+    "code": "(Y)",
+    "name": "Thumbs Up",
+    "title": "Thumbs Up ((Y))"
+  }
+];
+
+  // Map for fast code -> src lookups
+  const codeToEmojiMap = {};
+  EMOJI_LIST.forEach(item => {
+    if (item.code) {
+      codeToEmojiMap[item.code] = item;
+      // Register HTML-escaped variant (e.g. &lt;3 for <3)
+      const htmlEscaped = item.code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      if (htmlEscaped !== item.code) {
+        codeToEmojiMap[htmlEscaped] = item;
+      }
+    }
+  });
+
+  // Sorted codes by length descending for regex matching
+  const sortedCodes = Object.keys(codeToEmojiMap).sort((a, b) => b.length - a.length);
+
+  // Build master regex pattern
+  const patternParts = sortedCodes.map(code => {
+    const escaped = code.replace(/[.*+?^$${}()|[\]\\]/g, '\\$&');
+    // If code is pure alphanumeric (like brb, Kitkat, hunk), use word boundaries
+    if (/^[A-Za-z0-9_]+$/.test(code)) {
+      return '\\b' + escaped + '\\b';
+    }
+    return escaped;
+  });
+
+  const masterEmojiRegex = new RegExp(patternParts.join('|'), 'g');
+
+  // Main Parser function: converts shortcodes into inline <img> tags
+  window.parseEmojis = function(text) {
+    if (!text) return '';
+    return text.replace(masterEmojiRegex, (match) => {
+      const emoji = codeToEmojiMap[match];
+      if (emoji) {
+        return `<img src="${emoji.src}" class="chat-emoji" title="${emoji.title || emoji.name || match}" alt="${match}" loading="lazy" />`;
+      }
+      return match;
+    });
+  };
+
+  window.EMOJI_LIST = EMOJI_LIST;
+
+  // Initialize Emoji Picker Grid
+  window.initEmojiPicker = function(containerEl, inputEl) {
+    if (!containerEl) return;
+    containerEl.innerHTML = '';
+    
+    // Create grid element
+    const gridDiv = document.createElement('div');
+    gridDiv.className = 'emoji-grid-scrollable';
+    
+    EMOJI_LIST.forEach(item => {
+      const img = document.createElement('img');
+      img.src = item.src;
+      img.className = 'emoji-picker-item';
+      img.title = item.title || item.name || item.code;
+      img.setAttribute('data-code', item.code);
+      img.loading = 'lazy';
+      
+      img.addEventListener('click', () => {
+        if (inputEl) {
+          const start = inputEl.selectionStart || inputEl.value.length;
+          const end = inputEl.selectionEnd || inputEl.value.length;
+          const val = inputEl.value;
+          const codeToInsert = item.code + ' ';
+          inputEl.value = val.substring(0, start) + codeToInsert + val.substring(end);
+          inputEl.focus();
+          inputEl.selectionStart = inputEl.selectionEnd = start + codeToInsert.length;
+        }
+      });
+
+      gridDiv.appendChild(img);
+    });
+
+    containerEl.appendChild(gridDiv);
+  };
+})();

@@ -108,16 +108,12 @@
         <!-- Emoji Picker Container -->
         <div id="emoji-picker" class="emoji-picker hidden">
           <div class="emoji-header">
-            <span>Select Emoji</span>
+            <span>😊 Select Emoji (700+ Emojis)</span>
             <button id="btn-close-emoji" class="emoji-close">&times;</button>
           </div>
-          <div class="emoji-grid">
-            <span>😀</span><span>😂</span><span>😍</span><span>😎</span><span>🤔</span><span>🔥</span>
-            <span>👍</span><span>❤️</span><span>🎉</span><span>👏</span><span>🙌</span><span>💯</span>
-            <span>💩</span><span>💀</span><span>🚀</span><span>🌟</span><span>👑</span><span>🛡️</span>
-            <span>⭐</span><span>⚡</span><span>🔊</span><span>💬</span><span>⚠️</span><span>🚫</span>
-          </div>
+          <div id="emoji-grid-body"></div>
         </div>
+
 
         <!-- Text & Background Color Picker Modal -->
         <div id="color-picker-modal" class="color-picker-modal hidden">
@@ -409,6 +405,7 @@
 
   </div>
 
+  <script src="js/emojis.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

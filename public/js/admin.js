@@ -336,27 +336,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (data.success && data.logs) {
         allLogsData = data.logs;
-
-        const uniqueIPs = new Set();
-        const uniqueNicks = new Set();
-        const uniqueDevices = new Set();
-
-        const todayStart = new Date();
-        todayStart.setHours(0, 0, 0, 0);
-
-        allLogsData.forEach(l => {
-          const lDate = new Date(l.last_seen || l.first_seen || Date.now());
-          if (lDate >= todayStart) {
-            if (l.ip) uniqueIPs.add(l.ip);
-            if (l.nick) uniqueNicks.add(l.nick);
-            if (l.device_id) uniqueDevices.add(l.device_id);
-          }
-        });
-
-        if (statLogIps) statLogIps.textContent = uniqueIPs.size;
-        if (statLogNicks) statLogNicks.textContent = uniqueNicks.size;
-        if (statLogDevices) statLogDevices.textContent = uniqueDevices.size;
-
         renderVisitorLogsTable();
       }
     } catch (err) {
@@ -373,23 +352,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const yesterdayStart = todayStart - (24 * 60 * 60 * 1000);
     const day3Start = todayStart - (2 * 24 * 60 * 60 * 1000);
 
-    let filtered = allLogsData.filter(item => {
+    // 1. Filter logs by date range tab first
+    const dateFilteredLogs = allLogsData.filter(item => {
       const itemTime = new Date(item.last_seen || item.first_seen || Date.now()).getTime();
 
-      if (currentLogFilter === 'today' && itemTime < todayStart) return false;
-      if (currentLogFilter === 'yesterday' && (itemTime < yesterdayStart || itemTime >= todayStart)) return false;
-      if (currentLogFilter === 'day3' && (itemTime < day3Start || itemTime >= yesterdayStart)) return false;
+      if (currentLogFilter === 'today') return itemTime >= todayStart;
+      if (currentLogFilter === 'yesterday') return itemTime >= yesterdayStart && itemTime < todayStart;
+      if (currentLogFilter === 'day3') return itemTime >= day3Start && itemTime < yesterdayStart;
+      if (currentLogFilter === 'all') return itemTime >= day3Start;
+      return true;
+    });
 
-      if (query) {
+    // 2. Dynamically update top stat summary cards (Labels & Values) based on selected tab
+    const uniqueIPs = new Set();
+    const uniqueNicks = new Set();
+    const uniqueDevices = new Set();
+
+    dateFilteredLogs.forEach(l => {
+      if (l.ip) uniqueIPs.add(l.ip);
+      if (l.nick) uniqueNicks.add(l.nick);
+      if (l.device_id) uniqueDevices.add(l.device_id);
+    });
+
+    const statLogIps = document.getElementById('stat-log-ips');
+    const statLogNicks = document.getElementById('stat-log-nicks');
+    const statLogDevices = document.getElementById('stat-log-devices');
+    const labelIps = document.getElementById('stat-log-ips-label');
+    const labelNicks = document.getElementById('stat-log-nicks-label');
+    const labelDevices = document.getElementById('stat-log-devices-label');
+
+    let filterTitle = 'Today';
+    if (currentLogFilter === 'yesterday') filterTitle = 'Yesterday';
+    else if (currentLogFilter === 'day3') filterTitle = 'Day 3';
+    else if (currentLogFilter === 'all') filterTitle = '3-Day Total';
+
+    if (labelIps) labelIps.textContent = `${filterTitle} Unique IPs`;
+    if (labelNicks) labelNicks.textContent = `${filterTitle} Unique Nicks`;
+    if (labelDevices) labelDevices.textContent = `${filterTitle} Unique Devices`;
+
+    if (statLogIps) statLogIps.textContent = uniqueIPs.size;
+    if (statLogNicks) statLogNicks.textContent = uniqueNicks.size;
+    if (statLogDevices) statLogDevices.textContent = uniqueDevices.size;
+
+    // 3. Filter by search query for table display
+    let filtered = dateFilteredLogs;
+    if (query) {
+      filtered = dateFilteredLogs.filter(item => {
         const nick = (item.nick || '').toLowerCase();
         const ip = (item.ip || '').toLowerCase();
         const device = (item.device_id || '').toLowerCase();
         const ua = (item.user_agent || '').toLowerCase();
         return nick.includes(query) || ip.includes(query) || device.includes(query) || ua.includes(query);
-      }
-
-      return true;
-    });
+      });
+    }
 
     if (filtered.length === 0) {
       logsTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px; color: #64748b;">No visitor logs found for the selected filter.</td></tr>`;
@@ -421,6 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
 
   async function handleBanIP(ip, reason) {
     try {

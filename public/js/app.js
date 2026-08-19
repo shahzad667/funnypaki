@@ -55,27 +55,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return COLOR_PALETTE[index];
   }
 
-  // --- TEXT SMILIES SHORTCUT KEY AUTO-CONVERTER ---
+  // --- EMOJI ENGINE PARSER (700+ Emojis) ---
   function parseEmojiShortcuts(escapedText) {
     if (!escapedText) return '';
-    const map = {
-      ':-)' : '😊', ':)' : '😊',
-      ':-(' : '🙁', ':(' : '🙁',
-      ':-D' : '😀', ':D' : '😀',
-      ';-)' : '😉', ';)' : '😉',
-      ':-P' : '😛', ':-p' : '😛', ':P' : '😛', ':p' : '😛',
-      '&lt;3': '❤️', '<3'  : '❤️',
-      ':-O' : '😮', ':-o' : '😮', ':O' : '😮', ':o' : '😮',
-      '8-)' : '😎', '8)'  : '😎', 'B)' : '😎',
-      ":'(" : '😢', ';('  : '😢',
-      '(y)' : '👍', '(Y)' : '👍'
-    };
-
-    return escapedText.replace(/(:\-\)|:\)|:\-\(|:\(|:\-D|:D|;\-\)|;\)|:\-P|:\-p|:P|:p|&lt;3|<3|:\-O|:\-o|:O|:o|8\-\)|8\)|B\)|:'\(|;\(|\(y\)|\(Y\))/g, (match) => {
-      const emoji = map[match] || match;
-      return `<span class="emoji-char">${emoji}</span>`;
-    });
+    if (window.parseEmojis) {
+      return window.parseEmojis(escapedText);
+    }
+    return escapedText;
   }
+
 
   // DOM
   const chatInput = document.getElementById('chat-input');
@@ -958,13 +946,10 @@ document.addEventListener('DOMContentLoaded', () => {
     emojiPicker.classList.add('hidden');
   });
 
-  document.querySelectorAll('.emoji-grid span').forEach(el => {
-    el.addEventListener('click', (e) => {
-      chatInput.value += e.target.textContent;
-      chatInput.focus();
-      emojiPicker.classList.add('hidden');
-    });
-  });
+  if (window.initEmojiPicker) {
+    window.initEmojiPicker(document.getElementById('emoji-grid-body'), chatInput);
+  }
+
 
   btnFmtBold.addEventListener('click', () => {
     isBold = !isBold;

@@ -337,9 +337,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   socket.on('user_init', (data) => {
-    currentNick = data.nick;
-    if (nickInput && !nickInput.value) {
-      nickInput.value = currentNick;
+    if (data && data.nick) {
+      currentNick = data.nick;
+      if (nickInput) nickInput.value = currentNick;
+    }
+  });
+
+  socket.on('nick_updated', (data) => {
+    if (data && data.nick) {
+      currentNick = data.nick;
+      if (nickInput) nickInput.value = currentNick;
     }
   });
 
