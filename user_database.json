@@ -8,7 +8,7 @@
     },
     "sunny": {
       "nick": "Sunny",
-      "password_hash": "",
+      "password_hash": "$2a$10$azzrB0/1HNSBGqWp0NKSdO1To/To2AIArh4.NdxDMTYz/UTA/pygK",
       "global_role": "user",
       "is_admin": 0,
       "vhost": "",
@@ -46,15 +46,115 @@
       "realname": "PakiChat User",
       "created_at": "2026-08-15T11:58:59.574Z"
     },
-    "sunnytest": {
-      "nick": "SunnyTest",
-      "password_hash": "$2a$10$23mV9OgULYM4wRvUq5OAoOXKRpuC5rRfzUS4yun/IuRK7Fue1opyu",
+    "sameena": {
+      "nick": "Sameena",
+      "password_hash": "$2a$10$HFCN7ThAuk7zpj6E.5NpGuwcyhIvTtQ516CYexoQkbjhv6PG3ltVu",
       "global_role": "user",
       "is_admin": 0,
       "vhost": "",
       "ident": "user",
       "realname": "PakiChat User",
-      "created_at": "2026-08-18T18:32:04.176Z"
+      "created_at": "2026-08-15T18:08:45.872Z"
+    },
+    "roses": {
+      "nick": "Roses",
+      "password_hash": "$2a$10$z6XnFepl5AsIiPkBBzHwcOkjrZFAOxoHoGdLCjIlfpJZNLS5IpOra",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T18:18:37.920Z"
+    },
+    "hammad": {
+      "nick": "Hammad",
+      "password_hash": "$2a$10$uUJbwL2W6ktPbY2UKkXk6u8RX47H/9YZ/MNHN9lLexsD9uirnhhhK",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T19:42:55.879Z"
+    },
+    "chulbul": {
+      "nick": "ChUlBUl",
+      "password_hash": "$2a$10$J6iUkHmVkphUMiurd8c/L.434waw.KAjvIJtSQQ8UFZKasYc3mytG",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T19:56:58.083Z"
+    },
+    "hornet": {
+      "nick": "Hornet",
+      "password_hash": "$2a$10$phjeU39TZ8K4M1tyetVVkeYfHb8A8mH2YGqKfi1vRt6CdV2UkG6de",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T20:05:13.077Z"
+    },
+    "raza87": {
+      "nick": "Raza87",
+      "password_hash": "$2a$10$k0BrV9HgsSKHkr0OyGfWoeDYqgYIDaRXDZv0Qk0VjL.lOQRR9FH/q",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T20:18:28.459Z"
+    },
+    "cricket": {
+      "nick": "Cricket",
+      "password_hash": "$2a$10$sppL5KVq5FP7ieZ3EkpW7uIFYo5DDDFdK7PExV5a3il/gXIiGIxii",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T20:20:38.473Z"
+    },
+    "wasp": {
+      "nick": "Wasp",
+      "password_hash": "$2a$10$NYuIsZY0NtPBPNs/RHxngu0PvQNGFv8ZFsR6a8wcYGQ4SIqix27va",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T21:27:49.129Z"
+    },
+    "honey": {
+      "nick": "HoNeY",
+      "password_hash": "$2a$10$kTWgB67.gRbqn.tsz2RgFOKKVWEec0Jp/l0vtw0SREwBuJPiyOBtK",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-15T21:43:49.648Z"
+    },
+    "billa": {
+      "nick": "Billa",
+      "password_hash": "$2a$10$2Nvc5MnF/rH3ZVdalY6/6uGsV5DExt1zdSYG20pKl6Udtay3tyBvO",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-17T18:38:17.826Z"
+    },
+    "storm": {
+      "nick": "StOrM",
+      "password_hash": "$2a$10$PN1OAxcXKr2B63xsBLsM2.BtuJrreSPAN9viSVDmbeGEkBO0r/jAS",
+      "global_role": "user",
+      "is_admin": 0,
+      "vhost": "",
+      "ident": "user",
+      "realname": "PakiChat User",
+      "created_at": "2026-08-17T19:29:25.813Z"
     }
   },
   "registered_channels": {
@@ -96,11 +196,25 @@
         "created_at": "2026-08-15T11:58:26.208Z"
       },
       {
-        "nick_lower": "sunnytest",
-        "original_nick": "SunnyTest",
+        "nick_lower": "roses",
+        "original_nick": "Roses",
+        "role": "admin",
+        "added_by": "PrinCe",
+        "created_at": "2026-08-15T18:18:49.558Z"
+      },
+      {
+        "nick_lower": "hammad",
+        "original_nick": "Hammad",
         "role": "op",
         "added_by": "PrinCe",
-        "created_at": "2026-08-18T18:32:04.195Z"
+        "created_at": "2026-08-15T21:07:57.416Z"
+      },
+      {
+        "nick_lower": "honey",
+        "original_nick": "Honey",
+        "role": "op",
+        "added_by": "PrinCe",
+        "created_at": "2026-08-17T07:12:06.507Z"
       }
     ]
   },
@@ -1675,6 +1789,5 @@
       "message": "<3",
       "timestamp": "2026-08-18T19:34:39.154Z"
     }
-  ],
-  "spam_filters": []
+  ]
 }
