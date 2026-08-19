@@ -160,6 +160,25 @@ function checkAndGrantPersistentRank(socket, chanObj) {
   const u = users.get(socket.id);
   if (!u || !u.identified) return;
 
+  // 1. Check Channel Founder
+  const chInfo = db.getRegisteredChannel(chanObj.name);
+  if (chInfo && chInfo.founder_nick && chInfo.founder_nick.toLowerCase() === u.nick.toLowerCase()) {
+    chanObj.owners.add(socket.id);
+    return;
+  }
+
+  // 2. Check Global Server Roles
+  if (u.global_role === 'owner') {
+    chanObj.owners.add(socket.id);
+    return;
+  }
+
+  if (u.global_role === 'admin' || u.is_admin) {
+    chanObj.admins.add(socket.id);
+    return;
+  }
+
+  // 3. Check Channel Access List
   const savedRole = db.getUserChannelRole(chanObj.name, u.nick);
   if (savedRole) {
     if (savedRole === 'owner') chanObj.owners.add(socket.id);
@@ -655,6 +674,7 @@ io.on('connection', (socket) => {
         u.is_admin = u.global_role === 'admin' || u.global_role === 'owner' || u.global_role === 'oper';
         u.is_oper = u.global_role === 'oper' || u.global_role === 'owner';
         socket.emit('system_notice', { type: 'success', message: `*** Identified successfully as '${u.nick}'` });
+        notifyNickUpdatedAcrossChannels(socket);
       }
     }
 
@@ -1208,7 +1228,8 @@ function joinChannel(socket, channelName, keyArg = '') {
   }
 
   if (chanObj.users.has(socket.id)) {
-    socket.emit('system_notice', { type: 'info', message: `*** You are already in ${chanObj.name}` });
+    checkAndGrantPersistentRank(socket, chanObj);
+    broadcastChannelUserList(chanObj.name);
     return;
   }
 
@@ -1909,6 +1930,7 @@ function notifyNickUpdatedAcrossChannels(socket, oldNick = null, newNick = null)
           newNick: currentNick
         });
       }
+      checkAndGrantPersistentRank(socket, chanObj);
       broadcastChannelUserList(chanObj.name);
     }
   });
