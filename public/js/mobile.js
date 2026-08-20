@@ -331,10 +331,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  let hasMobileEnteredLobby = false;
+
   // Socket Initial Handshake
   socket.on('connect', () => {
     console.log('Mobile Socket Connected');
+    if (hasMobileEnteredLobby && currentNick) {
+      const chosenPass = passInput ? passInput.value.trim() : '';
+      socket.emit('user_enter_lobby', { nick: currentNick, password: chosenPass });
+      document.querySelectorAll('.mobile-tab[data-target^="#"]').forEach(tab => {
+        const ch = tab.getAttribute('data-target');
+        if (ch) socket.emit('join_channel', { channel: ch });
+      });
+    }
   });
+
 
   socket.on('user_init', (data) => {
     if (data && data.nick) {
@@ -556,8 +567,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Handle Mobile Login Submit
   loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    hasMobileEnteredLobby = true;
     const chosenNick = nickInput.value.trim();
     const chosenPass = passInput.value.trim();
+
 
     socket.emit('user_enter_lobby', {
       nick: chosenNick,

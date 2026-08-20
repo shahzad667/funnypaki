@@ -230,7 +230,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('connect', () => {
     socket.emit('set_device_id', { deviceId: clientDeviceId });
+    if (hasEnteredLobby && currentNick) {
+      const savedPass = loginPassInput ? loginPassInput.value.trim() : '';
+      socket.emit('user_enter_lobby', { nick: currentNick, password: savedPass });
+      document.querySelectorAll('.pakichat-tab[data-target^="#"]').forEach(tab => {
+        const ch = tab.getAttribute('data-target');
+        if (ch) socket.emit('join_channel', { channel: ch });
+      });
+    }
   });
+
 
   // Handle Login Connect Submit (With 5-Second Buffer Delay)
   if (loginForm) {

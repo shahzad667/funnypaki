@@ -10,9 +10,10 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: { origin: '*' },
-  pingTimeout: 60000,
-  pingInterval: 10000
+  pingTimeout: 180000,
+  pingInterval: 25000
 });
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -947,11 +948,25 @@ io.on('connection', (socket) => {
 
     if (target.startsWith('#')) {
       const norm = normChan(target);
-      const chanObj = channels.get(norm);
-      if (!chanObj || !chanObj.users.has(socket.id)) {
-        socket.emit('system_notice', { type: 'error', message: `*** You are not in ${target}` });
-        return;
+      let chanObj = channels.get(norm);
+      if (!chanObj) {
+        chanObj = {
+          name: norm,
+          topic: `Welcome to ${norm}`,
+          users: new Set([BOT_SOCKET_ID]),
+          owners: new Set(), admins: new Set(), ops: new Set(), halfops: new Set(), voices: new Set(),
+          modes: { r: false, i: false, m: false, k: '' }, invites: new Set()
+        };
+        channels.set(norm, chanObj);
       }
+
+      // Auto-restore channel membership & persistent ranks if client reconnected after screen sleep
+      if (!chanObj.users.has(socket.id)) {
+        chanObj.users.add(socket.id);
+        if (u) u.channels.add(norm);
+        checkAndGrantPersistentRank(socket, chanObj);
+      }
+
 
       const rankInfo = getUserRankInChannel(socket.id, chanObj);
 
